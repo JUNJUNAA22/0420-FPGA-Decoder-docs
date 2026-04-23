@@ -1,8 +1,8 @@
 site_name: 0420-FPGA-Decoder Documentation
 site_description: Public documentation for the 0420 FPGA decoder workspace
 site_url: https://junjunaa22.github.io/0420-FPGA-Decoder-docs/
-repo_url: https://github.com/JUNJUNAA22/0420-FPGA-Decoder-docs
-repo_name: JUNJUNAA22/0420-FPGA-Decoder-docs
+repo_url: https://github.com/QuAIR/0420-FPGA-Decoder
+repo_name: 0420-FPGA-Decoder
 
 theme:
   name: material
