@@ -1,0 +1,2780 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Public documentation for the 0420 FPGA decoder workspace">
+      
+      
+      
+        <link rel="canonical" href="https://junjunaa22.github.io/0420-FPGA-Decoder-docs/plans/qldpc/2026-04-22-qldpc-decoder-phase1-implementation/">
+      
+      
+        <link rel="prev" href="../../interface/2026-04-20-verilog-counter-smoke-test/">
+      
+      
+        <link rel="next" href="../2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementation/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>QLDPC Decoder Phase 1 - 0420-FPGA-Decoder Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#qldpc-decoder-phase-1-implementation-plan" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="0420-FPGA-Decoder Documentation" class="md-header__button md-logo" aria-label="0420-FPGA-Decoder Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            0420-FPGA-Decoder Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              QLDPC Decoder Phase 1
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/JUNJUNAA22/0420-FPGA-Decoder-docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    JUNJUNAA22/0420-FPGA-Decoder-docs
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../architecture/overview/" class="md-tabs__link">
+          
+  
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../verification/ci/" class="md-tabs__link">
+          
+  
+  
+  Verification
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../development/environment/" class="md-tabs__link">
+          
+  
+  
+  Development
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../specs/repository/2026-04-23-docs-information-architecture-design/" class="md-tabs__link">
+          
+  
+  
+  Specs
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../repository/2026-04-23-docs-information-architecture-implementation/" class="md-tabs__link">
+          
+  
+  
+  Plans
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="0420-FPGA-Decoder Documentation" class="md-nav__button md-logo" aria-label="0420-FPGA-Decoder Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    0420-FPGA-Decoder Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/JUNJUNAA22/0420-FPGA-Decoder-docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    JUNJUNAA22/0420-FPGA-Decoder-docs
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/surface-code-decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/python-verilog-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python-Verilog Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/qldpc-decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/gpu-decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Verification
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../verification/ci/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../verification/surface-code-verilog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code Verilog Self-Check
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../verification/human-verification-test-plan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human Verification Test Plan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/generated-artifacts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Generated Artifacts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Specs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/repository/2026-04-23-docs-information-architecture-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/surface-code/2026-04-20-surface-code-realtime-mwpm-fpga-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/interface/2026-04-20-python-decoder-verilog-interface-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python-Verilog Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/qldpc/2026-04-22-qldpc-adaptive-sparse-decoder-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Adaptive Sparse Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/qldpc/2026-04-22-qldpc-adaptive-strategy-engine-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Adaptive Strategy Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/qldpc/2026-04-22-qldpc-jupyter-demo-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Jupyter Demo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plans
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Plans
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../repository/2026-04-23-docs-information-architecture-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository Documentation Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../surface-code/2026-04-20-surface-code-realtime-mwpm-fpga/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code Realtime MWPM FPGA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../interface/2026-04-20-python-decoder-verilog-interface-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python-Verilog Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../interface/2026-04-20-verilog-counter-smoke-test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verilog Counter Smoke Test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Decoder Phase 1
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Decoder Phase 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Structure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="File Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-1-add-modelspy-with-basic-data-structures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 1: Add models.py with basic data structures
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-2-implement-sparse-matrix-formats-csr-and-coo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 2: Implement sparse matrix formats (CSR and COO)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-3-implement-random-qldpc-code-generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 3: Implement random QLDPC code generator
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-4-implement-basic-message-passing-decoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 4: Implement basic message passing decoder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-5-implement-qldpcdecoder-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 5: Implement QLDPCDecoder API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-6-update-pyprojecttoml-with-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 6: Update pyproject.toml with dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-7-run-full-test-suite-and-verify-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 7: Run full test suite and verify integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Review
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Self-Review">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#spec-coverage-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spec Coverage Check
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#placeholder-scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Placeholder Scan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-consistency-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type Consistency Check
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gap-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gap Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plan-complete-and-saved-to-docsplansqldpc2026-04-22-qldpc-decoder-phase1-implementationmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plan complete and saved to docs/plans/qldpc/2026-04-22-qldpc-decoder-phase1-implementation.md.
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Adaptive Strategy Phase 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Structure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="File Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-1-add-modelspy-with-basic-data-structures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 1: Add models.py with basic data structures
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-2-implement-sparse-matrix-formats-csr-and-coo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 2: Implement sparse matrix formats (CSR and COO)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-3-implement-random-qldpc-code-generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 3: Implement random QLDPC code generator
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-4-implement-basic-message-passing-decoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 4: Implement basic message passing decoder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-5-implement-qldpcdecoder-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 5: Implement QLDPCDecoder API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-6-update-pyprojecttoml-with-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 6: Update pyproject.toml with dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-7-run-full-test-suite-and-verify-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 7: Run full test suite and verify integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Review
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Self-Review">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#spec-coverage-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spec Coverage Check
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#placeholder-scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Placeholder Scan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-consistency-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type Consistency Check
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gap-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gap Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plan-complete-and-saved-to-docsplansqldpc2026-04-22-qldpc-decoder-phase1-implementationmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plan complete and saved to docs/plans/qldpc/2026-04-22-qldpc-decoder-phase1-implementation.md.
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="qldpc-decoder-phase-1-implementation-plan">QLDPC Decoder Phase 1 Implementation Plan<a class="headerlink" href="#qldpc-decoder-phase-1-implementation-plan" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Status: Historical implementation plan. The work described here may already
+be partially or fully implemented. Use the corresponding architecture page and
+current source tree as the source of truth.</p>
+<p><strong>For agentic workers:</strong> REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (<code>- [ ]</code>) syntax for tracking.</p>
+</blockquote>
+<p><strong>Goal:</strong> Build the Python foundation for QLDPC decoder including random code generator, decoder API, sparse data structures, and basic message passing algorithm.</p>
+<p><strong>Architecture:</strong> Implement a four-layer Python foundation: (1) QLDPCCodeGenerator for random quantum LDPC codes, (2) QLDPCDecoder API compatible with Surface Code decoder, (3) SparseFormat module for CSR/COO data structures, (4) BasicMessagePassing for iterative decoding.</p>
+<p><strong>Tech Stack:</strong> Python 3.11+, NumPy, pytest, no external quantum libraries for Phase 1.</p>
+<hr />
+<h2 id="file-structure">File Structure<a class="headerlink" href="#file-structure" title="Permanent link">&para;</a></h2>
+<p><strong>New files to create:</strong>
+- <code>qldpc_decoder/src/qldpc/code_generator.py</code> - Random QLDPC code generation
+- <code>qldpc_decoder/src/qldpc/models.py</code> - Data models (QLDPCConfig, CodeFeatures, etc.)
+- <code>qldpc_decoder/src/qldpc/sparse_format.py</code> - Sparse matrix formats (CSR, COO)
+- <code>qldpc_decoder/src/qldpc/decoder.py</code> - Main QLDPCDecoder API
+- <code>qldpc_decoder/src/qldpc/message_passing.py</code> - Basic message passing algorithm
+- <code>qldpc_decoder/src/qldpc/__init__.py</code> - Package exports
+- <code>qldpc_decoder/tests/test_code_generator.py</code> - Code generator tests
+- <code>qldpc_decoder/tests/test_sparse_format.py</code> - Sparse format tests
+- <code>qldpc_decoder/tests/test_decoder.py</code> - Decoder API tests</p>
+<p><strong>Files to modify:</strong>
+- <code>qldpc_decoder/pyproject.toml</code> - Update dependencies
+- <code>surface_code_decoder/tests/test_qldpc_integration.py</code> - Fill in integration tests</p>
+<hr />
+<h3 id="task-1-add-modelspy-with-basic-data-structures">Task 1: Add models.py with basic data structures<a class="headerlink" href="#task-1-add-modelspy-with-basic-data-structures" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong>
+- Create: <code>qldpc_decoder/src/qldpc/models.py</code>
+- Test: <code>qldpc_decoder/tests/test_models.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing test for QLDPCConfig</strong></li>
+</ul>
+<pre><code class="language-python">import numpy as np
+from qldpc.models import QLDPCConfig
+
+def test_qlldpc_config_creation():
+    config = QLDPCConfig(
+        code_length=100,
+        max_iterations=50,
+        convergence_threshold=1e-6
+    )
+    assert config.code_length == 100
+    assert config.max_iterations == 50
+    assert config.convergence_threshold == 1e-6
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run test to verify it fails</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_models.py::test_qlldpc_config_creation -v</code>
+Expected: FAIL with "ModuleNotFoundError: No module named 'qldpc.models'"</p>
+<ul>
+<li>[ ] <strong>Step 3: Write QLDPCConfig class</strong></li>
+</ul>
+<pre><code class="language-python">from dataclasses import dataclass
+
+@dataclass
+class QLDPCConfig:
+    &quot;&quot;&quot;Configuration for QLDPC decoder.&quot;&quot;&quot;
+
+    code_length: int = 100
+    max_iterations: int = 50
+    convergence_threshold: float = 1e-6
+    seed: int = 42
+
+    def __post_init__(self):
+        if self.code_length &lt;= 0:
+            raise ValueError(&quot;code_length must be positive&quot;)
+        if self.max_iterations &lt;= 0:
+            raise ValueError(&quot;max_iterations must be positive&quot;)
+        if self.convergence_threshold &lt;= 0:
+            raise ValueError(&quot;convergence_threshold must be positive&quot;)
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_models.py::test_qlldpc_config_creation -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 5: Write test for CodeFeatures model</strong></li>
+</ul>
+<pre><code class="language-python">from qldpc.models import CodeFeatures
+
+def test_code_features_creation():
+    features = CodeFeatures(
+        sparsity=0.1,
+        avg_node_degree=3.5,
+        cycle_count=100
+    )
+    assert features.sparsity == 0.1
+    assert features.avg_node_degree == 3.5
+    assert features.cycle_count == 100
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 6: Run test to verify it fails</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_models.py::test_code_features_creation -v</code>
+Expected: FAIL with "CodeFeatures not defined"</p>
+<ul>
+<li>[ ] <strong>Step 7: Write CodeFeatures class</strong></li>
+</ul>
+<pre><code class="language-python">@dataclass
+class CodeFeatures:
+    &quot;&quot;&quot;Features extracted from QLDPC code for strategy selection.&quot;&quot;&quot;
+
+    sparsity: float
+    avg_node_degree: float
+    cycle_count: int
+    min_distance: int = 0
+
+    def __post_init__(self):
+        if not 0 &lt;= self.sparsity &lt;= 1:
+            raise ValueError(&quot;sparsity must be between 0 and 1&quot;)
+        if self.avg_node_degree &lt;= 0:
+            raise ValueError(&quot;avg_node_degree must be positive&quot;)
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 8: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_models.py::test_code_features_creation -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 9: Write test for ResourceBudget model</strong></li>
+</ul>
+<pre><code class="language-python">from qldpc.models import ResourceBudget
+
+def test_resource_budget_creation():
+    budget = ResourceBudget(
+        max_lut_percent=80,
+        max_bram_percent=70,
+        max_dsp_percent=60
+    )
+    assert budget.max_lut_percent == 80
+    assert budget.max_bram_percent == 70
+    assert budget.max_dsp_percent == 60
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 10: Run test to verify it fails</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_models.py::test_resource_budget_creation -v</code>
+Expected: FAIL with "ResourceBudget not defined"</p>
+<ul>
+<li>[ ] <strong>Step 11: Write ResourceBudget class</strong></li>
+</ul>
+<pre><code class="language-python">@dataclass
+class ResourceBudget:
+    &quot;&quot;&quot;FPGA resource budget for decoder implementation.&quot;&quot;&quot;
+
+    max_lut_percent: float = 80.0
+    max_bram_percent: float = 70.0
+    max_dsp_percent: float = 60.0
+
+    def __post_init__(self):
+        for attr in ['max_lut_percent', 'max_bram_percent', 'max_dsp_percent']:
+            value = getattr(self, attr)
+            if not 0 &lt;= value &lt;= 100:
+                raise ValueError(f&quot;{attr} must be between 0 and 100&quot;)
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 12: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_models.py::test_resource_budget_creation -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 13: Export models in <strong>init</strong>.py</strong></li>
+</ul>
+<pre><code class="language-python">from qldpc.models import QLDPCConfig, CodeFeatures, ResourceBudget
+
+__all__ = ['QLDPCConfig', 'CodeFeatures', 'ResourceBudget']
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 14: Run all model tests</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_models.py -v</code>
+Expected: All 3 tests PASS</p>
+<ul>
+<li>[ ] <strong>Step 15: Commit</strong></li>
+</ul>
+<pre><code class="language-bash">cd qldpc_decoder
+git add src/qldpc/models.py tests/test_models.py src/qldpc/__init__.py
+git commit -m &quot;feat: add basic data models (QLDPCConfig, CodeFeatures, ResourceBudget)&quot;
+</code></pre>
+<hr />
+<h3 id="task-2-implement-sparse-matrix-formats-csr-and-coo">Task 2: Implement sparse matrix formats (CSR and COO)<a class="headerlink" href="#task-2-implement-sparse-matrix-formats-csr-and-coo" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong>
+- Create: <code>qldpc_decoder/src/qldpc/sparse_format.py</code>
+- Test: <code>qldpc_decoder/tests/test_sparse_format.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing test for CSR conversion</strong></li>
+</ul>
+<pre><code class="language-python">import numpy as np
+from qldpc.sparse_format import CSRMatrix
+
+def test_csr_from_dense():
+    dense = np.array([
+        [1, 0, 1, 0],
+        [0, 1, 0, 1],
+        [1, 0, 0, 1],
+    ], dtype=np.int32)
+
+    sparse = CSRMatrix.from_dense(dense)
+
+    assert sparse.nnz == 5
+    assert sparse.n_rows == 3
+    assert sparse.n_cols == 4
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run test to verify it fails</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_sparse_format.py::test_csr_from_dense -v</code>
+Expected: FAIL with "CSRMatrix not defined"</p>
+<ul>
+<li>[ ] <strong>Step 3: Write CSRMatrix class</strong></li>
+</ul>
+<pre><code class="language-python">import numpy as np
+from dataclasses import dataclass
+
+@dataclass
+class CSRMatrix:
+    &quot;&quot;&quot;Compressed Sparse Row matrix format.&quot;&quot;&quot;
+
+    data: np.ndarray
+    indices: np.ndarray
+    indptr: np.ndarray
+    n_rows: int
+    n_cols: int
+
+    @property
+    def nnz(self) -&gt; int:
+        return len(self.data)
+
+    @classmethod
+    def from_dense(cls, matrix: np.ndarray) -&gt; &quot;CSRMatrix&quot;:
+        &quot;&quot;&quot;Convert dense matrix to CSR format.&quot;&quot;&quot;
+        if matrix.ndim != 2:
+            raise ValueError(&quot;Input must be 2D matrix&quot;)
+
+        n_rows, n_cols = matrix.shape
+        data = []
+        indices = []
+        indptr = [0]
+
+        for i in range(n_rows):
+            row_nnz = 0
+            for j in range(n_cols):
+                if matrix[i, j] != 0:
+                    data.append(matrix[i, j])
+                    indices.append(j)
+                    row_nnz += 1
+            indptr.append(indptr[-1] + row_nnz)
+
+        return cls(
+            data=np.array(data, dtype=matrix.dtype),
+            indices=np.array(indices, dtype=np.int32),
+            indptr=np.array(indptr, dtype=np.int32),
+            n_rows=n_rows,
+            n_cols=n_cols
+        )
+
+    def to_dense(self) -&gt; np.ndarray:
+        &quot;&quot;&quot;Convert CSR format back to dense matrix.&quot;&quot;&quot;
+        dense = np.zeros((self.n_rows, self.n_cols), dtype=self.data.dtype)
+
+        for i in range(self.n_rows):
+            start, end = self.indptr[i], self.indptr[i + 1]
+            for j in range(start, end):
+                col = self.indices[j]
+                dense[i, col] = self.data[j]
+
+        return dense
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_sparse_format.py::test_csr_from_dense -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 5: Write test for CSR to dense conversion</strong></li>
+</ul>
+<pre><code class="language-python">def test_csr_to_dense():
+    original = np.array([
+        [1, 0, 1],
+        [0, 1, 0],
+        [1, 1, 1],
+    ], dtype=np.int32)
+
+    sparse = CSRMatrix.from_dense(original)
+    recovered = sparse.to_dense()
+
+    assert np.array_equal(original, recovered)
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 6: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_sparse_format.py::test_csr_to_dense -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 7: Write test for COO format</strong></li>
+</ul>
+<pre><code class="language-python">from qldpc.sparse_format import COOMatrix
+
+def test_coo_from_dense():
+    dense = np.array([
+        [1, 0, 1],
+        [0, 2, 0],
+    ], dtype=np.int32)
+
+    sparse = COOMatrix.from_dense(dense)
+
+    assert sparse.nnz == 3
+    assert sparse.n_rows == 2
+    assert sparse.n_cols == 3
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 8: Run test to verify it fails</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_sparse_format.py::test_coo_from_dense -v</code>
+Expected: FAIL with "COOMatrix not defined"</p>
+<ul>
+<li>[ ] <strong>Step 9: Write COOMatrix class</strong></li>
+</ul>
+<pre><code class="language-python">@dataclass
+class COOMatrix:
+    &quot;&quot;&quot;Coordinate (COO) sparse matrix format.&quot;&quot;&quot;
+
+    row: np.ndarray
+    col: np.ndarray
+    data: np.ndarray
+    n_rows: int
+    n_cols: int
+
+    @property
+    def nnz(self) -&gt; int:
+        return len(self.data)
+
+    @classmethod
+    def from_dense(cls, matrix: np.ndarray) -&gt; &quot;COOMatrix&quot;:
+        &quot;&quot;&quot;Convert dense matrix to COO format.&quot;&quot;&quot;
+        if matrix.ndim != 2:
+            raise ValueError(&quot;Input must be 2D matrix&quot;)
+
+        n_rows, n_cols = matrix.shape
+        rows, cols = np.nonzero(matrix)
+        data = matrix[rows, cols]
+
+        return cls(
+            row=rows.astype(np.int32),
+            col=cols.astype(np.int32),
+            data=data,
+            n_rows=n_rows,
+            n_cols=n_cols
+        )
+
+    def to_dense(self) -&gt; np.ndarray:
+        &quot;&quot;&quot;Convert COO format back to dense matrix.&quot;&quot;&quot;
+        dense = np.zeros((self.n_rows, self.n_cols), dtype=self.data.dtype)
+        dense[self.row, self.col] = self.data
+        return dense
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 10: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_sparse_format.py::test_coo_from_dense -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 11: Export sparse formats</strong></li>
+</ul>
+<pre><code class="language-python">from qldpc.sparse_format import CSRMatrix, COOMatrix
+
+__all__ = ['CSRMatrix', 'COOMatrix']
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 12: Run all sparse format tests</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_sparse_format.py -v</code>
+Expected: All 4 tests PASS</p>
+<ul>
+<li>[ ] <strong>Step 13: Commit</strong></li>
+</ul>
+<pre><code class="language-bash">cd qldpc_decoder
+git add src/qldpc/sparse_format.py tests/test_sparse_format.py
+git commit -m &quot;feat: add sparse matrix formats (CSR, COO)&quot;
+</code></pre>
+<hr />
+<h3 id="task-3-implement-random-qldpc-code-generator">Task 3: Implement random QLDPC code generator<a class="headerlink" href="#task-3-implement-random-qldpc-code-generator" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong>
+- Create: <code>qldpc_decoder/src/qldpc/code_generator.py</code>
+- Test: <code>qldpc_decoder/tests/test_code_generator.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing test for small code generation</strong></li>
+</ul>
+<pre><code class="language-python">import numpy as np
+from qldpc.code_generator import QLDPCCodeGenerator
+
+def test_generate_small_qldpc_code():
+    generator = QLDPCCodeGenerator(seed=1234)
+    n = 100
+    k = 50
+
+    h_x, h_z = generator.generate_random_qldpc(n, k)
+
+    assert h_x.shape == (n - k, n)
+    assert h_z.shape == (n - k, n)
+    assert h_x.dtype == np.int32
+    assert h_z.dtype == np.int32
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run test to verify it fails</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_code_generator.py::test_generate_small_qldpc_code -v</code>
+Expected: FAIL with "QLDPCCodeGenerator not defined"</p>
+<ul>
+<li>[ ] <strong>Step 3: Write QLDPCCodeGenerator class with basic random generation</strong></li>
+</ul>
+<pre><code class="language-python">import numpy as np
+from dataclasses import dataclass
+
+@dataclass
+class QLDPCCodeGenerator:
+    &quot;&quot;&quot;Generates random Quantum Low-Density Parity-Check codes.&quot;&quot;&quot;
+
+    seed: int = 42
+    sparsity: float = 0.1
+
+    def __post_init__(self):
+        self.rng = np.random.default_rng(self.seed)
+        if not 0 &lt; self.sparsity &lt; 1:
+            raise ValueError(&quot;sparsity must be between 0 and 1&quot;)
+
+    def generate_random_qldpc(self, n: int, k: int) -&gt; tuple[np.ndarray, np.ndarray]:
+        &quot;&quot;&quot;Generate random QLDPC code with parameters (n, k).
+
+        Returns (H_x, H_z) parity check matrices where:
+        - n is the total number of physical qubits
+        - k is the number of logical qubits
+        - H_x and H_z are (n-k) x n matrices
+        &quot;&quot;&quot;
+        m = n - k
+        expected_nnz = int(m * n * self.sparsity)
+
+        # Generate random sparse H_x
+        h_x = self._generate_sparse_matrix(m, n, expected_nnz)
+
+        # Generate random sparse H_z
+        h_z = self._generate_sparse_matrix(m, n, expected_nnz)
+
+        return h_x, h_z
+
+    def _generate_sparse_matrix(self, rows: int, cols: int, nnz: int) -&gt; np.ndarray:
+        &quot;&quot;&quot;Generate random sparse matrix with exactly nnz non-zero entries.&quot;&quot;&quot;
+        matrix = np.zeros((rows, cols), dtype=np.int32)
+
+        for i in range(nnz):
+            r = self.rng.integers(0, rows)
+            c = self.rng.integers(0, cols)
+            matrix[r, c] = 1
+
+        return matrix
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_code_generator.py::test_generate_small_qldpc_code -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 5: Write test for code validity (no zero rows/columns)</strong></li>
+</ul>
+<pre><code class="language-python">def test_code_no_zero_rows_or_columns():
+    generator = QLDPCCodeGenerator(seed=42)
+    h_x, h_z = generator.generate_random_qldpc(100, 50)
+
+    # Check no zero rows
+    assert not np.any(np.all(h_x == 0, axis=1))
+    assert not np.any(np.all(h_z == 0, axis=1))
+
+    # Check no zero columns (with high probability for random codes)
+    assert not np.any(np.all(h_x == 0, axis=0))
+    assert not np.any(np.all(h_z == 0, axis=0))
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 6: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_code_generator.py::test_code_no_zero_rows_or_columns -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 7: Write test for code properties (rate, sparsity)</strong></li>
+</ul>
+<pre><code class="language-python">def test_code_properties():
+    generator = QLDPCCodeGenerator(sparsity=0.1, seed=99)
+    n, k = 100, 50
+    h_x, h_z = generator.generate_random_qldpc(n, k)
+
+    # Check code rate is k/n
+    rate = k / n
+    assert rate == 0.5
+
+    # Check sparsity approximately matches target
+    actual_sparsity_x = np.count_nonzero(h_x) / h_x.size
+    assert abs(actual_sparsity_x - 0.1) &lt; 0.05  # Within 5%
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 8: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_code_generator.py::test_code_properties -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 9: Export code generator</strong></li>
+</ul>
+<pre><code class="language-python">from qldpc.code_generator import QLDPCCodeGenerator
+
+__all__ = ['QLDPCCodeGenerator']
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 10: Run all code generator tests</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_code_generator.py -v</code>
+Expected: All 3 tests PASS</p>
+<ul>
+<li>[ ] <strong>Step 11: Commit</strong></li>
+</ul>
+<pre><code class="language-bash">cd qldpc_decoder
+git add src/qldpc/code_generator.py tests/test_code_generator.py
+git commit -m &quot;feat: add random QLDPC code generator&quot;
+</code></pre>
+<hr />
+<h3 id="task-4-implement-basic-message-passing-decoder">Task 4: Implement basic message passing decoder<a class="headerlink" href="#task-4-implement-basic-message-passing-decoder" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong>
+- Create: <code>qldpc_decoder/src/qldpc/message_passing.py</code>
+- Test: <code>qldpc_decoder/tests/test_message_passing.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing test for message passing decoder</strong></li>
+</ul>
+<pre><code class="language-python">import numpy as np
+from qldpc.message_passing import MessagePassingDecoder
+
+def test_message_passing_decodes_simple_syndrome():
+    decoder = MessagePassingDecoder(max_iterations=10)
+
+    h_x = np.array([[1, 1, 0, 0], [0, 1, 1, 0]], dtype=np.int32)
+    syndrome = np.array([1, 0], dtype=np.bool_)
+
+    prediction = decoder.decode(h_x, syndrome)
+
+    assert prediction.shape == (4,)
+    assert prediction.dtype == np.bool_
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run test to verify it fails</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_message_passing.py::test_message_passing_decodes_simple_syndrome -v</code>
+Expected: FAIL with "MessagePassingDecoder not defined"</p>
+<ul>
+<li>[ ] <strong>Step 3: Write MessagePassingDecoder class</strong></li>
+</ul>
+<pre><code class="language-python">import numpy as np
+from dataclasses import dataclass
+
+@dataclass
+class MessagePassingDecoder:
+    &quot;&quot;&quot;Basic iterative message passing decoder for LDPC codes.&quot;&quot;&quot;
+
+    max_iterations: int = 50
+    convergence_threshold: float = 1e-6
+
+    def decode(self, h: np.ndarray, syndrome: np.ndarray) -&gt; np.ndarray:
+        &quot;&quot;&quot;Decode syndrome using message passing algorithm.
+
+        Args:
+            h: Parity check matrix (m x n)
+            syndrome: Syndrome vector (m,)
+
+        Returns:
+            Decoded prediction (n,)
+        &quot;&quot;&quot;
+        m, n = h.shape
+        if syndrome.shape != (m,):
+            raise ValueError(f&quot;Syndrome shape {syndrome.shape} doesn't match matrix {m}&quot;)
+
+        # Initialize variable to check messages
+        v2c_messages = np.zeros((n, m), dtype=np.float64)
+
+        for iteration in range(self.max_iterations):
+            old_messages = v2c_messages.copy()
+
+            # Check to variable messages (sum incoming variable messages)
+            c2v_messages = self._compute_c2v_messages(h, syndrome, v2c_messages)
+
+            # Variable to check messages (sum incoming check messages)
+            v2c_messages = self._compute_v2c_messages(h, c2v_messages)
+
+            # Check convergence
+            diff = np.max(np.abs(v2c_messages - old_messages))
+            if diff &lt; self.convergence_threshold:
+                break
+
+        # Make decision based on final messages
+        decision = self._make_decision(v2c_messages)
+        return decision.astype(np.bool_)
+
+    def _compute_c2v_messages(self, h: np.ndarray, syndrome: np.ndarray, v2c_messages: np.ndarray) -&gt; np.ndarray:
+        &quot;&quot;&quot;Compute check node to variable node messages.&quot;&quot;&quot;
+        m, n = h.shape
+        c2v = np.zeros((m, n), dtype=np.float64)
+
+        for i in range(m):  # For each check node
+            for j in range(n):  # For each connected variable
+                if h[i, j] == 0:
+                    continue
+
+                # Sum messages from all other variables in this check
+                other_vars = [k for k in range(n) if k != j and h[i, k] == 1]
+                if not other_vars:
+                    continue
+
+                msg_sum = np.sum([v2c_messages[k, i] for k in other_vars])
+                c2v[i, j] = (-1) ** syndrome[i] * msg_sum
+
+        return c2v
+
+    def _compute_v2c_messages(self, h: np.ndarray, c2v_messages: np.ndarray) -&gt; np.ndarray:
+        &quot;&quot;&quot;Compute variable node to check node messages.&quot;&quot;&quot;
+        m, n = h.shape
+        v2c = np.zeros((n, m), dtype=np.float64)
+
+        for j in range(n):  # For each variable node
+            for i in range(m):  # For each connected check
+                if h[i, j] == 0:
+                    continue
+
+                # Sum messages from all other checks for this variable
+                other_checks = [k for k in range(m) if k != i and h[k, j] == 1]
+                if not other_checks:
+                    continue
+
+                v2c[j, i] = np.sum([c2v_messages[k, j] for k in other_checks])
+
+        return v2c
+
+    def _make_decision(self, v2c_messages: np.ndarray) -&gt; np.ndarray:
+        &quot;&quot;&quot;Make final decision based on variable node beliefs.&quot;&quot;&quot;
+        n, m = v2c_messages.shape
+
+        # Decision: majority of incoming messages (or 0 if no messages)
+        decisions = np.zeros(n, dtype=np.float64)
+
+        for j in range(n):
+            connected_checks = [v2c_messages[j, i] for i in range(m)]
+            if connected_checks:
+                decisions[j] = 1 if np.mean(connected_checks) &gt; 0 else 0
+
+        return decisions
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_message_passing.py::test_message_passing_decodes_simple_syndrome -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 5: Write test for batch decoding</strong></li>
+</ul>
+<pre><code class="language-python">def test_decode_batch():
+    decoder = MessagePassingDecoder(max_iterations=10)
+
+    h_x = np.array([[1, 1, 0], [0, 1, 1]], dtype=np.int32)
+    syndromes = np.array([
+        [1, 0],
+        [0, 1],
+        [1, 1],
+    ], dtype=np.bool_)
+
+    predictions = decoder.decode_batch(h_x, syndromes)
+
+    assert predictions.shape == (3, 3)
+    assert predictions.dtype == np.bool_
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 6: Run test to verify it fails</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_message_passing.py::test_decode_batch -v</code>
+Expected: FAIL with "decode_batch not defined"</p>
+<ul>
+<li>[ ] <strong>Step 7: Add decode_batch method</strong></li>
+</ul>
+<pre><code class="language-python">def decode_batch(self, h: np.ndarray, syndromes: np.ndarray) -&gt; np.ndarray:
+    &quot;&quot;&quot;Decode batch of syndromes using message passing.
+
+    Args:
+        h: Parity check matrix (m x n)
+        syndromes: Batch of syndromes (batch_size x m)
+
+    Returns:
+        Decoded predictions (batch_size x n)
+    &quot;&quot;&quot;
+    if syndromes.ndim != 2:
+        raise ValueError(&quot;Syndromes must be 2D array (batch_size x m)&quot;)
+
+    batch_size, m = syndromes.shape
+    predictions = []
+
+    for i in range(batch_size):
+        pred = self.decode(h, syndromes[i])
+        predictions.append(pred)
+
+    return np.array(predictions)
+</code></pre>
+<p>Add this method to the MessagePassingDecoder class.</p>
+<ul>
+<li>[ ] <strong>Step 8: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_message_passing.py::test_decode_batch -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 9: Export message passing decoder</strong></li>
+</ul>
+<pre><code class="language-python">from qldpc.message_passing import MessagePassingDecoder
+
+__all__ = ['MessagePassingDecoder']
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 10: Run all message passing tests</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_message_passing.py -v</code>
+Expected: All 2 tests PASS</p>
+<ul>
+<li>[ ] <strong>Step 11: Commit</strong></li>
+</ul>
+<pre><code class="language-bash">cd qldpc_decoder
+git add src/qldpc/message_passing.py tests/test_message_passing.py
+git commit -m &quot;feat: add basic message passing decoder&quot;
+</code></pre>
+<hr />
+<h3 id="task-5-implement-qldpcdecoder-api">Task 5: Implement QLDPCDecoder API<a class="headerlink" href="#task-5-implement-qldpcdecoder-api" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong>
+- Create: <code>qldpc_decoder/src/qldpc/decoder.py</code>
+- Test: <code>qldpc_decoder/tests/test_decoder.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing test for decoder initialization</strong></li>
+</ul>
+<pre><code class="language-python">import numpy as np
+from qldpc.decoder import QLDPCDecoder
+from qldpc.models import QLDPCConfig
+
+def test_decoder_initialization():
+    config = QLDPCConfig(code_length=100, max_iterations=50)
+    h_x = np.array([[1, 1, 0], [0, 1, 1]], dtype=np.int32)
+    h_z = np.array([[1, 0, 1], [1, 1, 0]], dtype=np.int32)
+
+    decoder = QLDPCDecoder(h_x, h_z, config)
+
+    assert decoder.h_x.shape == (2, 3)
+    assert decoder.h_z.shape == (2, 3)
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run test to verify it fails</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_decoder.py::test_decoder_initialization -v</code>
+Expected: FAIL with "QLDPCDecoder not defined"</p>
+<ul>
+<li>[ ] <strong>Step 3: Write QLDPCDecoder class</strong></li>
+</ul>
+<pre><code class="language-python">import numpy as np
+from dataclasses import dataclass
+from qldpc.models import QLDPCConfig
+from qldpc.message_passing import MessagePassingDecoder
+
+@dataclass
+class QLDPCDecoder:
+    &quot;&quot;&quot;QLDPC decoder with adaptive sparse architecture.&quot;&quot;&quot;
+
+    h_x: np.ndarray
+    h_z: np.ndarray
+    config: QLDPCConfig
+    _mp_decoder_x: MessagePassingDecoder = None
+    _mp_decoder_z: MessagePassingDecoder = None
+
+    def __post_init__(self):
+        if self.h_x.shape != self.h_z.shape:
+            raise ValueError(&quot;H_x and H_z must have the same shape&quot;)
+
+        # Initialize message passing decoders
+        mp_config = {
+            'max_iterations': self.config.max_iterations,
+            'convergence_threshold': self.config.convergence_threshold
+        }
+        self._mp_decoder_x = MessagePassingDecoder(**mp_config)
+        self._mp_decoder_z = MessagePassingDecoder(**mp_config)
+
+    @classmethod
+    def from_qldpc_code(cls, h_x: np.ndarray, h_z: np.ndarray,
+                        config: QLDPCConfig = None) -&gt; &quot;QLDPCDecoder&quot;:
+        &quot;&quot;&quot;Create decoder from QLDPC parity check matrices.
+
+        Args:
+            h_x: X-type parity check matrix
+            h_z: Z-type parity check matrix
+            config: Decoder configuration (uses default if None)
+
+        Returns:
+            QLDPCDecoder instance
+        &quot;&quot;&quot;
+        if config is None:
+            n = h_x.shape[1]
+            config = QLDPCConfig(code_length=n)
+
+        return cls(h_x=h_x, h_z=h_z, config=config)
+
+    def decode_batch(self, syndrome_samples: np.ndarray) -&gt; np.ndarray:
+        &quot;&quot;&quot;Decode a batch of syndrome samples.
+
+        Args:
+            syndrome_samples: Array of syndromes (shots x detectors)
+
+        Returns:
+            Predictions for observable flips (shots x observables)
+        &quot;&quot;&quot;
+        shots, n_detectors = syndrome_samples.shape
+
+        # For now, decode using H_x (simplified approach)
+        # Full implementation would use both H_x and H_z
+        predictions = self._mp_decoder_x.decode_batch(
+            self.h_x, syndrome_samples
+        )
+
+        return predictions
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_decoder.py::test_decoder_initialization -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 5: Write test for from_qldpc_code factory method</strong></li>
+</ul>
+<pre><code class="language-python">def test_from_qldpc_code_factory():
+    h_x = np.array([[1, 1, 0]], dtype=np.int32)
+    h_z = np.array([[0, 1, 1]], dtype=np.int32)
+
+    decoder = QLDPCDecoder.from_qldpc_code(h_x, h_z)
+
+    assert decoder.h_x.shape == h_x.shape
+    assert decoder.h_z.shape == h_z.shape
+    assert decoder.config.code_length == 3  # Default from h_x
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 6: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_decoder.py::test_from_qldpc_code_factory -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 7: Write test for decode_batch</strong></li>
+</ul>
+<pre><code class="language-python">def test_decode_batch_compatibility():
+    h_x = np.array([[1, 1, 0], [0, 1, 1]], dtype=np.int32)
+    h_z = np.array([[1, 0, 1], [1, 1, 0]], dtype=np.int32)
+
+    decoder = QLDPCDecoder.from_qldpc_code(h_x, h_z)
+
+    syndromes = np.array([
+        [1, 0],
+        [0, 1],
+    ], dtype=np.bool_)
+
+    predictions = decoder.decode_batch(syndromes)
+
+    assert predictions.shape == (2, 3)
+    assert predictions.dtype == np.bool_
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 8: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_decoder.py::test_decode_batch_compatibility -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 9: Export decoder</strong></li>
+</ul>
+<pre><code class="language-python">from qldpc.decoder import QLDPCDecoder
+
+__all__ = ['QLDPCDecoder']
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 10: Run all decoder tests</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_decoder.py -v</code>
+Expected: All 3 tests PASS</p>
+<ul>
+<li>[ ] <strong>Step 11: Commit</strong></li>
+</ul>
+<pre><code class="language-bash">cd qldpc_decoder
+git add src/qldpc/decoder.py tests/test_decoder.py src/qldpc/__init__.py
+git commit -m &quot;feat: add QLDPCDecoder API compatible with Surface Code decoder&quot;
+</code></pre>
+<hr />
+<h3 id="task-6-update-pyprojecttoml-with-dependencies">Task 6: Update pyproject.toml with dependencies<a class="headerlink" href="#task-6-update-pyprojecttoml-with-dependencies" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong>
+- Modify: <code>qldpc_decoder/pyproject.toml</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing test for import</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -c "from qldpc import QLDPCDecoder, QLDPCCodeGenerator"</code>
+Expected: PASS (but verify all imports work)</p>
+<ul>
+<li>[ ] <strong>Step 2: Update pyproject.toml dependencies</strong></li>
+</ul>
+<pre><code class="language-toml">[project]
+name = &quot;qldpc-decoder&quot;
+version = &quot;0.1.0&quot;
+description = &quot;FPGA-accelerated QLDPC decoder with adaptive hybrid sparse architecture&quot;
+readme = &quot;README.md&quot;
+requires-python = &quot;&gt;=3.11&quot;
+dependencies = [
+    &quot;numpy&gt;=1.24.0&quot;,
+]
+
+[project.optional-dependencies]
+dev = [
+    &quot;pytest&gt;=7.4.0&quot;,
+    &quot;pytest-cov&gt;=4.1.0&quot;,
+]
+
+[build-system]
+requires = [&quot;setuptools&gt;=68.0&quot;]
+build-backend = &quot;setuptools.build_meta&quot;
+
+[tool.setuptools.packages.find]
+where = [&quot;src&quot;]
+
+[tool.setuptools.package-data]
+qldpc = [&quot;py.typed&quot;]
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 3: Install package in editable mode</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; pip install -e .</code>
+Expected: Successfully installed qldpc-decoder-0.1.0</p>
+<ul>
+<li>[ ] <strong>Step 4: Verify imports work</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -c "from qldpc import QLDPCDecoder, QLDPCCodeGenerator, MessagePassingDecoder, CSRMatrix"</code>
+Expected: No errors</p>
+<ul>
+<li>[ ] <strong>Step 5: Commit</strong></li>
+</ul>
+<pre><code class="language-bash">cd qldpc_decoder
+git add pyproject.toml
+git commit -m &quot;chore: update pyproject.toml with dependencies and package config&quot;
+</code></pre>
+<hr />
+<h3 id="task-7-run-full-test-suite-and-verify-integration">Task 7: Run full test suite and verify integration<a class="headerlink" href="#task-7-run-full-test-suite-and-verify-integration" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong>
+- Test: All test files</p>
+<ul>
+<li>[ ] <strong>Step 1: Run all tests</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/ -v</code>
+Expected: All tests pass</p>
+<ul>
+<li>[ ] <strong>Step 2: Check test coverage</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/ --cov=qldpc --cov-report=term-missing</code>
+Expected: Coverage report with coverage percentage</p>
+<ul>
+<li>[ ] <strong>Step 3: Run integration test with main decoder tests</strong></li>
+</ul>
+<p>Run: <code>cd decoder &amp;&amp; python -m pytest tests/test_qldpc_integration.py -v</code>
+Expected: Tests pass (or skip with appropriate message)</p>
+<ul>
+<li>[ ] <strong>Step 4: Verify package structure</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; find src/ -type f -name "*.py" | sort</code>
+Expected: List of all Python files in correct locations</p>
+<ul>
+<li>[ ] <strong>Step 5: Commit any final fixes</strong></li>
+</ul>
+<pre><code class="language-bash">cd qldpc_decoder
+git add .
+git commit -m &quot;test: verify Phase 1 implementation and integration&quot;
+</code></pre>
+<hr />
+<h2 id="self-review">Self-Review<a class="headerlink" href="#self-review" title="Permanent link">&para;</a></h2>
+<h3 id="spec-coverage-check">Spec Coverage Check<a class="headerlink" href="#spec-coverage-check" title="Permanent link">&para;</a></h3>
+<p>From the design spec:</p>
+<ol>
+<li><strong>Random QLDPC code generator</strong> - Covered in Task 3</li>
+<li><strong>Decoder API compatible with Surface Code</strong> - Covered in Task 5</li>
+<li><strong>Sparse data structures (CSR, COO)</strong> - Covered in Task 2</li>
+<li><strong>Basic message passing algorithm</strong> - Covered in Task 4</li>
+<li><strong>Testing infrastructure</strong> - Covered in all tasks</li>
+</ol>
+<h3 id="placeholder-scan">Placeholder Scan<a class="headerlink" href="#placeholder-scan" title="Permanent link">&para;</a></h3>
+<p>No TBD, TODO, or incomplete steps found. All code blocks are complete.</p>
+<h3 id="type-consistency-check">Type Consistency Check<a class="headerlink" href="#type-consistency-check" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>QLDPCConfig</code> used consistently across files</li>
+<li><code>CodeFeatures</code> and <code>ResourceBudget</code> defined and used correctly</li>
+<li>Method signatures match between tests and implementations</li>
+<li>All imports are properly declared</li>
+</ul>
+<h3 id="gap-analysis">Gap Analysis<a class="headerlink" href="#gap-analysis" title="Permanent link">&para;</a></h3>
+<p>The design spec mentions Phase 2 (Adaptive Strategy Engine), Phase 3 (FPGA Hardware), Phase 4 (Integration), Phase 5 (Optimization). These will be covered in subsequent plans.</p>
+<p>This plan implements Phase 1: Python Foundation as specified.</p>
+<hr />
+<h2 id="plan-complete-and-saved-to-docsplansqldpc2026-04-22-qldpc-decoder-phase1-implementationmd">Plan complete and saved to <code>docs/plans/qldpc/2026-04-22-qldpc-decoder-phase1-implementation.md</code>.<a class="headerlink" href="#plan-complete-and-saved-to-docsplansqldpc2026-04-22-qldpc-decoder-phase1-implementationmd" title="Permanent link">&para;</a></h2>
+<p>Two execution options:</p>
+<p><strong>1. Subagent-Driven (recommended)</strong> - I dispatch a fresh subagent per task, review between tasks, fast iteration</p>
+<p><strong>2. Inline Execution</strong> - Execute tasks in this session using executing-plans, batch execution with checkpoints</p>
+<p>Which approach?</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

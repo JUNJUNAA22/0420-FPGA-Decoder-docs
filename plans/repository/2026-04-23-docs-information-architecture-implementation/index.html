@@ -1,0 +1,2418 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Public documentation for the 0420 FPGA decoder workspace">
+      
+      
+      
+        <link rel="canonical" href="https://junjunaa22.github.io/0420-FPGA-Decoder-docs/plans/repository/2026-04-23-docs-information-architecture-implementation/">
+      
+      
+        <link rel="prev" href="../../../specs/qldpc/2026-04-22-qldpc-jupyter-demo-design/">
+      
+      
+        <link rel="next" href="../../surface-code/2026-04-20-surface-code-realtime-mwpm-fpga/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Repository Documentation Migration - 0420-FPGA-Decoder Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#repository-documentation-information-architecture-implementation-plan" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="0420-FPGA-Decoder Documentation" class="md-header__button md-logo" aria-label="0420-FPGA-Decoder Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            0420-FPGA-Decoder Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Repository Documentation Migration
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/JUNJUNAA22/0420-FPGA-Decoder-docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    JUNJUNAA22/0420-FPGA-Decoder-docs
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../architecture/overview/" class="md-tabs__link">
+          
+  
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../verification/ci/" class="md-tabs__link">
+          
+  
+  
+  Verification
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../development/environment/" class="md-tabs__link">
+          
+  
+  
+  Development
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../specs/repository/2026-04-23-docs-information-architecture-design/" class="md-tabs__link">
+          
+  
+  
+  Specs
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  Plans
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="0420-FPGA-Decoder Documentation" class="md-nav__button md-logo" aria-label="0420-FPGA-Decoder Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    0420-FPGA-Decoder Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/JUNJUNAA22/0420-FPGA-Decoder-docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    JUNJUNAA22/0420-FPGA-Decoder-docs
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/surface-code-decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/python-verilog-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python-Verilog Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/qldpc-decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/gpu-decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Verification
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../verification/ci/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../verification/surface-code-verilog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code Verilog Self-Check
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../verification/human-verification-test-plan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human Verification Test Plan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/generated-artifacts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Generated Artifacts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Specs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/repository/2026-04-23-docs-information-architecture-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/surface-code/2026-04-20-surface-code-realtime-mwpm-fpga-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/interface/2026-04-20-python-decoder-verilog-interface-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python-Verilog Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/qldpc/2026-04-22-qldpc-adaptive-sparse-decoder-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Adaptive Sparse Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/qldpc/2026-04-22-qldpc-adaptive-strategy-engine-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Adaptive Strategy Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/qldpc/2026-04-22-qldpc-jupyter-demo-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Jupyter Demo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plans
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Plans
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository Documentation Migration
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository Documentation Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#scope-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-1-add-the-markdown-link-checker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 1: Add The Markdown Link Checker
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-2-migrate-specs-and-plans-into-topic-directories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 2: Migrate Specs And Plans Into Topic Directories
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-3-add-navigation-architecture-development-and-verification-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 3: Add Navigation, Architecture, Development, And Verification Pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-4-update-entry-points-and-agent-guidance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 4: Update Entry Points And Agent Guidance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-5-final-documentation-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 5: Final Documentation Verification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-6-handoff-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 6: Handoff Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../surface-code/2026-04-20-surface-code-realtime-mwpm-fpga/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code Realtime MWPM FPGA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../interface/2026-04-20-python-decoder-verilog-interface-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python-Verilog Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../interface/2026-04-20-verilog-counter-smoke-test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verilog Counter Smoke Test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../qldpc/2026-04-22-qldpc-decoder-phase1-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Decoder Phase 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../qldpc/2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Adaptive Strategy Phase 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#scope-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-1-add-the-markdown-link-checker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 1: Add The Markdown Link Checker
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-2-migrate-specs-and-plans-into-topic-directories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 2: Migrate Specs And Plans Into Topic Directories
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-3-add-navigation-architecture-development-and-verification-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 3: Add Navigation, Architecture, Development, And Verification Pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-4-update-entry-points-and-agent-guidance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 4: Update Entry Points And Agent Guidance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-5-final-documentation-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 5: Final Documentation Verification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-6-handoff-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 6: Handoff Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<!-- docs-link-check: allow-old-paths -->
+
+<h1 id="repository-documentation-information-architecture-implementation-plan">Repository Documentation Information Architecture Implementation Plan<a class="headerlink" href="#repository-documentation-information-architecture-implementation-plan" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>For agentic workers:</strong> REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (<code>- [ ]</code>) syntax for tracking.</p>
+</blockquote>
+<p><strong>Goal:</strong> Reorganize repository documentation for issue #6 into a clear top-level <code>docs/</code> information architecture while preserving compatibility stubs at old paths.</p>
+<p><strong>Architecture:</strong> Keep source, Verilog, CI, and package directories in place. Move long-term documentation into topic-based <code>docs/</code> sections, replace old documentation paths with short stubs, and add a local Markdown link checker for verification.</p>
+<p><strong>Tech Stack:</strong> Markdown, Python 3 standard library, Git on Windows PowerShell.</p>
+<hr />
+<h2 id="scope-check">Scope Check<a class="headerlink" href="#scope-check" title="Permanent link">&para;</a></h2>
+<p>This plan implements <code>docs/superpowers/specs/2026-04-23-docs-information-architecture-design.md</code>. It is one documentation migration, not a code-module layout change. Do not move <code>surface_code_decoder/</code>, <code>verilog_test/</code>, <code>qldpc_decoder/</code>, <code>GPU-decoder/</code>, <code>.github/</code>, or runtime test directories.</p>
+<h2 id="file-structure">File Structure<a class="headerlink" href="#file-structure" title="Permanent link">&para;</a></h2>
+<p>Create long-term documentation directories:</p>
+<ul>
+<li><code>docs/README.md</code>: documentation navigation entry point.</li>
+<li><code>docs/architecture/overview.md</code>: current repository architecture summary.</li>
+<li><code>docs/architecture/surface-code-decoder.md</code>: current <code>surface_code_decoder/</code> Surface Code benchmark summary.</li>
+<li><code>docs/architecture/python-verilog-interface.md</code>: current Python-to-Verilog interface and Verilog contract model summary.</li>
+<li><code>docs/architecture/qldpc-decoder.md</code>: conservative current QLDPC module status.</li>
+<li><code>docs/architecture/gpu-decoder.md</code>: parked future module status.</li>
+<li><code>docs/development/environment.md</code>: setup and command entry points.</li>
+<li><code>docs/development/generated-artifacts.md</code>: generated artifact policy.</li>
+<li><code>docs/verification/ci.md</code>: CI workflow and local equivalents.</li>
+<li><code>docs/verification/surface-code-verilog.md</code>: vector generation and Verilog self-check.</li>
+<li><code>docs/verification/human-verification-test-plan.md</code>: moved human verification plan.</li>
+<li><code>docs/archive/README.md</code>: archive policy.</li>
+<li><code>docs/specs/repository/</code>: issue #6 documentation architecture spec.</li>
+<li><code>docs/specs/surface-code/</code>: Surface Code design specs.</li>
+<li><code>docs/specs/interface/</code>: Python-Verilog interface design specs.</li>
+<li><code>docs/specs/qldpc/</code>: QLDPC design specs.</li>
+<li><code>docs/plans/repository/</code>: issue #6 implementation plan.</li>
+<li><code>docs/plans/surface-code/</code>: Surface Code implementation plans.</li>
+<li><code>docs/plans/interface/</code>: Python-Verilog interface implementation plans.</li>
+<li><code>docs/plans/qldpc/</code>: QLDPC implementation plans.</li>
+</ul>
+<p>Retain compatibility stubs at old paths:</p>
+<ul>
+<li><code>docs/superpowers/specs/*.md</code></li>
+<li><code>docs/superpowers/plans/*.md</code></li>
+<li><code>surface_code_decoder/docs/superpowers/specs/*.md</code></li>
+<li><code>surface_code_decoder/docs/superpowers/plans/*.md</code></li>
+<li><code>GPU-decoder/docs/superpowers/specs/*.md</code></li>
+<li><code>GPU-decoder/docs/superpowers/plans/*.md</code></li>
+<li><code>HUMAN_VERIFICATION_TEST_PLAN.md</code></li>
+</ul>
+<p>Add verification script:</p>
+<ul>
+<li><code>scripts/check_docs_links.py</code>: repository-local Markdown link and stale path checker.</li>
+</ul>
+<p>Modify entry-point docs:</p>
+<ul>
+<li><code>README.md</code>: slim project entry point.</li>
+<li><code>surface_code_decoder/README.md</code>: Surface Code subproject entry point with new docs links.</li>
+<li><code>qldpc_decoder/README.md</code>: conservative status table.</li>
+<li><code>AGENTS.md</code>: updated agent guidance and new docs links.</li>
+<li><code>CLAUDE.md</code>: updated agent guidance and new docs links.</li>
+</ul>
+<h2 id="task-1-add-the-markdown-link-checker">Task 1: Add The Markdown Link Checker<a class="headerlink" href="#task-1-add-the-markdown-link-checker" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Create: <code>scripts/check_docs_links.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Create the checker script</strong></li>
+</ul>
+<p>Create <code>scripts/check_docs_links.py</code> with this content:</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import re
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+from urllib.parse import unquote, urlparse
+
+
+LINK_RE = re.compile(r&quot;(?&lt;!!)\[[^\]]+\]\(([^)]+)\)&quot;)
+ALLOW_OLD_PATHS_MARKER = &quot;&lt;!-- docs-link-check: allow-old-paths --&gt;&quot;
+
+OLD_DOC_PREFIXES = (
+    &quot;docs/superpowers/&quot;,
+    &quot;surface_code_decoder/docs/superpowers/&quot;,
+    &quot;GPU-decoder/docs/superpowers/&quot;,
+)
+
+COMPATIBILITY_STUB_DIRS = (
+    Path(&quot;docs/superpowers&quot;),
+    Path(&quot;surface_code_decoder/docs/superpowers&quot;),
+    Path(&quot;GPU-decoder/docs/superpowers&quot;),
+)
+
+COMPATIBILITY_STUB_FILES = {
+    Path(&quot;HUMAN_VERIFICATION_TEST_PLAN.md&quot;),
+}
+
+SKIP_DIR_NAMES = {
+    &quot;.git&quot;,
+    &quot;.mypy_cache&quot;,
+    &quot;.pytest_cache&quot;,
+    &quot;.ruff_cache&quot;,
+    &quot;.venv&quot;,
+    &quot;__pycache__&quot;,
+    &quot;benchmark-out&quot;,
+    &quot;node_modules&quot;,
+    &quot;pytest-temp-runs&quot;,
+}
+
+SKIP_DIR_PREFIXES = (
+    &quot;.pytest-basetemp&quot;,
+    &quot;pytest-basetemp&quot;,
+)
+
+
+@dataclass(frozen=True)
+class Finding:
+    path: Path
+    line: int
+    message: str
+
+
+def parse_args() -&gt; argparse.Namespace:
+    parser = argparse.ArgumentParser(description=&quot;Check repository-local Markdown links.&quot;)
+    parser.add_argument(
+        &quot;--root&quot;,
+        type=Path,
+        default=Path.cwd(),
+        help=&quot;Repository root to scan. Defaults to the current directory.&quot;,
+    )
+    return parser.parse_args()
+
+
+def main() -&gt; int:
+    args = parse_args()
+    root = args.root.resolve()
+    findings: list[Finding] = []
+
+    for markdown_path in iter_markdown_files(root):
+        rel_path = markdown_path.relative_to(root)
+        text = markdown_path.read_text(encoding=&quot;utf-8&quot;)
+        findings.extend(check_local_links(root, markdown_path, rel_path, text))
+        findings.extend(check_stale_doc_paths(rel_path, text))
+
+    if findings:
+        for finding in findings:
+            print(f&quot;{finding.path}:{finding.line}: {finding.message}&quot;)
+        return 1
+
+    print(&quot;Documentation links OK.&quot;)
+    return 0
+
+
+def iter_markdown_files(root: Path) -&gt; list[Path]:
+    return sorted(
+        path
+        for path in root.rglob(&quot;*.md&quot;)
+        if path.is_file() and not should_skip(path.relative_to(root))
+    )
+
+
+def should_skip(rel_path: Path) -&gt; bool:
+    for part in rel_path.parts:
+        if part in SKIP_DIR_NAMES:
+            return True
+        if any(part.startswith(prefix) for prefix in SKIP_DIR_PREFIXES):
+            return True
+    return False
+
+
+def check_local_links(root: Path, markdown_path: Path, rel_path: Path, text: str) -&gt; list[Finding]:
+    findings: list[Finding] = []
+    for match in LINK_RE.finditer(text):
+        raw_target = match.group(1).strip()
+        line = text.count(&quot;\n&quot;, 0, match.start()) + 1
+        target = normalize_markdown_target(raw_target)
+
+        if should_ignore_target(target):
+            continue
+
+        target_path = (markdown_path.parent / target).resolve()
+        try:
+            target_path.relative_to(root)
+        except ValueError:
+            findings.append(Finding(rel_path, line, f&quot;local link escapes repository: {raw_target}&quot;))
+            continue
+
+        if not target_path.exists():
+            findings.append(Finding(rel_path, line, f&quot;missing local link target: {raw_target}&quot;))
+
+    return findings
+
+
+def normalize_markdown_target(raw_target: str) -&gt; str:
+    target = raw_target
+    if &quot; &quot; in target and not target.startswith(&quot;&lt;&quot;):
+        target = target.split()[0]
+    target = target.strip(&quot;&lt;&gt;&quot;)
+    target = target.split(&quot;#&quot;, 1)[0]
+    target = target.split(&quot;?&quot;, 1)[0]
+    return unquote(target)
+
+
+def should_ignore_target(target: str) -&gt; bool:
+    if not target:
+        return True
+    parsed = urlparse(target)
+    if parsed.scheme in {&quot;http&quot;, &quot;https&quot;, &quot;mailto&quot;}:
+        return True
+    if target.startswith(&quot;#&quot;):
+        return True
+    return False
+
+
+def check_stale_doc_paths(rel_path: Path, text: str) -&gt; list[Finding]:
+    if stale_paths_allowed(rel_path, text):
+        return []
+
+    findings: list[Finding] = []
+    for old_prefix in OLD_DOC_PREFIXES:
+        search_start = 0
+        while True:
+            index = text.find(old_prefix, search_start)
+            if index == -1:
+                break
+            line = text.count(&quot;\n&quot;, 0, index) + 1
+            findings.append(
+                Finding(
+                    rel_path,
+                    line,
+                    f&quot;stale documentation path reference: {old_prefix}&quot;,
+                )
+            )
+            search_start = index + len(old_prefix)
+    return findings
+
+
+def stale_paths_allowed(rel_path: Path, text: str) -&gt; bool:
+    if ALLOW_OLD_PATHS_MARKER in text:
+        return True
+    if rel_path in COMPATIBILITY_STUB_FILES:
+        return True
+    return any(is_relative_to(rel_path, stub_dir) for stub_dir in COMPATIBILITY_STUB_DIRS)
+
+
+def is_relative_to(path: Path, parent: Path) -&gt; bool:
+    try:
+        path.relative_to(parent)
+    except ValueError:
+        return False
+    return True
+
+
+if __name__ == &quot;__main__&quot;:
+    raise SystemExit(main())
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run the checker before migration</strong></li>
+</ul>
+<p>Run from the repository root:</p>
+<pre><code class="language-powershell">python scripts\check_docs_links.py
+</code></pre>
+<p>Expected: the command may fail before old references are migrated. Record whether it reports stale <code>docs/superpowers/</code>, <code>surface_code_decoder/docs/superpowers/</code>, or <code>GPU-decoder/docs/superpowers/</code> references. Do not change the script to hide real findings.</p>
+<ul>
+<li>[ ] <strong>Step 3: Commit the checker</strong></li>
+</ul>
+<pre><code class="language-powershell">git add scripts\check_docs_links.py
+git commit -m &quot;docs: add markdown link checker&quot;
+</code></pre>
+<h2 id="task-2-migrate-specs-and-plans-into-topic-directories">Task 2: Migrate Specs And Plans Into Topic Directories<a class="headerlink" href="#task-2-migrate-specs-and-plans-into-topic-directories" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Move: <code>docs/superpowers/specs/2026-04-23-docs-information-architecture-design.md</code> to <code>docs/specs/repository/2026-04-23-docs-information-architecture-design.md</code>
+- Move: <code>docs/superpowers/plans/2026-04-23-docs-information-architecture-implementation.md</code> to <code>docs/plans/repository/2026-04-23-docs-information-architecture-implementation.md</code>
+- Move: <code>surface_code_decoder/docs/superpowers/specs/2026-04-20-surface-code-realtime-mwpm-fpga-design.md</code> to <code>docs/specs/surface-code/2026-04-20-surface-code-realtime-mwpm-fpga-design.md</code>
+- Move: <code>surface_code_decoder/docs/superpowers/plans/2026-04-20-surface-code-realtime-mwpm-fpga.md</code> to <code>docs/plans/surface-code/2026-04-20-surface-code-realtime-mwpm-fpga.md</code>
+- Move: <code>GPU-decoder/docs/superpowers/specs/2026-04-20-python-decoder-verilog-interface-design.md</code> to <code>docs/specs/interface/2026-04-20-python-decoder-verilog-interface-design.md</code>
+- Move: <code>GPU-decoder/docs/superpowers/plans/2026-04-20-python-decoder-verilog-interface-implementation.md</code> to <code>docs/plans/interface/2026-04-20-python-decoder-verilog-interface-implementation.md</code>
+- Move: <code>GPU-decoder/docs/superpowers/plans/2026-04-20-verilog-counter-smoke-test.md</code> to <code>docs/plans/interface/2026-04-20-verilog-counter-smoke-test.md</code>
+- Move: <code>docs/superpowers/specs/2026-04-22-qldpc-adaptive-sparse-decoder-design.md</code> to <code>docs/specs/qldpc/2026-04-22-qldpc-adaptive-sparse-decoder-design.md</code>
+- Move: <code>docs/superpowers/specs/2026-04-22-qldpc-adaptive-strategy-engine-design.md</code> to <code>docs/specs/qldpc/2026-04-22-qldpc-adaptive-strategy-engine-design.md</code>
+- Move: <code>docs/superpowers/specs/2026-04-22-qldpc-jupyter-demo-design.md</code> to <code>docs/specs/qldpc/2026-04-22-qldpc-jupyter-demo-design.md</code>
+- Move: <code>docs/superpowers/plans/2026-04-22-qldpc-decoder-phase1-implementation.md</code> to <code>docs/plans/qldpc/2026-04-22-qldpc-decoder-phase1-implementation.md</code>
+- Move: <code>docs/superpowers/plans/2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementation.md</code> to <code>docs/plans/qldpc/2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementation.md</code>
+- Modify: every old moved path listed above, replacing it with a compatibility stub.</p>
+<ul>
+<li>[ ] <strong>Step 1: Create target directories</strong></li>
+</ul>
+<pre><code class="language-powershell">New-Item -ItemType Directory -Force docs\specs\repository,docs\specs\surface-code,docs\specs\interface,docs\specs\qldpc,docs\plans\repository,docs\plans\surface-code,docs\plans\interface,docs\plans\qldpc
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Move the files with Git</strong></li>
+</ul>
+<p>Run these exact commands from the repository root:</p>
+<pre><code class="language-powershell">git mv docs\superpowers\specs\2026-04-23-docs-information-architecture-design.md docs\specs\repository\2026-04-23-docs-information-architecture-design.md
+git mv docs\superpowers\plans\2026-04-23-docs-information-architecture-implementation.md docs\plans\repository\2026-04-23-docs-information-architecture-implementation.md
+git mv surface_code_decoder\docs\superpowers\specs\2026-04-20-surface-code-realtime-mwpm-fpga-design.md docs\specs\surface-code\2026-04-20-surface-code-realtime-mwpm-fpga-design.md
+git mv surface_code_decoder\docs\superpowers\plans\2026-04-20-surface-code-realtime-mwpm-fpga.md docs\plans\surface-code\2026-04-20-surface-code-realtime-mwpm-fpga.md
+git mv GPU-decoder\docs\superpowers\specs\2026-04-20-python-decoder-verilog-interface-design.md docs\specs\interface\2026-04-20-python-decoder-verilog-interface-design.md
+git mv GPU-decoder\docs\superpowers\plans\2026-04-20-python-decoder-verilog-interface-implementation.md docs\plans\interface\2026-04-20-python-decoder-verilog-interface-implementation.md
+git mv GPU-decoder\docs\superpowers\plans\2026-04-20-verilog-counter-smoke-test.md docs\plans\interface\2026-04-20-verilog-counter-smoke-test.md
+git mv docs\superpowers\specs\2026-04-22-qldpc-adaptive-sparse-decoder-design.md docs\specs\qldpc\2026-04-22-qldpc-adaptive-sparse-decoder-design.md
+git mv docs\superpowers\specs\2026-04-22-qldpc-adaptive-strategy-engine-design.md docs\specs\qldpc\2026-04-22-qldpc-adaptive-strategy-engine-design.md
+git mv docs\superpowers\specs\2026-04-22-qldpc-jupyter-demo-design.md docs\specs\qldpc\2026-04-22-qldpc-jupyter-demo-design.md
+git mv docs\superpowers\plans\2026-04-22-qldpc-decoder-phase1-implementation.md docs\plans\qldpc\2026-04-22-qldpc-decoder-phase1-implementation.md
+git mv docs\superpowers\plans\2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementation.md docs\plans\qldpc\2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementation.md
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 3: Add historical status notes to moved historical plans</strong></li>
+</ul>
+<p>For each moved plan under <code>docs/plans/surface-code/</code>, <code>docs/plans/interface/</code>, and <code>docs/plans/qldpc/</code>, insert this note immediately after the title line:</p>
+<pre><code class="language-md">&gt; Status: Historical implementation plan. The work described here may already
+&gt; be partially or fully implemented. Use the corresponding architecture page and
+&gt; current source tree as the source of truth.
+</code></pre>
+<p>Do not add that status note to <code>docs/plans/repository/2026-04-23-docs-information-architecture-implementation.md</code> while it is the active implementation plan.</p>
+<ul>
+<li>[ ] <strong>Step 4: Add the allow marker to repository migration docs</strong></li>
+</ul>
+<p>Ensure these files contain this marker as their first line:</p>
+<pre><code class="language-md">&lt;!-- docs-link-check: allow-old-paths --&gt;
+</code></pre>
+<p>Files:</p>
+<ul>
+<li><code>docs/specs/repository/2026-04-23-docs-information-architecture-design.md</code></li>
+<li>
+<p><code>docs/plans/repository/2026-04-23-docs-information-architecture-implementation.md</code></p>
+</li>
+<li>
+<p>[ ] <strong>Step 5: Recreate compatibility stubs at old paths</strong></p>
+</li>
+</ul>
+<p>Each old path must contain only a title, moved target, and removal condition. Use this exact pattern, substituting the title and target:</p>
+<pre><code class="language-md"># Original Document Title
+
+This document moved to:
+
+`relative/path/from/old/location/to/new/document.md`
+
+This compatibility stub can be removed after downstream references, open
+branches, and agent guidance have been verified against the new path.
+</code></pre>
+<p>Use these titles and target paths:</p>
+<table>
+<thead>
+<tr>
+<th>Old path</th>
+<th>Title</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docs/superpowers/specs/2026-04-23-docs-information-architecture-design.md</code></td>
+<td><code>Repository Documentation Information Architecture Design</code></td>
+<td><code>../../specs/repository/2026-04-23-docs-information-architecture-design.md</code></td>
+</tr>
+<tr>
+<td><code>docs/superpowers/plans/2026-04-23-docs-information-architecture-implementation.md</code></td>
+<td><code>Repository Documentation Information Architecture Implementation Plan</code></td>
+<td><code>../../plans/repository/2026-04-23-docs-information-architecture-implementation.md</code></td>
+</tr>
+<tr>
+<td><code>surface_code_decoder/docs/superpowers/specs/2026-04-20-surface-code-realtime-mwpm-fpga-design.md</code></td>
+<td><code>Surface Code Realtime MWPM FPGA Design</code></td>
+<td><code>../../../../docs/specs/surface-code/2026-04-20-surface-code-realtime-mwpm-fpga-design.md</code></td>
+</tr>
+<tr>
+<td><code>surface_code_decoder/docs/superpowers/plans/2026-04-20-surface-code-realtime-mwpm-fpga.md</code></td>
+<td><code>Surface Code Realtime MWPM FPGA Implementation Plan</code></td>
+<td><code>../../../../docs/plans/surface-code/2026-04-20-surface-code-realtime-mwpm-fpga.md</code></td>
+</tr>
+<tr>
+<td><code>GPU-decoder/docs/superpowers/specs/2026-04-20-python-decoder-verilog-interface-design.md</code></td>
+<td><code>Python Decoder To Verilog Interface Simulation Design</code></td>
+<td><code>../../../../docs/specs/interface/2026-04-20-python-decoder-verilog-interface-design.md</code></td>
+</tr>
+<tr>
+<td><code>GPU-decoder/docs/superpowers/plans/2026-04-20-python-decoder-verilog-interface-implementation.md</code></td>
+<td><code>Python Decoder To Verilog Interface Implementation Plan</code></td>
+<td><code>../../../../docs/plans/interface/2026-04-20-python-decoder-verilog-interface-implementation.md</code></td>
+</tr>
+<tr>
+<td><code>GPU-decoder/docs/superpowers/plans/2026-04-20-verilog-counter-smoke-test.md</code></td>
+<td><code>Verilog Counter Smoke Test Plan</code></td>
+<td><code>../../../../docs/plans/interface/2026-04-20-verilog-counter-smoke-test.md</code></td>
+</tr>
+<tr>
+<td><code>docs/superpowers/specs/2026-04-22-qldpc-adaptive-sparse-decoder-design.md</code></td>
+<td><code>QLDPC Adaptive Sparse Decoder Design</code></td>
+<td><code>../../specs/qldpc/2026-04-22-qldpc-adaptive-sparse-decoder-design.md</code></td>
+</tr>
+<tr>
+<td><code>docs/superpowers/specs/2026-04-22-qldpc-adaptive-strategy-engine-design.md</code></td>
+<td><code>QLDPC Adaptive Strategy Engine Design</code></td>
+<td><code>../../specs/qldpc/2026-04-22-qldpc-adaptive-strategy-engine-design.md</code></td>
+</tr>
+<tr>
+<td><code>docs/superpowers/specs/2026-04-22-qldpc-jupyter-demo-design.md</code></td>
+<td><code>QLDPC Jupyter Demo Design</code></td>
+<td><code>../../specs/qldpc/2026-04-22-qldpc-jupyter-demo-design.md</code></td>
+</tr>
+<tr>
+<td><code>docs/superpowers/plans/2026-04-22-qldpc-decoder-phase1-implementation.md</code></td>
+<td><code>QLDPC Decoder Phase 1 Implementation Plan</code></td>
+<td><code>../../plans/qldpc/2026-04-22-qldpc-decoder-phase1-implementation.md</code></td>
+</tr>
+<tr>
+<td><code>docs/superpowers/plans/2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementation.md</code></td>
+<td><code>QLDPC Phase 2 Adaptive Strategy Engine Implementation Plan</code></td>
+<td><code>../../plans/qldpc/2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementation.md</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>[ ] <strong>Step 6: Verify this migration slice</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-powershell">python scripts\check_docs_links.py
+git status --short
+</code></pre>
+<p>Expected: the link checker may still report stale references from root README, agent guidance, and subproject README files. It must not report missing targets for the moved spec/plan stubs.</p>
+<ul>
+<li>[ ] <strong>Step 7: Commit the migration slice</strong></li>
+</ul>
+<pre><code class="language-powershell">git add docs surface_code_decoder\docs GPU-decoder\docs
+git commit -m &quot;docs: migrate specs and plans into topic directories&quot;
+</code></pre>
+<h2 id="task-3-add-navigation-architecture-development-and-verification-pages">Task 3: Add Navigation, Architecture, Development, And Verification Pages<a class="headerlink" href="#task-3-add-navigation-architecture-development-and-verification-pages" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Create: <code>docs/README.md</code>
+- Create: <code>docs/architecture/overview.md</code>
+- Create: <code>docs/architecture/surface-code-decoder.md</code>
+- Create: <code>docs/architecture/python-verilog-interface.md</code>
+- Create: <code>docs/architecture/qldpc-decoder.md</code>
+- Create: <code>docs/architecture/gpu-decoder.md</code>
+- Create: <code>docs/development/environment.md</code>
+- Create: <code>docs/development/generated-artifacts.md</code>
+- Create: <code>docs/verification/ci.md</code>
+- Create: <code>docs/verification/surface-code-verilog.md</code>
+- Create: <code>docs/archive/README.md</code>
+- Move: <code>HUMAN_VERIFICATION_TEST_PLAN.md</code> to <code>docs/verification/human-verification-test-plan.md</code>
+- Recreate: <code>HUMAN_VERIFICATION_TEST_PLAN.md</code> as compatibility stub.</p>
+<ul>
+<li>[ ] <strong>Step 1: Create documentation directories</strong></li>
+</ul>
+<pre><code class="language-powershell">New-Item -ItemType Directory -Force docs\architecture,docs\development,docs\verification,docs\archive
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Move the human verification plan</strong></li>
+</ul>
+<pre><code class="language-powershell">git mv HUMAN_VERIFICATION_TEST_PLAN.md docs\verification\human-verification-test-plan.md
+</code></pre>
+<p>Create root <code>HUMAN_VERIFICATION_TEST_PLAN.md</code> with:</p>
+<pre><code class="language-md"># Human Verification Test Plan
+
+This document moved to:
+
+`docs/verification/human-verification-test-plan.md`
+
+This compatibility stub can be removed after downstream references, open
+branches, and agent guidance have been verified against the new path.
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 3: Create <code>docs/README.md</code></strong></li>
+</ul>
+<p>Write <code>docs/README.md</code> with these sections:</p>
+<pre><code class="language-md"># Documentation
+
+This directory is the long-term documentation entry point for the FPGA decoder
+exploration workspace.
+
+## Current Architecture
+
+- [Repository Overview](architecture/overview.md)
+- [Surface Code Decoder](architecture/surface-code-decoder.md)
+- [Python-Verilog Interface](architecture/python-verilog-interface.md)
+- [QLDPC Decoder](architecture/qldpc-decoder.md)
+- [GPU Decoder](architecture/gpu-decoder.md)
+
+## Development
+
+- [Environment](development/environment.md)
+- [Generated Artifacts](development/generated-artifacts.md)
+
+## Verification
+
+- [CI](verification/ci.md)
+- [Surface Code Verilog Self-Check](verification/surface-code-verilog.md)
+- [Human Verification Test Plan](verification/human-verification-test-plan.md)
+
+## Design Specifications
+
+- [Repository Documentation](specs/repository/2026-04-23-docs-information-architecture-design.md)
+- [Surface Code](specs/surface-code/2026-04-20-surface-code-realtime-mwpm-fpga-design.md)
+- [Python-Verilog Interface](specs/interface/2026-04-20-python-decoder-verilog-interface-design.md)
+- [QLDPC Adaptive Sparse Decoder](specs/qldpc/2026-04-22-qldpc-adaptive-sparse-decoder-design.md)
+- [QLDPC Adaptive Strategy Engine](specs/qldpc/2026-04-22-qldpc-adaptive-strategy-engine-design.md)
+- [QLDPC Jupyter Demo](specs/qldpc/2026-04-22-qldpc-jupyter-demo-design.md)
+
+## Implementation Plans
+
+Plans preserve implementation history and handoff details. Historical plans are
+not the current source of truth; use architecture pages and source files for
+current behavior.
+
+- [Repository Documentation Migration](plans/repository/2026-04-23-docs-information-architecture-implementation.md)
+- [Surface Code Realtime MWPM FPGA](plans/surface-code/2026-04-20-surface-code-realtime-mwpm-fpga.md)
+- [Python-Verilog Interface](plans/interface/2026-04-20-python-decoder-verilog-interface-implementation.md)
+- [Verilog Counter Smoke Test](plans/interface/2026-04-20-verilog-counter-smoke-test.md)
+- [QLDPC Decoder Phase 1](plans/qldpc/2026-04-22-qldpc-decoder-phase1-implementation.md)
+- [QLDPC Adaptive Strategy Phase 2](plans/qldpc/2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementation.md)
+
+## Archive
+
+- [Archive Policy](archive/README.md)
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Create architecture pages</strong></li>
+</ul>
+<p>Create each architecture page using these required facts:</p>
+<p><code>docs/architecture/overview.md</code>:</p>
+<ul>
+<li>State that this repository is an FPGA quantum decoder exploration workspace.</li>
+<li>List current root-level modules: <code>surface_code_decoder/</code>, <code>verilog_test/</code>, <code>qldpc_decoder/</code>, and <code>GPU-decoder/</code>.</li>
+<li>State that current root-level locations are present state, not a permanent layout constraint.</li>
+<li>Link to each module-specific architecture page.</li>
+</ul>
+<p><code>docs/architecture/surface-code-decoder.md</code>:</p>
+<ul>
+<li>Describe <code>surface_code_decoder/</code> as the Surface Code Python benchmark package.</li>
+<li>Mention circuit generation, syndrome sampling, PyMatching/MWPM decoding, latency modeling, reporting, and Verilog vector export.</li>
+<li>Link to <code>../specs/surface-code/2026-04-20-surface-code-realtime-mwpm-fpga-design.md</code>.</li>
+</ul>
+<p><code>docs/architecture/python-verilog-interface.md</code>:</p>
+<ul>
+<li>Describe Python vector generation from <code>surface_code_decoder/</code>.</li>
+<li>Describe Verilog consumption through <code>verilog_test/vectors/current/</code>.</li>
+<li>State that <code>verilog_test/decoder_interface_model.v</code> is an interface contract model, not a hardware MWPM decoder.</li>
+<li>Link to <code>../specs/interface/2026-04-20-python-decoder-verilog-interface-design.md</code> and <code>../verification/surface-code-verilog.md</code>.</li>
+</ul>
+<p><code>docs/architecture/qldpc-decoder.md</code>:</p>
+<ul>
+<li>Describe <code>qldpc_decoder/</code> as an adaptive sparse QLDPC decoder module.</li>
+<li>Use a conservative status table with rows for Python package scaffold, models, sparse format, message passing, decoder API, adaptive strategy engine, code generator, FPGA host interface, Verilog FPGA modules, integration tests, and performance validation.</li>
+<li>Mark current implementation as implemented, partial, skeleton, or planned based on files in <code>qldpc_decoder/src/</code> and skipped tests in <code>qldpc_decoder/tests/test_integration.py</code>.</li>
+</ul>
+<p><code>docs/architecture/gpu-decoder.md</code>:</p>
+<ul>
+<li>Describe <code>GPU-decoder/</code> as a parked future module owned separately.</li>
+<li>State that it is not part of the current Python-Verilog interface validation path.</li>
+<li>State that future integration should be handled by a dedicated design and implementation plan.</li>
+</ul>
+<p><code>docs/archive/README.md</code>:</p>
+<ul>
+<li>Define archive as obsolete but still useful design drafts, plans, or verification notes.</li>
+<li>
+<p>State that generated reports, runtime outputs, and current source-of-truth docs do not belong in archive.</p>
+</li>
+<li>
+<p>[ ] <strong>Step 5: Create development and verification pages</strong></p>
+</li>
+</ul>
+<p><code>docs/development/environment.md</code> must include:</p>
+<ul>
+<li>Python 3.11 or newer.</li>
+<li>Conda environment name <code>fpga-decoder</code>.</li>
+<li>Editable install command from <code>surface_code_decoder/</code>.</li>
+<li>Verilog simulator requirement for <code>iverilog</code> and <code>vvp</code>.</li>
+<li>Note that Windows PowerShell profile execution-policy warnings are not project failures when commands still run and exit correctly.</li>
+</ul>
+<p><code>docs/development/generated-artifacts.md</code> must include:</p>
+<ul>
+<li><code>surface_code_decoder/benchmark-out/</code></li>
+<li><code>verilog_test/vectors/current/</code></li>
+<li>pytest temp directories under <code>pytest-temp-runs/</code> and <code>.pytest-basetemp*</code></li>
+<li>simulator outputs such as <code>.out</code>, <code>.vcd</code>, and <code>sim.out</code></li>
+<li>Python caches such as <code>__pycache__/</code></li>
+<li>State that these are regenerated, not moved into long-term docs.</li>
+</ul>
+<p><code>docs/verification/ci.md</code> must include:</p>
+<ul>
+<li><code>.github/workflows/ci.yml</code></li>
+<li><code>python-tests</code> job summary.</li>
+<li><code>verilog-interface</code> job summary.</li>
+<li>Local equivalents should point to <code>surface-code-verilog.md</code> for vector and Verilog commands.</li>
+</ul>
+<p><code>docs/verification/surface-code-verilog.md</code> must include these commands:</p>
+<pre><code class="language-powershell">conda run -n fpga-decoder python -m pytest tests/test_verilog_vectors.py tests/test_verilog_cli.py -q --basetemp ..\pytest-temp-runs\task1\run-local
+conda run -n fpga-decoder python -m decoder_benchmark.verilog_cli --distance 3 --error-rate 0.001 --shots 4 --rounds 3 --seed 1234 --output-dir ..\verilog_test\vectors\current
+iverilog -o verilog_test\sim_decoder_interface.out verilog_test\decoder_interface_model.v verilog_test\tb_decoder_interface.v
+vvp verilog_test\sim_decoder_interface.out
+</code></pre>
+<p>Also include the fallback pytest command when <code>surface_code_decoder/tests/test_verilog_vectors.py</code> is absent.</p>
+<ul>
+<li>[ ] <strong>Step 6: Verify this documentation slice</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-powershell">python scripts\check_docs_links.py
+</code></pre>
+<p>Expected: missing-link findings should be fixed before committing. Stale path findings may remain from root README, <code>AGENTS.md</code>, <code>CLAUDE.md</code>, <code>surface_code_decoder/README.md</code>, or <code>qldpc_decoder/README.md</code> until Task 4.</p>
+<ul>
+<li>[ ] <strong>Step 7: Commit this slice</strong></li>
+</ul>
+<pre><code class="language-powershell">git add docs HUMAN_VERIFICATION_TEST_PLAN.md
+git commit -m &quot;docs: add documentation navigation and current architecture pages&quot;
+</code></pre>
+<h2 id="task-4-update-entry-points-and-agent-guidance">Task 4: Update Entry Points And Agent Guidance<a class="headerlink" href="#task-4-update-entry-points-and-agent-guidance" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Modify: <code>README.md</code>
+- Modify: <code>surface_code_decoder/README.md</code>
+- Modify: <code>qldpc_decoder/README.md</code>
+- Modify: <code>AGENTS.md</code>
+- Modify: <code>CLAUDE.md</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Slim root <code>README.md</code></strong></li>
+</ul>
+<p>Rewrite root <code>README.md</code> as a concise project entry point with these sections:</p>
+<ul>
+<li><code># 0420-FPGA-Decoder</code></li>
+<li><code>## Purpose</code></li>
+<li><code>## Core Modules</code></li>
+<li><code>## Documentation</code></li>
+<li><code>## Quick Start</code></li>
+<li><code>## Generated Files</code></li>
+<li><code>## Contributing Notes</code></li>
+</ul>
+<p>Required module bullets:</p>
+<ul>
+<li><code>surface_code_decoder/</code>: Surface Code Python benchmark and vector exporter.</li>
+<li><code>verilog_test/</code>: Verilog interface-level self-check harness.</li>
+<li><code>qldpc_decoder/</code>: QLDPC adaptive sparse decoder module.</li>
+<li><code>GPU-decoder/</code>: parked future module, not connected to current validation flow.</li>
+</ul>
+<p>Required docs links:</p>
+<ul>
+<li><code>docs/README.md</code></li>
+<li><code>docs/development/environment.md</code></li>
+<li><code>docs/verification/surface-code-verilog.md</code></li>
+<li>
+<p><code>docs/development/generated-artifacts.md</code></p>
+</li>
+<li>
+<p>[ ] <strong>Step 2: Update <code>surface_code_decoder/README.md</code></strong></p>
+</li>
+</ul>
+<p>Keep it as a Surface Code subproject entry point. Ensure it links to:</p>
+<ul>
+<li><code>../docs/architecture/surface-code-decoder.md</code></li>
+<li><code>../docs/architecture/python-verilog-interface.md</code></li>
+<li><code>../docs/verification/surface-code-verilog.md</code></li>
+<li><code>../docs/development/generated-artifacts.md</code></li>
+</ul>
+<p>Retain enough local quick-start detail for someone working directly in <code>surface_code_decoder/</code>.</p>
+<ul>
+<li>[ ] <strong>Step 3: Update <code>qldpc_decoder/README.md</code></strong></li>
+</ul>
+<p>Replace the old implementation checklist with a conservative status table:</p>
+<pre><code class="language-md">## Implementation Status
+
+| Area | Status | Notes |
+| --- | --- | --- |
+| Package scaffold | Implemented | `pyproject.toml`, `src/qldpc/`, and tests are present. |
+| Models | Implemented | Core dataclasses live in `src/qldpc/models.py`. |
+| Sparse format | Implemented | Sparse matrix helpers live in `src/qldpc/sparse_format.py`. |
+| Message passing | Implemented | The current decoder core lives in `src/qldpc/message_passing.py`. |
+| Decoder API | Partial | `QLDPCDecoder` exists, but `decode_batch()` currently uses a simplified `H_x` path. |
+| Adaptive strategy engine | Partial | Code analysis and strategy selection exist, with future runtime adaptation still expected. |
+| Code generator | Planned | `src/qldpc/code_generator.py` exists, but integration tests still mark generation work as not complete. |
+| FPGA host interface | Skeleton | `src/qldpc/fpga_interface.py` is present for future host integration. |
+| Verilog FPGA modules | Skeleton | `src/fpga/` contains module skeletons that are not yet the current validation path. |
+| End-to-end integration tests | Planned | `tests/test_integration.py` still contains skipped tests for the full pipeline. |
+| Performance validation | Planned | Performance regression tests are not yet active. |
+</code></pre>
+<p>Update the design links to:</p>
+<ul>
+<li><code>../docs/architecture/qldpc-decoder.md</code></li>
+<li><code>../docs/specs/qldpc/2026-04-22-qldpc-adaptive-sparse-decoder-design.md</code></li>
+<li><code>../docs/specs/qldpc/2026-04-22-qldpc-adaptive-strategy-engine-design.md</code></li>
+<li><code>../docs/plans/qldpc/2026-04-22-qldpc-decoder-phase1-implementation.md</code></li>
+<li>
+<p><code>../docs/plans/qldpc/2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementation.md</code></p>
+</li>
+<li>
+<p>[ ] <strong>Step 4: Update <code>AGENTS.md</code></strong></p>
+</li>
+</ul>
+<p>Keep agent rules, but update important paths to the new structure:</p>
+<ul>
+<li>Replace old Python-Verilog interface design path with <code>docs/specs/interface/2026-04-20-python-decoder-verilog-interface-design.md</code>.</li>
+<li>Replace old Python-Verilog interface plan path with <code>docs/plans/interface/2026-04-20-python-decoder-verilog-interface-implementation.md</code>.</li>
+<li>Reference <code>docs/verification/surface-code-verilog.md</code> for vector generation and Verilog simulation details.</li>
+<li>Reference <code>docs/development/environment.md</code> for environment setup.</li>
+<li>Reference <code>docs/development/generated-artifacts.md</code> for generated file policy.</li>
+<li>
+<p>Keep warnings about Windows pytest temp directories and PowerShell profile warnings.</p>
+</li>
+<li>
+<p>[ ] <strong>Step 5: Update <code>CLAUDE.md</code></strong></p>
+</li>
+</ul>
+<p>Mirror the same stable documentation path changes made in <code>AGENTS.md</code>. Keep Claude-specific guidance if present, and avoid introducing contradictions with <code>AGENTS.md</code>.</p>
+<ul>
+<li>[ ] <strong>Step 6: Check stale path references</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-powershell">rg &quot;docs/superpowers|surface_code_decoder/docs/superpowers|GPU-decoder/docs/superpowers&quot; README.md AGENTS.md CLAUDE.md surface_code_decoder\README.md qldpc_decoder\README.md docs
+</code></pre>
+<p>Expected: remaining matches should be compatibility stubs or repository migration docs containing <code>&lt;!-- docs-link-check: allow-old-paths --&gt;</code>.</p>
+<ul>
+<li>[ ] <strong>Step 7: Run link checker</strong></li>
+</ul>
+<pre><code class="language-powershell">python scripts\check_docs_links.py
+</code></pre>
+<p>Expected: <code>Documentation links OK.</code></p>
+<ul>
+<li>[ ] <strong>Step 8: Commit entry-point updates</strong></li>
+</ul>
+<pre><code class="language-powershell">git add README.md surface_code_decoder\README.md qldpc_decoder\README.md AGENTS.md CLAUDE.md docs
+git commit -m &quot;docs: update repository entry points for new docs structure&quot;
+</code></pre>
+<h2 id="task-5-final-documentation-verification">Task 5: Final Documentation Verification<a class="headerlink" href="#task-5-final-documentation-verification" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Verify: all Markdown files under the repository, excluding generated and temporary directories.</p>
+<ul>
+<li>[ ] <strong>Step 1: Run the link checker</strong></li>
+</ul>
+<pre><code class="language-powershell">python scripts\check_docs_links.py
+</code></pre>
+<p>Expected:</p>
+<pre><code class="language-text">Documentation links OK.
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Check for stale old-path references</strong></li>
+</ul>
+<pre><code class="language-powershell">rg &quot;docs/superpowers|surface_code_decoder/docs/superpowers|GPU-decoder/docs/superpowers&quot; -g &quot;*.md&quot; -g &quot;!**/benchmark-out/**&quot; -g &quot;!**/pytest-temp-runs/**&quot; -g &quot;!**/.pytest-basetemp*/**&quot;
+</code></pre>
+<p>Expected: matches are limited to compatibility stubs and repository migration docs that contain the allow marker.</p>
+<ul>
+<li>[ ] <strong>Step 3: Check for generated files in the diff</strong></li>
+</ul>
+<pre><code class="language-powershell">git status --short
+</code></pre>
+<p>Expected: no generated artifacts from these paths should be staged or modified:</p>
+<ul>
+<li><code>surface_code_decoder/benchmark-out/</code></li>
+<li><code>verilog_test/vectors/current/</code></li>
+<li><code>pytest-temp-runs/</code></li>
+<li><code>.pytest-basetemp*</code></li>
+<li><code>__pycache__/</code></li>
+<li>
+<p>simulator outputs such as <code>.out</code> or <code>.vcd</code></p>
+</li>
+<li>
+<p>[ ] <strong>Step 4: Check whitespace</strong></p>
+</li>
+</ul>
+<pre><code class="language-powershell">git diff --check
+</code></pre>
+<p>Expected: no output and exit code 0.</p>
+<ul>
+<li>[ ] <strong>Step 5: Commit verification-only fixes if any were required</strong></li>
+</ul>
+<p>If Steps 1 through 4 required doc-only fixes, commit them:</p>
+<pre><code class="language-powershell">git add README.md AGENTS.md CLAUDE.md docs surface_code_decoder\README.md qldpc_decoder\README.md scripts\check_docs_links.py HUMAN_VERIFICATION_TEST_PLAN.md
+git commit -m &quot;docs: fix documentation links after migration&quot;
+</code></pre>
+<p>If no fixes were required, do not create an empty commit.</p>
+<h2 id="task-6-handoff-summary">Task 6: Handoff Summary<a class="headerlink" href="#task-6-handoff-summary" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Verify: Git history and working tree.</p>
+<ul>
+<li>[ ] <strong>Step 1: Show final status</strong></li>
+</ul>
+<pre><code class="language-powershell">git status --short --branch
+</code></pre>
+<p>Expected: clean working tree on <code>codex/issue-6-docs-architecture</code>, except for known local permission warnings from pytest temp directories.</p>
+<ul>
+<li>[ ] <strong>Step 2: Summarize commits</strong></li>
+</ul>
+<pre><code class="language-powershell">git log --oneline --decorate -n 8
+</code></pre>
+<p>Expected: recent commits include:</p>
+<ul>
+<li><code>docs: add markdown link checker</code></li>
+<li><code>docs: migrate specs and plans into topic directories</code></li>
+<li><code>docs: add documentation navigation and current architecture pages</code></li>
+<li><code>docs: update repository entry points for new docs structure</code></li>
+<li>
+<p>optional <code>docs: fix documentation links after migration</code></p>
+</li>
+<li>
+<p>[ ] <strong>Step 3: Prepare final response</strong></p>
+</li>
+</ul>
+<p>Report:</p>
+<ul>
+<li>the new <code>docs/</code> structure;</li>
+<li>that no source module directories were moved;</li>
+<li>that compatibility stubs remain at old paths;</li>
+<li>that <code>scripts/check_docs_links.py</code> passed;</li>
+<li>any remaining local-only warnings, especially Windows locked pytest temp directories.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

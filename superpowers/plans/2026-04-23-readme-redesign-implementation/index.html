@@ -1,0 +1,2372 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Public documentation for the 0420 FPGA decoder workspace">
+      
+      
+      
+        <link rel="canonical" href="https://junjunaa22.github.io/0420-FPGA-Decoder-docs/superpowers/plans/2026-04-23-readme-redesign-implementation/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>README Redesign Implementation Plan - 0420-FPGA-Decoder Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#readme-redesign-implementation-plan" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="0420-FPGA-Decoder Documentation" class="md-header__button md-logo" aria-label="0420-FPGA-Decoder Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            0420-FPGA-Decoder Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              README Redesign Implementation Plan
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/JUNJUNAA22/0420-FPGA-Decoder-docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    JUNJUNAA22/0420-FPGA-Decoder-docs
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../architecture/overview/" class="md-tabs__link">
+          
+  
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../verification/ci/" class="md-tabs__link">
+          
+  
+  
+  Verification
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../development/environment/" class="md-tabs__link">
+          
+  
+  
+  Development
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../specs/repository/2026-04-23-docs-information-architecture-design/" class="md-tabs__link">
+          
+  
+  
+  Specs
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../plans/repository/2026-04-23-docs-information-architecture-implementation/" class="md-tabs__link">
+          
+  
+  
+  Plans
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="0420-FPGA-Decoder Documentation" class="md-nav__button md-logo" aria-label="0420-FPGA-Decoder Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    0420-FPGA-Decoder Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/JUNJUNAA22/0420-FPGA-Decoder-docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    JUNJUNAA22/0420-FPGA-Decoder-docs
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/surface-code-decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/python-verilog-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python-Verilog Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/qldpc-decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/gpu-decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Verification
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../verification/ci/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../verification/surface-code-verilog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code Verilog Self-Check
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../verification/human-verification-test-plan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human Verification Test Plan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/generated-artifacts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Generated Artifacts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Specs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/repository/2026-04-23-docs-information-architecture-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/surface-code/2026-04-20-surface-code-realtime-mwpm-fpga-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/interface/2026-04-20-python-decoder-verilog-interface-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python-Verilog Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/qldpc/2026-04-22-qldpc-adaptive-sparse-decoder-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Adaptive Sparse Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/qldpc/2026-04-22-qldpc-adaptive-strategy-engine-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Adaptive Strategy Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/qldpc/2026-04-22-qldpc-jupyter-demo-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Jupyter Demo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plans
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Plans
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../plans/repository/2026-04-23-docs-information-architecture-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository Documentation Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../plans/surface-code/2026-04-20-surface-code-realtime-mwpm-fpga/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code Realtime MWPM FPGA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../plans/interface/2026-04-20-python-decoder-verilog-interface-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python-Verilog Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../plans/interface/2026-04-20-verilog-counter-smoke-test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verilog Counter Smoke Test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../plans/qldpc/2026-04-22-qldpc-decoder-phase1-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Decoder Phase 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../plans/qldpc/2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Adaptive Strategy Phase 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-1-create-feature-branch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 1: Create Feature Branch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-2-create-github-issue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 2: Create GitHub Issue
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-3-backup-current-readme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 3: Backup Current README
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-4-write-new-readme-header-section" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 4: Write New README - Header Section
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-5-write-new-readme-status-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 5: Write New README - Status Dashboard
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-6-write-new-readme-quick-navigation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 6: Write New README - Quick Navigation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-7-write-new-readme-quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 7: Write New README - Quick Start
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Task 7: Write New README - Quick Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#installation-verification-30-seconds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installation Verification (30 seconds)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#full-verification-flow-5-minutes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full Verification Flow (5 minutes)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-8-write-new-readme-project-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 8: Write New README - Project Modules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-9-write-new-readme-roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 9: Write New README - Roadmap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-10-write-new-readme-contributing-and-license" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 10: Write New README - Contributing and License
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-11-remove-backup-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 11: Remove Backup File
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-12-final-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 12: Final Verification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-13-push-to-remote" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 13: Push to Remote
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-14-update-issue-and-plan-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 14: Update Issue and Plan Status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-15-cleanup-temporary-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 15: Cleanup Temporary Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-review-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Review Results
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Self-Review Results">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#spec-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spec Coverage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#placeholder-scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Placeholder Scan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-consistency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type Consistency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scope-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope Check
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="readme-redesign-implementation-plan">README Redesign Implementation Plan<a class="headerlink" href="#readme-redesign-implementation-plan" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Status:</strong> ✅ Complete
+<strong>PR:</strong> #14
+<strong>Issue:</strong> #12</p>
+<p><strong>For agentic workers:</strong> REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (<code>- [ ]</code>) syntax for tracking.</p>
+</blockquote>
+<p><strong>Goal:</strong> Redesign the root README.md with a state-driven modular architecture that serves mixed audiences with clear project status and roadmap visibility.</p>
+<p><strong>Architecture:</strong> Replace current README with new structure featuring: 1) Status dashboard as core navigation, 2) Progressive disclosure quick start, 3) Module-based descriptions with links to docs/, 4) Clear roadmap with timeframes and checkboxes.</p>
+<p><strong>Tech Stack:</strong> Markdown, Git, GitHub CLI (gh)</p>
+<hr />
+<h2 id="file-structure">File Structure<a class="headerlink" href="#file-structure" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Action</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>README.md</code></td>
+<td>Replace</td>
+<td>New state-driven modular README</td>
+</tr>
+<tr>
+<td><code>docs/superpowers/plans/2026-04-23-readme-redesign-implementation.md</code></td>
+<td>Create</td>
+<td>This plan file</td>
+</tr>
+<tr>
+<td><code>docs/superpowers/specs/2026-04-23-readme-redesign-design.md</code></td>
+<td>Reference</td>
+<td>Design spec (already exists)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="task-1-create-feature-branch">Task 1: Create Feature Branch<a class="headerlink" href="#task-1-create-feature-branch" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Modify: <code>.git/HEAD</code> (branch creation)</p>
+<ul>
+<li>[ ] <strong>Step 1: Create and checkout feature branch</strong></li>
+</ul>
+<pre><code class="language-bash">git checkout -b feat/readme-redesign
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Verify branch creation</strong></li>
+</ul>
+<pre><code class="language-bash">git branch --show-current
+</code></pre>
+<p>Expected: <code>feat/readme-redesign</code></p>
+<ul>
+<li>[ ] <strong>Step 3: Commit branch creation</strong></li>
+</ul>
+<pre><code class="language-bash">git add . &amp;&amp; git commit -m &quot;chore: create feature branch for README redesign&quot;
+</code></pre>
+<hr />
+<h2 id="task-2-create-github-issue">Task 2: Create GitHub Issue<a class="headerlink" href="#task-2-create-github-issue" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- External: GitHub Issue</p>
+<ul>
+<li>[ ] <strong>Step 1: Create GitHub issue with full requirements</strong></li>
+</ul>
+<pre><code class="language-bash">gh issue create \
+  --title &quot;feat: Redesign README.md with state-driven modular architecture&quot; \
+  --body &quot;$(cat &lt;&lt;'EOF'
+## Summary
+Redesign the root README.md to provide better navigation and visibility into project status, serving a mixed audience of developers, researchers, and visitors.
+
+## Background
+The current README is functional but lacks clear status visibility and modular navigation. As a multi-module project with different completion states (Surface Code production-ready, QLDPC in development, GPU planned), readers struggle to quickly understand what's available and what to focus on.
+
+## Requirements
+
+### Core Structure
+1. **Status Dashboard** - Primary navigation anchor showing all modules with their current state
+2. **Quick Navigation** - Card-style links to key resources
+3. **Quick Start** - Progressive complexity: 30s verification → 5min full flow
+4. **Project Modules** - Concise descriptions with links to detailed docs
+5. **Roadmap** - Time-based phases with checkboxes for tracking
+6. **Contributing** - Clear contribution guidelines
+
+### Design Principles
+- Status as anchor (first substantive content)
+- Progressive disclosure (quick validation first)
+- Link-down strategy (details in docs/)
+- Visual hierarchy (emojis, tables, code blocks)
+- Minimal friction (copy-paste ready commands)
+
+### Status Indicators
+- 🔷 Blue = completed/stable modules
+- 🟨 Yellow = in progress
+- 🟦 Light blue = supporting
+- ⬜ White = planned/future
+- ✅ = done
+- 🔨 = building
+- 🔮 = future
+
+### Module Descriptions
+Each module should include:
+- 3-5 line description
+- Key files/components
+- Current status
+- Link to detailed docs in docs/
+
+## Success Criteria
+- [ ] New visitors understand project value and status within 10 seconds
+- [ ] Developers can run verification in under 5 minutes
+- [ ] Researchers can find relevant architecture docs in 3 clicks
+- [ ] Status updates require changing only one table row
+- [ ] Document structure scales as new modules are added
+
+## References
+- Design spec: docs/superpowers/specs/2026-04-23-readme-redesign-design.md
+- Current README: README.md
+
+## Related
+- Documentation architecture: docs/superpowers/specs/2026-04-23-docs-information-architecture-design.md
+
+EOF
+)&quot; \
+  --label &quot;enhancement&quot; \
+  --label &quot;documentation&quot;
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Note the issue number</strong></li>
+</ul>
+<pre><code class="language-bash">gh issue list --limit 1 --state open --json number,title --jq '.[0].number'
+</code></pre>
+<p>Save the issue number for linking to the PR.</p>
+<ul>
+<li>[ ] <strong>Step 3: Commit issue reference</strong></li>
+</ul>
+<pre><code class="language-bash">echo &quot;#$(gh issue list --limit 1 --state open --json number --jq '.[0].number')&quot; &gt; .issue-ref
+git add .issue-ref
+git commit -m &quot;docs: track README redesign issue reference&quot;
+</code></pre>
+<hr />
+<h2 id="task-3-backup-current-readme">Task 3: Backup Current README<a class="headerlink" href="#task-3-backup-current-readme" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Create: <code>README.md.bak</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Backup current README</strong></li>
+</ul>
+<pre><code class="language-bash">cp README.md README.md.bak
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Verify backup</strong></li>
+</ul>
+<pre><code class="language-bash">ls -lh README.md.bak
+</code></pre>
+<p>Expected: File exists with reasonable size (~4KB)</p>
+<ul>
+<li>[ ] <strong>Step 3: Commit backup</strong></li>
+</ul>
+<pre><code class="language-bash">git add README.md.bak
+git commit -m &quot;chore: backup current README before redesign&quot;
+</code></pre>
+<hr />
+<h2 id="task-4-write-new-readme-header-section">Task 4: Write New README - Header Section<a class="headerlink" href="#task-4-write-new-readme-header-section" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Modify: <code>README.md</code> (replace all content)</p>
+<ul>
+<li>[ ] <strong>Step 1: Write README header with badges</strong></li>
+</ul>
+<pre><code class="language-markdown"># 0420-FPGA-Decoder
+
+[![CI](https://github.com/QuAIR/0420-FPGA-Decoder/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/QuAIR/0420-FPGA-Decoder/actions/workflows/ci.yml)
+
+Exploration workspace for FPGA quantum decoders, including Surface Code and QLDPC Python implementations with Verilog interface validation.
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Verify Markdown syntax</strong></li>
+</ul>
+<pre><code class="language-bash">python -c &quot;
+import markdown
+md = markdown.Markdown()
+md.convert('# Test\n[![CI](https://example.com/badge.svg)](https://example.com)')
+print('Markdown syntax valid')
+&quot;
+</code></pre>
+<p>Expected: <code>Markdown syntax valid</code></p>
+<ul>
+<li>[ ] <strong>Step 3: Commit header</strong></li>
+</ul>
+<pre><code class="language-bash">git add README.md
+git commit -m &quot;docs: add README header with badges&quot;
+</code></pre>
+<hr />
+<h2 id="task-5-write-new-readme-status-dashboard">Task 5: Write New README - Status Dashboard<a class="headerlink" href="#task-5-write-new-readme-status-dashboard" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Modify: <code>README.md</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Add project status dashboard</strong></li>
+</ul>
+<pre><code class="language-markdown">## Project Status
+
+| Module | Status | Description |
+|--------|--------|-------------|
+| 🔷 **Surface Code Decoder** | ✅ Production Ready | Python benchmark + PyMWPM + Verilog interface validation complete |
+| 🟨 **QLDPC Decoder** | 🔨 Phase 2 in Development | Adaptive sparse architecture, strategy engine implemented, integrating |
+| 🟦 **Python-Verilog Interface** | ✅ Validation Complete | Interface-level contract model with automated CI verification |
+| ⬜ **GPU Decoder** | 🔮 Planned | Parked, future consideration |
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Verify table formatting</strong></li>
+</ul>
+<pre><code class="language-bash">python -c &quot;
+import re
+with open('README.md', 'r') as f:
+    content = f.read()
+    lines = content.split('\n')
+    # Find table section
+    for i, line in enumerate(lines):
+        if '| Module' in line:
+            # Check table has header, separator, and 4 data rows
+            table_lines = lines[i:i+6]
+            if len(table_lines) &gt;= 6 and all('|' in line for line in table_lines):
+                print('Table format valid')
+                break
+&quot;
+</code></pre>
+<p>Expected: <code>Table format valid</code></p>
+<ul>
+<li>[ ] <strong>Step 3: Commit status dashboard</strong></li>
+</ul>
+<pre><code class="language-bash">git add README.md
+git commit -m &quot;docs: add project status dashboard&quot;
+</code></pre>
+<hr />
+<h2 id="task-6-write-new-readme-quick-navigation">Task 6: Write New README - Quick Navigation<a class="headerlink" href="#task-6-write-new-readme-quick-navigation" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Modify: <code>README.md</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Add quick navigation section</strong></li>
+</ul>
+<pre><code class="language-markdown">## Quick Navigation
+
+- 🚀 **[Quick Start](#quick-start)** - Run verification in 5 minutes
+- 📚 **[Documentation](../../README.md)** - Complete architecture and design docs
+- 🧪 **[Verification](../../verification/surface-code-verilog.md)** - CI and manual verification
+- 📈 **[Roadmap](#roadmap)** - Development plans and milestones
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Verify links are valid</strong></li>
+</ul>
+<pre><code class="language-bash">python -c &quot;
+import re
+with open('README.md', 'r') as f:
+    content = f.read()
+    # Check internal anchor links
+    anchor_links = re.findall(r'\[([^\]]+)\]\(#([^)]+)\)', content)
+    # Check external file links
+    file_links = re.findall(r'\[([^\]]+)\]\(([^)]+)\)', content)
+    print(f'Found {len(anchor_links)} anchor links, {len(file_links)} file links')
+&quot;
+</code></pre>
+<p>Expected: Shows links were found</p>
+<ul>
+<li>[ ] <strong>Step 3: Commit quick navigation</strong></li>
+</ul>
+<pre><code class="language-bash">git add README.md
+git commit -m &quot;docs: add quick navigation section&quot;
+</code></pre>
+<hr />
+<h2 id="task-7-write-new-readme-quick-start">Task 7: Write New README - Quick Start<a class="headerlink" href="#task-7-write-new-readme-quick-start" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Modify: <code>README.md</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Add quick start section</strong></li>
+</ul>
+<pre><code class="language-markdown">## Quick Start
+
+### Environment Setup
+
+```bash
+# Create and activate conda environment
+conda create -n fpga-decoder python=3.11
+conda activate fpga-decoder
+
+# Install Surface Code decoder
+cd decoder
+pip install -e &quot;.[dev]&quot;
+</code></pre>
+<h3 id="installation-verification-30-seconds">Installation Verification (30 seconds)<a class="headerlink" href="#installation-verification-30-seconds" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># From decoder/ directory run core verification
+cd decoder
+python -m pytest tests/test_verilog_cli.py -q
+</code></pre>
+<h3 id="full-verification-flow-5-minutes">Full Verification Flow (5 minutes)<a class="headerlink" href="#full-verification-flow-5-minutes" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># 1. Generate Verilog vectors
+python -m decoder_benchmark.verilog_cli \
+  --distance 3 --error-rate 0.001 --shots 4 \
+  --rounds 3 --seed 1234 \
+  --output-dir ../verilog_test/vectors/current
+
+# 2. Run Verilog interface simulation (requires iverilog)
+iverilog -o ../verilog_test/sim.out \
+  ../verilog_test/decoder_interface_model.v \
+  ../verilog_test/tb_decoder_interface.v
+vvp ../verilog_test/sim.out
+</code></pre>
+<blockquote>
+<p>💡 <strong>Tip</strong>: Complete flow and troubleshooting in <a href="../../../verification/surface-code-verilog/">Surface Code Verilog Verification</a></p>
+</blockquote>
+<pre><code>
+- [ ] **Step 2: Verify code blocks are properly formatted**
+
+```bash
+python -c &quot;
+import re
+with open('README.md', 'r') as f:
+    content = f.read()
+    # Count code blocks
+    code_blocks = re.findall(r'```bash', content)
+    print(f'Found {len(code_blocks)} bash code blocks')
+&quot;
+</code></pre>
+<p>Expected: <code>Found 3 bash code blocks</code></p>
+<ul>
+<li>[ ] <strong>Step 3: Commit quick start</strong></li>
+</ul>
+<pre><code class="language-bash">git add README.md
+git commit -m &quot;docs: add quick start section&quot;
+</code></pre>
+<hr />
+<h2 id="task-8-write-new-readme-project-modules">Task 8: Write New README - Project Modules<a class="headerlink" href="#task-8-write-new-readme-project-modules" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Modify: <code>README.md</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Add project modules section</strong></li>
+</ul>
+<pre><code class="language-markdown">## Project Modules
+
+### 🔷 decoder/ — Surface Code Decoder
+
+Python implementation of rotated Surface Code benchmark:
+- `circuit_factory.py` - Stim-based circuit generation
+- `syndrome.py` - Detector event sampling
+- `decoder.py` - PyMatching MWPM reference
+- `verilog_vectors.py` - Verilog-friendly export
+- `notebooks/` - Interactive Jupyter notebook
+
+**Status**: ✅ Production Ready
+**Docs**: [Surface Code Architecture](../../architecture/surface-code-decoder.md)
+
+---
+
+### 🟨 qldpc_decoder/ — QLDPC Decoder
+
+Adaptive sparse architecture quantum LDPC decoder:
+- **Phase 1** ✅: Data models, sparse formats, code generator, message passing
+- **Phase 2** 🔨: Adaptive strategy engine (implemented, integrating)
+- **Phase 3-5** 📋: FPGA hardware, integration optimization, performance validation
+
+**Status**: 🔨 Phase 2 in Development
+**Docs**: [QLDPC Architecture](../../architecture/qldpc-decoder.md)
+
+---
+
+### 🟦 verilog_test/ — Verilog Interface Validation
+
+Interface-level contract model for validating Python-Verilog data flow:
+- `decoder_interface_model.v` - Decoder interface model
+- `tb_decoder_interface.v` - Self-checking testbench
+- `vectors/current/` - Python-generated test vectors
+
+**Status**: ✅ Validation Complete
+**Docs**: [Python-Verilog Interface](../../architecture/python-verilog-interface.md)
+
+---
+
+### ⬜ GPU-decoder/ — GPU Decoder
+
+Paused future module, not yet connected to main validation flow.
+
+**Status**: 🔮 Planned
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Verify module links exist</strong></li>
+</ul>
+<pre><code class="language-bash">python -c &quot;
+import os
+links = [
+    '../../architecture/surface-code-decoder.md',
+    '../../architecture/qldpc-decoder.md',
+    '../../architecture/python-verilog-interface.md'
+]
+for link in links:
+    if os.path.exists(link):
+        print(f'✓ {link}')
+    else:
+        print(f'✗ {link} - NOT FOUND')
+&quot;
+</code></pre>
+<p>Expected: All links show <code>✓</code></p>
+<ul>
+<li>[ ] <strong>Step 3: Commit project modules</strong></li>
+</ul>
+<pre><code class="language-bash">git add README.md
+git commit -m &quot;docs: add project modules section&quot;
+</code></pre>
+<hr />
+<h2 id="task-9-write-new-readme-roadmap">Task 9: Write New README - Roadmap<a class="headerlink" href="#task-9-write-new-readme-roadmap" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Modify: <code>README.md</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Add roadmap section</strong></li>
+</ul>
+<pre><code class="language-markdown">## Roadmap
+
+### Current Focus (2026 Q2)
+
+- [ ] **QLDPC Phase 2 Complete** - Integrate adaptive strategy engine into main flow
+- [ ] **QLDPC End-to-End Verification** - Establish complete test benchmarks and performance reports
+- [ ] **Jupyter Demo** - QLDPC decoder interactive demonstration
+
+### Near-Term (2026 Q3-Q4)
+
+- [ ] **QLDPC Phase 3** - FPGA hardware architecture design
+- [ ] **Performance Optimization** - Establish benchmarks for Surface Code and QLDPC
+- [ ] **Documentation Polish** - Add API docs and more usage examples
+
+### Long-Term Vision
+
+- [ ] **GPU Decoder** - Evaluate and potentially restart GPU implementation path
+- [ ] **Multi-Decoder Integration** - Unified interface supporting multiple decoding strategies
+- [ ] **Open Source Release** - Clean dependencies, prepare for broader release
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Verify checkbox formatting</strong></li>
+</ul>
+<pre><code class="language-bash">grep -c &quot;\- \[ \]&quot; README.md
+</code></pre>
+<p>Expected: Returns count &gt; 0 (9 checkboxes should exist)</p>
+<ul>
+<li>[ ] <strong>Step 3: Commit roadmap</strong></li>
+</ul>
+<pre><code class="language-bash">git add README.md
+git commit -m &quot;docs: add roadmap section&quot;
+</code></pre>
+<hr />
+<h2 id="task-10-write-new-readme-contributing-and-license">Task 10: Write New README - Contributing and License<a class="headerlink" href="#task-10-write-new-readme-contributing-and-license" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Modify: <code>README.md</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Add contributing section</strong></li>
+</ul>
+<pre><code class="language-markdown">## Contributing
+
+We welcome community contributions! Ways to participate:
+
+### Report Issues
+
+- Report bugs or feature requests in GitHub Issues
+- Include environment info, reproduction steps, expected behavior
+
+### Submit Code
+
+1. Fork this repository and create a feature branch
+2. Follow [CLAUDE.md](CLAUDE.md) development guidelines
+3. Ensure all tests pass:
+   ```bash
+   # Surface Code
+   cd decoder &amp;&amp; python -m pytest -q
+
+   # QLDPC
+   cd qldpc_decoder &amp;&amp; python -m pytest -q
+   ```
+4. Run documentation link check:
+   ```bash
+   python scripts/check_docs_links.py
+   ```
+5. Submit Pull Request
+
+### Code Standards
+
+- Keep commit messages clear and concise
+- Add necessary test cases
+- Update relevant documentation
+- Follow existing code style
+
+## License
+
+[License information to be determined]
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Verify all README sections are present</strong></li>
+</ul>
+<pre><code class="language-bash">python -c &quot;
+required_sections = [
+    '# 0420-FPGA-Decoder',
+    '## Project Status',
+    '## Quick Navigation',
+    '## Quick Start',
+    '## Project Modules',
+    '## Roadmap',
+    '## Contributing',
+    '## License'
+]
+
+with open('README.md', 'r') as f:
+    content = f.read()
+    for section in required_sections:
+        if section in content:
+            print(f'✓ {section}')
+        else:
+            print(f'✗ {section} - MISSING')
+&quot;
+</code></pre>
+<p>Expected: All sections show <code>✓</code></p>
+<ul>
+<li>[ ] <strong>Step 3: Commit contributing section</strong></li>
+</ul>
+<pre><code class="language-bash">git add README.md
+git commit -m &quot;docs: add contributing and license sections&quot;
+</code></pre>
+<hr />
+<h2 id="task-11-remove-backup-file">Task 11: Remove Backup File<a class="headerlink" href="#task-11-remove-backup-file" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Delete: <code>README.md.bak</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Remove backup file</strong></li>
+</ul>
+<pre><code class="language-bash">rm README.md.bak
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Verify deletion</strong></li>
+</ul>
+<pre><code class="language-bash">ls README.md.bak 2&gt;&amp;1
+</code></pre>
+<p>Expected: <code>ls: cannot access 'README.md.bak': No such file or directory</code></p>
+<ul>
+<li>[ ] <strong>Step 3: Commit cleanup</strong></li>
+</ul>
+<pre><code class="language-bash">git add README.md.bak
+git commit -m &quot;chore: remove README backup file&quot;
+</code></pre>
+<hr />
+<h2 id="task-12-final-verification">Task 12: Final Verification<a class="headerlink" href="#task-12-final-verification" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Verify: <code>README.md</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Run documentation link check</strong></li>
+</ul>
+<pre><code class="language-bash">python scripts/check_docs_links.py
+</code></pre>
+<p>Expected: All links pass (or known broken links listed)</p>
+<ul>
+<li>[ ] <strong>Step 2: Render and review README locally</strong></li>
+</ul>
+<pre><code class="language-bash"># Check file size and structure
+wc -l README.md
+head -20 README.md
+</code></pre>
+<p>Expected: README has reasonable length (~200-300 lines), header is correct</p>
+<ul>
+<li>[ ] <strong>Step 3: Verify Git status</strong></li>
+</ul>
+<pre><code class="language-bash">git status --short
+</code></pre>
+<p>Expected: Only shows feature branch, no uncommitted changes</p>
+<ul>
+<li>[ ] <strong>Step 4: View commit history</strong></li>
+</ul>
+<pre><code class="language-bash">git log --oneline -10
+</code></pre>
+<p>Expected: Shows sequence of commits for README redesign</p>
+<hr />
+<h2 id="task-13-push-to-remote">Task 13: Push to Remote<a class="headerlink" href="#task-13-push-to-remote" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Remote: GitHub</p>
+<ul>
+<li>[ ] <strong>Step 1: Push feature branch to remote</strong></li>
+</ul>
+<pre><code class="language-bash">git push -u origin feat/readme-redesign
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Verify push success</strong></li>
+</ul>
+<pre><code class="language-bash">git branch -vv | grep feat/readme-redesign
+</code></pre>
+<p>Expected: Shows branch tracking remote with latest commit</p>
+<ul>
+<li>[ ] <strong>Step 3: Create Pull Request</strong></li>
+</ul>
+<pre><code class="language-bash">ISSUE_NUM=$(cat .issue-ref | tr -d '#')
+gh pr create \
+  --title &quot;feat: Redesign README.md with state-driven modular architecture&quot; \
+  --body &quot;$(cat &lt;&lt;'EOF'
+## Summary
+Implements README redesign with state-driven modular architecture as specified in the design spec.
+
+## Changes
+- ✅ Added project status dashboard as primary navigation anchor
+- ✅ Implemented quick navigation card-style links
+- ✅ Progressive disclosure quick start (30s → 5min flow)
+- ✅ Modular project module descriptions with doc links
+- ✅ Time-based roadmap with tracking checkboxes
+- ✅ Clear contribution guidelines
+
+## Related Issue
+Closes #${ISSUE_NUM}
+
+## Design Reference
+- Design spec: docs/superpowers/specs/2026-04-23-readme-redesign-design.md
+- Implementation plan: docs/superpowers/plans/2026-04-23-readme-redesign-implementation.md
+
+## Testing
+- [ ] Documentation links verified with scripts/check_docs_links.py
+- [ ] All module links confirmed to exist
+- [ ] Markdown syntax validated
+- [ ] Git push successful
+
+## Checklist
+- [ ] Code follows project style guidelines
+- [ ] Self-review completed
+- [ ] Comments added for complex sections
+- [ ] Documentation updated
+- [ ] No new files generated (except intended)
+- [ ] Tests pass locally
+
+EOF
+)&quot; \
+  --base main \
+  --label &quot;documentation&quot; \
+  --label &quot;enhancement&quot;
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Note PR number and URL</strong></li>
+</ul>
+<pre><code class="language-bash">gh pr list --head feat/readme-redesign --json number,url --jq '.[0] | &quot;\(.number): \(.url)&quot;'
+</code></pre>
+<p>Expected: Shows PR number and URL</p>
+<ul>
+<li>[ ] <strong>Step 5: Commit PR reference</strong></li>
+</ul>
+<pre><code class="language-bash">PR_OUTPUT=$(gh pr list --head feat/readme-redesign --json number --jq '.[0].number')
+echo &quot;#${PR_OUTPUT}&quot; &gt; .pr-ref
+git add .pr-ref
+git commit -m &quot;docs: track README redesign PR reference&quot;
+git push
+</code></pre>
+<hr />
+<h2 id="task-14-update-issue-and-plan-status">Task 14: Update Issue and Plan Status<a class="headerlink" href="#task-14-update-issue-and-plan-status" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- External: GitHub Issue, Plan file</p>
+<ul>
+<li>[ ] <strong>Step 1: Close GitHub issue with PR reference</strong></li>
+</ul>
+<pre><code class="language-bash">ISSUE_NUM=$(cat .issue-ref | tr -d '#')
+PR_NUM=$(cat .pr-ref | tr -d '#')
+gh issue close ${ISSUE_NUM} --comment &quot;Implemented in #${PR_NUM}&quot;
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Update implementation plan status</strong></li>
+</ul>
+<pre><code class="language-bash">sed -i '1s/^/# README Redesign Implementation Plan\n\n&gt; **Status:** ✅ Complete\n&gt; **PR:** #'&quot;${PR_NUM}&quot;'\n&gt; **Issue:** #'&quot;${ISSUE_NUM}&quot;'\n\n/' docs/superpowers/plans/2026-04-23-readme-redesign-implementation.md
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 3: Commit status updates</strong></li>
+</ul>
+<pre><code class="language-bash">git add docs/superpowers/plans/2026-04-23-readme-redesign-implementation.md
+git commit -m &quot;docs: update README redesign plan status to complete&quot;
+git push
+</code></pre>
+<hr />
+<h2 id="task-15-cleanup-temporary-files">Task 15: Cleanup Temporary Files<a class="headerlink" href="#task-15-cleanup-temporary-files" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Delete: <code>.issue-ref</code>, <code>.pr-ref</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Remove temporary reference files</strong></li>
+</ul>
+<pre><code class="language-bash">rm .issue-ref .pr-ref
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Commit cleanup</strong></li>
+</ul>
+<pre><code class="language-bash">git add .issue-ref .pr-ref
+git commit -m &quot;chore: remove temporary reference files&quot;
+git push
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 3: Verify final state</strong></li>
+</ul>
+<pre><code class="language-bash">git status --short
+gh pr view --json number,state,mergeable --jq '.'
+</code></pre>
+<p>Expected: Clean working directory, PR shows as open and mergeable</p>
+<hr />
+<h2 id="self-review-results">Self-Review Results<a class="headerlink" href="#self-review-results" title="Permanent link">&para;</a></h2>
+<h3 id="spec-coverage">Spec Coverage<a class="headerlink" href="#spec-coverage" title="Permanent link">&para;</a></h3>
+<ul>
+<li>✅ Status dashboard with module states - Task 5</li>
+<li>✅ Quick navigation cards - Task 6</li>
+<li>✅ Progressive quick start - Task 7</li>
+<li>✅ Project modules with descriptions and links - Task 8</li>
+<li>✅ Roadmap with timeframes and checkboxes - Task 9</li>
+<li>✅ Contributing guidelines - Task 10</li>
+<li>✅ License placeholder - Task 10</li>
+<li>✅ All design principles addressed in structure</li>
+</ul>
+<h3 id="placeholder-scan">Placeholder Scan<a class="headerlink" href="#placeholder-scan" title="Permanent link">&para;</a></h3>
+<ul>
+<li>✅ No TBD/TODO placeholders</li>
+<li>✅ All code blocks contain complete commands</li>
+<li>✅ All steps include exact file paths</li>
+<li>✅ No "similar to Task X" references</li>
+</ul>
+<h3 id="type-consistency">Type Consistency<a class="headerlink" href="#type-consistency" title="Permanent link">&para;</a></h3>
+<ul>
+<li>✅ All issue/PR references use consistent format</li>
+<li>✅ All file paths use forward slashes</li>
+<li>✅ All Git commands use same flag patterns</li>
+</ul>
+<h3 id="scope-check">Scope Check<a class="headerlink" href="#scope-check" title="Permanent link">&para;</a></h3>
+<ul>
+<li>✅ Focused on README redesign only</li>
+<li>✅ No unrelated refactoring</li>
+<li>✅ Self-contained implementation</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

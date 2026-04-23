@@ -1,0 +1,2688 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Public documentation for the 0420 FPGA decoder workspace">
+      
+      
+      
+        <link rel="canonical" href="https://junjunaa22.github.io/0420-FPGA-Decoder-docs/plans/qldpc/2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementation/">
+      
+      
+        <link rel="prev" href="../2026-04-22-qldpc-decoder-phase1-implementation/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>QLDPC Adaptive Strategy Phase 2 - 0420-FPGA-Decoder Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#qldpc-adaptive-strategy-engine-implementation-plan" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="0420-FPGA-Decoder Documentation" class="md-header__button md-logo" aria-label="0420-FPGA-Decoder Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            0420-FPGA-Decoder Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              QLDPC Adaptive Strategy Phase 2
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/JUNJUNAA22/0420-FPGA-Decoder-docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    JUNJUNAA22/0420-FPGA-Decoder-docs
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../architecture/overview/" class="md-tabs__link">
+          
+  
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../verification/ci/" class="md-tabs__link">
+          
+  
+  
+  Verification
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../development/environment/" class="md-tabs__link">
+          
+  
+  
+  Development
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../specs/repository/2026-04-23-docs-information-architecture-design/" class="md-tabs__link">
+          
+  
+  
+  Specs
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../repository/2026-04-23-docs-information-architecture-implementation/" class="md-tabs__link">
+          
+  
+  
+  Plans
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="0420-FPGA-Decoder Documentation" class="md-nav__button md-logo" aria-label="0420-FPGA-Decoder Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    0420-FPGA-Decoder Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/JUNJUNAA22/0420-FPGA-Decoder-docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    JUNJUNAA22/0420-FPGA-Decoder-docs
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/surface-code-decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/python-verilog-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python-Verilog Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/qldpc-decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/gpu-decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Verification
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../verification/ci/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../verification/surface-code-verilog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code Verilog Self-Check
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../verification/human-verification-test-plan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human Verification Test Plan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/generated-artifacts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Generated Artifacts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Specs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/repository/2026-04-23-docs-information-architecture-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/surface-code/2026-04-20-surface-code-realtime-mwpm-fpga-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/interface/2026-04-20-python-decoder-verilog-interface-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python-Verilog Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/qldpc/2026-04-22-qldpc-adaptive-sparse-decoder-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Adaptive Sparse Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/qldpc/2026-04-22-qldpc-adaptive-strategy-engine-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Adaptive Strategy Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/qldpc/2026-04-22-qldpc-jupyter-demo-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Jupyter Demo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plans
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Plans
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../repository/2026-04-23-docs-information-architecture-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository Documentation Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../surface-code/2026-04-20-surface-code-realtime-mwpm-fpga/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code Realtime MWPM FPGA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../interface/2026-04-20-python-decoder-verilog-interface-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python-Verilog Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../interface/2026-04-20-verilog-counter-smoke-test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verilog Counter Smoke Test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2026-04-22-qldpc-decoder-phase1-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Decoder Phase 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Adaptive Strategy Phase 2
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Adaptive Strategy Phase 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Structure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="File Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-1-extend-data-models-in-modelspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 1: Extend data models in models.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-2-implement-codeanalyzer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 2: Implement CodeAnalyzer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-3-implement-strategyselector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 3: Implement StrategySelector
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-4-implement-strategyadapter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 4: Implement StrategyAdapter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-5-implement-adaptivestrategyengine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 5: Implement AdaptiveStrategyEngine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-6-integrate-adaptivestrategyengine-into-qldpcdecoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 6: Integrate AdaptiveStrategyEngine into QLDPCDecoder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-7-update-decoder-decode_batch-to-support-strategy-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 7: Update decoder decode_batch to support strategy tracking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-8-run-full-test-suite-and-verify-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 8: Run full test suite and verify integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Review
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Self-Review">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#spec-coverage-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spec Coverage Check
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#placeholder-scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Placeholder Scan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-consistency-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type Consistency Check
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gap-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gap Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plan-complete-and-saved-to-docsplansqldpc2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementationmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plan complete and saved to docs/plans/qldpc/2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementation.md.
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Structure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="File Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-1-extend-data-models-in-modelspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 1: Extend data models in models.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-2-implement-codeanalyzer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 2: Implement CodeAnalyzer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-3-implement-strategyselector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 3: Implement StrategySelector
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-4-implement-strategyadapter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 4: Implement StrategyAdapter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-5-implement-adaptivestrategyengine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 5: Implement AdaptiveStrategyEngine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-6-integrate-adaptivestrategyengine-into-qldpcdecoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 6: Integrate AdaptiveStrategyEngine into QLDPCDecoder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-7-update-decoder-decode_batch-to-support-strategy-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 7: Update decoder decode_batch to support strategy tracking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-8-run-full-test-suite-and-verify-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 8: Run full test suite and verify integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Review
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Self-Review">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#spec-coverage-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spec Coverage Check
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#placeholder-scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Placeholder Scan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-consistency-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type Consistency Check
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gap-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gap Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plan-complete-and-saved-to-docsplansqldpc2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementationmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plan complete and saved to docs/plans/qldpc/2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementation.md.
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="qldpc-adaptive-strategy-engine-implementation-plan">QLDPC Adaptive Strategy Engine Implementation Plan<a class="headerlink" href="#qldpc-adaptive-strategy-engine-implementation-plan" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Status: Historical implementation plan. The work described here may already
+be partially or fully implemented. Use the corresponding architecture page and
+current source tree as the source of truth.</p>
+<p><strong>For agentic workers:</strong> REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (<code>- [ ]</code>) syntax for tracking.</p>
+</blockquote>
+<p><strong>Goal:</strong> Implement the Adaptive Strategy Engine (Phase 2) for the QLDPC decoder, enabling intelligent sparse strategy selection and runtime adaptation based on code characteristics.</p>
+<p><strong>Architecture:</strong> Three-component design with CodeAnalyzer for feature extraction, StrategySelector for optimal strategy selection, and StrategyAdapter for runtime adaptation during decoding iterations.</p>
+<p><strong>Tech Stack:</strong> Python 3.11+, NumPy, pytest</p>
+<hr />
+<h2 id="file-structure">File Structure<a class="headerlink" href="#file-structure" title="Permanent link">&para;</a></h2>
+<pre><code>qldpc_decoder/src/qldpc/
+├── adaptive_strategy.py        # New file: CodeAnalyzer, StrategySelector, StrategyAdapter, AdaptiveStrategyEngine
+├── models.py                 # Modify: extend CodeFeatures, add SparseStrategy/DecodingProgress/StrategyUpdate
+└── decoder.py               # Modify: integrate AdaptiveStrategyEngine
+
+qldpc_decoder/tests/
+└── test_adaptive_strategy.py  # New file: 8+ tests for all components
+</code></pre>
+<hr />
+<h3 id="task-1-extend-data-models-in-modelspy">Task 1: Extend data models in models.py<a class="headerlink" href="#task-1-extend-data-models-in-modelspy" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong>
+- Modify: <code>qldpc_decoder/src/qldpc/models.py</code>
+- Test: <code>qldpc_decoder/tests/test_adaptive_strategy.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing test for extended CodeFeatures</strong></li>
+</ul>
+<pre><code class="language-python">def test_code_features_extended():
+    features = CodeFeatures(
+        sparsity=0.1,
+        avg_node_degree=3.5,
+        cycle_count=100,
+        max_node_degree=5,
+        min_node_degree=2,
+        avg_cycle_length=4.5,
+        n_connected_components=3,
+        max_component_size=200
+    )
+    assert features.max_node_degree == 5
+    assert features.min_node_degree == 2
+    assert features.avg_cycle_length == 4.5
+    assert features.n_connected_components == 3
+    assert features.max_component_size == 200
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run test to verify it fails</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_adaptive_strategy.py::test_code_features_extended -v</code>
+Expected: FAIL with "unexpected keyword argument" or AttributeError</p>
+<ul>
+<li>[ ] <strong>Step 3: Add new fields to CodeFeatures</strong></li>
+</ul>
+<pre><code class="language-python">@dataclass
+class CodeFeatures:
+    &quot;&quot;&quot;Features extracted from QLDPC code for strategy selection.&quot;&quot;&quot;
+
+    sparsity: float
+    avg_node_degree: float
+    cycle_count: int
+    min_distance: int
+
+    # New fields
+    max_node_degree: int
+    min_node_degree: int
+    avg_cycle_length: float
+    n_connected_components: int
+    max_component_size: int
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Add SparseStrategy data class</strong></li>
+</ul>
+<pre><code class="language-python">@dataclass
+class SparseStrategy:
+    &quot;&quot;&quot;Sparse decoding strategy configuration.&quot;&quot;&quot;
+
+    graph_pruning_level: int = 0        # 0=none, 1=light, 2=heavy
+    zero_threshold: float = 0.01       # Zero-value filter threshold (0-1)
+    compression_format: str = &quot;none&quot;    # &quot;none&quot; | &quot;delta&quot; | &quot;rle&quot;
+    parallelization_degree: int = 1       # 1=serial, 2/4/8=parallel
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 5: Add DecodingProgress data class</strong></li>
+</ul>
+<pre><code class="language-python">@dataclass
+class DecodingProgress:
+    &quot;&quot;&quot;Decoding iteration progress for strategy adaptation.&quot;&quot;&quot;
+
+    iteration: int
+    convergence_rate: float
+    stuck_iterations: int
+    last_syndrome_weight: int
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 6: Add StrategyUpdate data class</strong></li>
+</ul>
+<pre><code class="language-python">from typing import Optional
+
+@dataclass
+class StrategyUpdate:
+    &quot;&quot;&quot;Strategy update during decoding.&quot;&quot;&quot;
+
+    new_pruning_level: Optional[int] = None
+    new_threshold: Optional[float] = None
+    convergence_early_stop: bool = False
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 7: Export new models in <strong>init</strong>.py</strong></li>
+</ul>
+<pre><code class="language-python">from qldpc.models import (
+    QLDPCConfig,
+    CodeFeatures,
+    ResourceBudget,
+    SparseStrategy,
+    DecodingProgress,
+    StrategyUpdate
+)
+
+__all__ = [
+    'QLDPCConfig',
+    'CodeFeatures',
+    'ResourceBudget',
+    'SparseStrategy',
+    'DecodingProgress',
+    'StrategyUpdate'
+]
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 8: Run tests to verify they pass</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_adaptive_strategy.py::test_code_features_extended -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 9: Commit</strong></li>
+</ul>
+<pre><code class="language-bash">cd qldpc_decoder
+git add src/qldpc/models.py tests/test_adaptive_strategy.py src/qldpc/__init__.py
+git commit -m &quot;feat: extend data models for Phase 2 (SparseStrategy, DecodingProgress, StrategyUpdate)&quot;
+</code></pre>
+<hr />
+<h3 id="task-2-implement-codeanalyzer">Task 2: Implement CodeAnalyzer<a class="headerlink" href="#task-2-implement-codeanalyzer" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong>
+- Create: <code>qldpc_decoder/src/qldpc/adaptive_strategy.py</code>
+- Test: <code>qldpc_decoder/tests/test_adaptive_strategy.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing test for basic metrics analysis</strong></li>
+</ul>
+<pre><code class="language-python">import numpy as np
+from qldpc.adaptive_strategy import CodeAnalyzer
+
+def test_code_analyzer_basic_metrics():
+    analyzer = CodeAnalyzer()
+    h = np.array([
+        [1, 1, 0, 0],
+        [0, 1, 1, 0],
+    ], dtype=np.int32)
+
+    features = analyzer.analyze(h)
+
+    assert 0 &lt; features.sparsity &lt; 1
+    assert features.avg_node_degree &gt; 0
+    assert features.max_node_degree == 2
+    assert features.min_node_degree == 1
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run test to verify it fails</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_adaptive_strategy.py::test_code_analyzer_basic_metrics -v</code>
+Expected: FAIL with "CodeAnalyzer not defined"</p>
+<ul>
+<li>[ ] <strong>Step 3: Write CodeAnalyzer class with basic metrics</strong></li>
+</ul>
+<pre><code class="language-python">from dataclasses import dataclass
+import numpy as np
+from qldpc.models import CodeFeatures
+
+@dataclass
+class CodeAnalyzer:
+    &quot;&quot;&quot;Analyzes QLDPC code features: sparsity, degree distribution, cycles, components.&quot;&quot;&quot;
+
+    max_cycle_length: int = 6
+
+    def analyze(self, h: np.ndarray) -&gt; CodeFeatures:
+        &quot;&quot;&quot;Analyze parity check matrix for code features.&quot;&quot;&quot;
+        if h.ndim != 2:
+            raise ValueError(f&quot;Matrix must be 2D, got {h.ndim}&quot;)
+        if not np.isin(h, [0, 1]).all():
+            raise ValueError(&quot;Matrix elements must be 0 or 1&quot;)
+        if h.size == 0:
+            raise ValueError(&quot;Matrix cannot be empty&quot;)
+
+        sparsity, avg_deg, max_deg, min_deg = self._analyze_basic_metrics(h)
+        cycle_count, avg_cycle_len = self._analyze_cycles(h)
+        n_components, max_comp_size = self._analyze_components(h)
+
+        return CodeFeatures(
+            sparsity=sparsity,
+            avg_node_degree=avg_deg,
+            cycle_count=cycle_count,
+            min_distance=0,
+            max_node_degree=max_deg,
+            min_node_degree=min_deg,
+            avg_cycle_length=avg_cycle_len,
+            n_connected_components=n_components,
+            max_component_size=max_comp_size
+        )
+
+    def _analyze_basic_metrics(self, h: np.ndarray) -&gt; tuple[float, float, int, int]:
+        m, n = h.shape
+        nnz = np.count_nonzero(h)
+        sparsity = 1.0 - (nnz / (m * n))
+
+        col_degrees = np.sum(h, axis=0)
+        non_zero_degrees = col_degrees[col_degrees &gt; 0]
+        avg_deg = np.mean(non_zero_degrees) if len(non_zero_degrees) &gt; 0 else 0.0
+        max_deg = np.max(col_degrees)
+        min_deg = np.min(non_zero_degrees) if len(non_zero_degrees) &gt; 0 else 0
+
+        return sparsity, avg_deg, max_deg, min_deg
+
+    def _analyze_cycles(self, h: np.ndarray) -&gt; tuple[int, float]:
+        m, n = h.shape
+        edges = [(i, j) for i in range(m) for j in range(n) if h[i, j] == 1]
+
+        cycle_lengths = []
+        for start in range(n):
+            for path_len in range(4, self.max_cycle_length + 1, 2):
+                self._find_cycles_bfs(start, edges, path_len, cycle_lengths)
+
+        if not cycle_lengths:
+            return 0, 0.0
+
+        return len(cycle_lengths), np.mean(cycle_lengths)
+
+    def _find_cycles_bfs(self, start: int, edges: list, max_len: int, cycles: list):
+        from collections import deque
+
+        for (check1, var1) in [e for e in edges if e[1] == start]:
+            queue = deque([(var1, check1, [start])])  # (current_var, current_check, path)
+            visited = set()
+
+            while queue:
+                curr_var, curr_check, path = queue.popleft()
+                if (curr_var, curr_check) in visited:
+                    continue
+                visited.add((curr_var, curr_check))
+
+                if curr_var == start and len(path) &gt;= 4:
+                    if curr_var == start:
+                        cycle_lengths.append(len(path))
+                    return
+
+                for (next_check, next_var) in [e for e in edges if e[0] == curr_check and e[1] == curr_var]:
+                    if next_var not in path:
+                        queue.append((next_var, next_check, path + [next_var]))
+
+    def _analyze_components(self, h: np.ndarray) -&gt; tuple[int, int]:
+        m, n = h.shape
+        visited = np.zeros(n, dtype=bool)
+        components = []
+        max_size = 0
+
+        for node in range(n):
+            if not visited[node]:
+                component_size = self._bfs_component(h, node, visited)
+                components.append(component_size)
+                max_size = max(max_size, component_size)
+
+        return len(components), max_size
+
+    def _bfs_component(self, h: np.ndarray, start: int, visited: np.ndarray) -&gt; int:
+        from collections import deque
+
+        queue = deque([start])
+        visited[start] = True
+        size = 0
+        m, n = h.shape
+
+        while queue:
+            var_node = queue.popleft()
+            size += 1
+
+            connected_checks = np.where(h[:, var_node] == 1)[0]
+            for check in connected_checks:
+                connected_vars = np.where(h[check, :] == 1)[0]
+                for var in connected_vars:
+                    if not visited[var]:
+                        visited[var] = True
+                        queue.append(var)
+
+        return size
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_adaptive_strategy.py::test_code_analyzer_basic_metrics -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 5: Write test for cycle detection</strong></li>
+</ul>
+<pre><code class="language-python">def test_code_analyzer_cycles():
+    analyzer = CodeAnalyzer(max_cycle_length=4)
+
+    h = np.array([
+        [1, 1, 0],
+        [0, 1, 1],
+        [1, 0, 1],
+    ], dtype=np.int32)
+
+    features = analyzer.analyze(h)
+
+    assert features.cycle_count &gt; 0
+    assert features.avg_cycle_length &gt;= 4
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 6: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_adaptive_strategy.py::test_code_analyzer_cycles -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 7: Write test for connected component analysis</strong></li>
+</ul>
+<pre><code class="language-python">def test_code_analyzer_components():
+    analyzer = CodeAnalyzer()
+
+    h = np.array([
+        [1, 1, 0, 0],
+        [0, 0, 1, 0],
+    ], dtype=np.int32)
+
+    features = analyzer.analyze(h)
+
+    assert features.n_connected_components == 2
+    assert features.max_component_size == 2
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 8: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_adaptive_strategy.py::test_code_analyzer_components -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 9: Export CodeAnalyzer in <strong>init</strong>.py</strong></li>
+</ul>
+<pre><code class="language-python">from qldpc.adaptive_strategy import CodeAnalyzer
+
+__all__ = ['CodeAnalyzer']
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 10: Commit</strong></li>
+</ul>
+<pre><code class="language-bash">cd qldpc_decoder
+git add src/qldpc/adaptive_strategy.py tests/test_adaptive_strategy.py src/qldpc/__init__.py
+git commit -m &quot;feat: implement CodeAnalyzer with cycle detection and component analysis&quot;
+</code></pre>
+<hr />
+<h3 id="task-3-implement-strategyselector">Task 3: Implement StrategySelector<a class="headerlink" href="#task-3-implement-strategyselector" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong>
+- Modify: <code>qldpc_decoder/src/qldpc/adaptive_strategy.py</code>
+- Test: <code>qldpc_decoder/tests/test_adaptive_strategy.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing test for strategy selection</strong></li>
+</ul>
+<pre><code class="language-python">from qldpc.adaptive_strategy import StrategySelector
+from qldpc.models import CodeFeatures, ResourceBudget, SparseStrategy
+
+def test_strategy_selector_selection():
+    selector = StrategySelector()
+    budget = ResourceBudget()
+
+    features_dense = CodeFeatures(
+        sparsity=0.3, avg_node_degree=4.0, cycle_count=50,
+        max_node_degree=6, min_node_degree=2, avg_cycle_length=5.0,
+        n_connected_components=1, max_component_size=100
+    )
+    features_sparse = CodeFeatures(
+        sparsity=0.9, avg_node_degree=2.0, cycle_count=5,
+        max_node_degree=3, min_node_degree=1, avg_cycle_length=4.0,
+        n_connected_components=4, max_component_size=50
+    )
+
+    strategy_dense = selector.select_strategy(features_dense, budget)
+    strategy_sparse = selector.select_strategy(features_sparse, budget)
+
+    assert isinstance(strategy_dense, SparseStrategy)
+    assert isinstance(strategy_sparse, SparseStrategy)
+    # Sparse graphs should have less or equal pruning
+    assert strategy_sparse.graph_pruning_level &lt;= strategy_dense.graph_pruning_level
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run test to verify it fails</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_adaptive_strategy.py::test_strategy_selector_selection -v</code>
+Expected: FAIL with "StrategySelector not defined"</p>
+<ul>
+<li>[ ] <strong>Step 3: Write StrategySelector class</strong></li>
+</ul>
+<pre><code class="language-python">from dataclasses import dataclass
+from qldpc.models import CodeFeatures, ResourceBudget, SparseStrategy
+
+@dataclass
+class StrategySelector:
+    &quot;&quot;&quot;Selects optimal sparse strategy based on code features and resource budget.&quot;&quot;&quot;
+
+    def select_strategy(self, features: CodeFeatures, budget: ResourceBudget) -&gt; SparseStrategy:
+        if features.sparsity &lt; 0 or features.sparsity &gt; 1:
+            raise ValueError(f&quot;Invalid sparsity: {features.sparsity}&quot;)
+
+        pruning_level = self._select_pruning_level(features, budget)
+        zero_threshold = self._select_threshold(features, budget)
+        compression = self._select_compression(features, budget)
+        parallelization = self._select_parallelization(features, budget)
+
+        return SparseStrategy(
+            graph_pruning_level=pruning_level,
+            zero_threshold=zero_threshold,
+            compression_format=compression,
+            parallelization_degree=parallelization
+        )
+
+    def _select_pruning_level(self, features: CodeFeatures, budget: ResourceBudget) -&gt; int:
+        if features.sparsity &gt; 0.8:
+            return 0
+
+        if features.n_connected_components &gt; 3:
+            pruning = 2
+        elif features.avg_cycle_length &lt; 4:
+            pruning = 1
+        else:
+            pruning = 0
+
+        if budget.max_lut_percent &lt; 60:
+            pruning = max(0, pruning - 1)
+
+        return pruning
+
+    def _select_threshold(self, features: CodeFeatures, budget: ResourceBudget) -&gt; float:
+        base_threshold = 0.01
+
+        if features.cycle_count &gt; features.sparsity * 1000:
+            base_threshold *= 1.5
+
+        if features.avg_node_degree &lt; 3:
+            base_threshold *= 0.8
+
+        return min(base_threshold, 0.1)
+
+    def _select_compression(self, features: CodeFeatures, budget: ResourceBudget) -&gt; str:
+        n_vars = features.max_component_size if features.max_component_size &gt; 0 else 100
+
+        if n_vars &gt; 500 and features.n_connected_components &gt; 2:
+            return &quot;delta&quot;
+        elif features.sparsity &gt; 0.7 and budget.max_bram_percent &gt; 70:
+            return &quot;rle&quot;
+        return &quot;none&quot;
+
+    def _select_parallelization(self, features: CodeFeatures, budget: ResourceBudget) -&gt; int:
+        if features.max_component_size &lt; 200:
+            return 1
+
+        if budget.max_dsp_percent &gt; 50:
+            return 8
+        elif budget.max_dsp_percent &gt; 30:
+            return 4
+        return 2
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_adaptive_strategy.py::test_strategy_selector_selection -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 5: Export StrategySelector in <strong>init</strong>.py</strong></li>
+</ul>
+<pre><code class="language-python">from qldpc.adaptive_strategy import CodeAnalyzer, StrategySelector
+
+__all__ = ['CodeAnalyzer', 'StrategySelector']
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 6: Commit</strong></li>
+</ul>
+<pre><code class="language-bash">cd qldpc_decoder
+git add src/qldpc/adaptive_strategy.py tests/test_adaptive_strategy.py src/qldpc/__init__.py
+git commit -m &quot;feat: implement StrategySelector for optimal sparse strategy selection&quot;
+</code></pre>
+<hr />
+<h3 id="task-4-implement-strategyadapter">Task 4: Implement StrategyAdapter<a class="headerlink" href="#task-4-implement-strategyadapter" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong>
+- Modify: <code>qldpc_decoder/src/qldpc/adaptive_strategy.py</code>
+- Test: <code>qldpc_decoder/tests/test_adaptive_strategy.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing test for stuck detection</strong></li>
+</ul>
+<pre><code class="language-python">from qldpc.adaptive_strategy import StrategyAdapter
+from qldpc.models import DecodingProgress, StrategyUpdate
+
+def test_strategy_adapter_stuck_detection():
+    adapter = StrategyAdapter(stuck_threshold=2)
+
+    progress = DecodingProgress(
+        iteration=10,
+        convergence_rate=0.01,
+        stuck_iterations=3,
+        last_syndrome_weight=5
+    )
+
+    assert adapter.should_adapt(progress)
+    update = adapter.adapt(progress)
+
+    assert update.new_pruning_level is not None
+    assert update.new_pruning_level == 2
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run test to verify it fails</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_adaptive_strategy.py::test_strategy_adapter_stuck_detection -v</code>
+Expected: FAIL with "StrategyAdapter not defined"</p>
+<ul>
+<li>[ ] <strong>Step 3: Write StrategyAdapter class</strong></li>
+</ul>
+<pre><code class="language-python">from dataclasses import dataclass
+from qldpc.models import DecodingProgress, StrategyUpdate
+
+@dataclass
+class StrategyAdapter:
+    &quot;&quot;&quot;Adapts strategy during decoding based on progress.&quot;&quot;&quot;
+
+    convergence_window: int = 5
+    stuck_threshold: int = 3
+    adaptation_interval: int = 10
+
+    def should_adapt(self, progress: DecodingProgress) -&gt; bool:
+        if progress.iteration % self.adaptation_interval != 0:
+            return False
+        return self._detect_stuck(progress) or self._detect_convergence(progress)
+
+    def adapt(self, progress: DecodingProgress) -&gt; StrategyUpdate:
+        if self._detect_stuck(progress):
+            return self._unstuck_strategy(progress)
+        elif self._detect_convergence(progress):
+            return self._convergence_strategy(progress)
+        else:
+            return StrategyUpdate()
+
+    def _detect_stuck(self, progress: DecodingProgress) -&gt; bool:
+        return progress.stuck_iterations &gt;= self.stuck_threshold
+
+    def _detect_convergence(self, progress: DecodingProgress) -&gt; bool:
+        return progress.convergence_rate &lt; 0.001
+
+    def _unstuck_strategy(self, progress: DecodingProgress) -&gt; StrategyUpdate:
+        new_pruning = 2
+        new_threshold = min(progress.last_syndrome_weight * 0.5, 0.1)
+
+        return StrategyUpdate(
+            new_pruning_level=new_pruning,
+            new_threshold=new_threshold
+        )
+
+    def _convergence_strategy(self, progress: DecodingProgress) -&gt; StrategyUpdate:
+        return StrategyUpdate(
+            new_pruning_level=0,
+            convergence_early_stop=True
+        )
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_adaptive_strategy.py::test_strategy_adapter_stuck_detection -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 5: Write test for convergence detection</strong></li>
+</ul>
+<pre><code class="language-python">def test_strategy_adapter_convergence():
+    adapter = StrategyAdapter()
+
+    progress = DecodingProgress(
+        iteration=15,
+        convergence_rate=0.0001,
+        stuck_iterations=0,
+        last_syndrome_weight=1
+    )
+
+    assert adapter.should_adapt(progress)
+    update = adapter.adapt(progress)
+
+    assert update.convergence_early_stop is True
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 6: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_adaptive_strategy.py::test_strategy_adapter_convergence -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 7: Export StrategyAdapter in <strong>init</strong>.py</strong></li>
+</ul>
+<pre><code class="language-python">from qldpc.adaptive_strategy import CodeAnalyzer, StrategySelector, StrategyAdapter
+
+__all__ = ['CodeAnalyzer', 'StrategySelector', 'StrategyAdapter']
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 8: Commit</strong></li>
+</ul>
+<pre><code class="language-bash">cd qldpc_decoder
+git add src/qldpc/adaptive_strategy.py tests/test_adaptive_strategy.py src/qldpc/__init__.py
+git commit -m &quot;feat: implement StrategyAdapter for runtime strategy adaptation&quot;
+</code></pre>
+<hr />
+<h3 id="task-5-implement-adaptivestrategyengine">Task 5: Implement AdaptiveStrategyEngine<a class="headerlink" href="#task-5-implement-adaptivestrategyengine" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong>
+- Modify: <code>qldpc_decoder/src/qldpc/adaptive_strategy.py</code>
+- Test: <code>qldpc_decoder/tests/test_adaptive_strategy.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing test for engine initialization</strong></li>
+</ul>
+<pre><code class="language-python">import numpy as np
+from qldpc.adaptive_strategy import AdaptiveStrategyEngine
+
+def test_adaptive_engine_initialization():
+    engine = AdaptiveStrategyEngine()
+    h_x = np.array([[1, 1, 0], [0, 1, 1]], dtype=np.int32)
+    h_z = np.array([[1, 0, 1], [1, 1, 0]], dtype=np.int32)
+
+    strategy_x, strategy_z = engine.initialize_strategy(h_x, h_z, None)
+
+    assert strategy_x.graph_pruning_level &gt;= 0
+    assert strategy_z.graph_pruning_level &gt;= 0
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run test to verify it fails</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_adaptive_strategy.py::test_adaptive_engine_initialization -v</code>
+Expected: FAIL with "AdaptiveStrategyEngine not defined"</p>
+<ul>
+<li>[ ] <strong>Step 3: Write AdaptiveStrategyEngine class</strong></li>
+</ul>
+<pre><code class="language-python">from dataclasses import dataclass
+import numpy as np
+from qldpc.models import QLDPCConfig, CodeFeatures, ResourceBudget
+from qldpc.adaptive_strategy import (
+    CodeAnalyzer,
+    StrategySelector,
+    StrategyAdapter,
+    SparseStrategy,
+    DecodingProgress,
+    StrategyUpdate
+)
+
+@dataclass
+class AdaptiveStrategyEngine:
+    &quot;&quot;&quot;Adaptive sparse strategy engine: coordinates analysis, selection, adaptation.&quot;&quot;&quot;
+
+    analyzer: CodeAnalyzer = None
+    selector: StrategySelector = None
+    adapter: StrategyAdapter = None
+
+    def __post_init__(self):
+        if self.analyzer is None:
+            self.analyzer = CodeAnalyzer()
+        if self.selector is None:
+            self.selector = StrategySelector()
+        if self.adapter is None:
+            self.adapter = StrategyAdapter()
+
+    def initialize_strategy(
+        self,
+        h_x: np.ndarray,
+        h_z: np.ndarray,
+        config: QLDPCConfig
+    ) -&gt; tuple[SparseStrategy, SparseStrategy]:
+        if h_x.shape != h_z.shape:
+            raise ValueError(
+                f&quot;H_x and H_z shape mismatch: {h_x.shape} vs {h_z.shape}&quot;
+            )
+
+        features_x = self.analyzer.analyze(h_x)
+        features_z = self.analyzer.analyze(h_z)
+
+        budget = ResourceBudget(
+            max_lut_percent=80.0,
+            max_bram_percent=70.0,
+            max_dsp_percent=60.0
+        )
+
+        strategy_x = self.selector.select_strategy(features_x, budget)
+        strategy_z = self.selector.select_strategy(features_z, budget)
+
+        return strategy_x, strategy_z
+
+    def should_adapt(self, progress: DecodingProgress) -&gt; bool:
+        return self.adapter.should_adapt(progress)
+
+    def adapt(self, progress: DecodingProgress) -&gt; StrategyUpdate:
+        return self.adapter.adapt(progress)
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_adaptive_strategy.py::test_adaptive_engine_initialization -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 5: Export AdaptiveStrategyEngine in <strong>init</strong>.py</strong></li>
+</ul>
+<pre><code class="language-python">from qldpc.adaptive_strategy import CodeAnalyzer, StrategySelector, StrategyAdapter, AdaptiveStrategyEngine
+
+__all__ = ['CodeAnalyzer', 'StrategySelector', 'StrategyAdapter', 'AdaptiveStrategyEngine']
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 6: Commit</strong></li>
+</ul>
+<pre><code class="language-bash">cd qldpc_decoder
+git add src/qldpc/adaptive_strategy.py tests/test_adaptive_strategy.py src/qldpc/__init__.py
+git commit -m &quot;feat: implement AdaptiveStrategyEngine to coordinate analysis and adaptation&quot;
+</code></pre>
+<hr />
+<h3 id="task-6-integrate-adaptivestrategyengine-into-qldpcdecoder">Task 6: Integrate AdaptiveStrategyEngine into QLDPCDecoder<a class="headerlink" href="#task-6-integrate-adaptivestrategyengine-into-qldpcdecoder" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong>
+- Modify: <code>qldpc_decoder/src/qldpc/decoder.py</code>
+- Test: <code>qldpc_decoder/tests/test_decoder.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing test for decoder with strategy engine</strong></li>
+</ul>
+<pre><code class="language-python">import numpy as np
+from qldpc.decoder import QLDPCDecoder
+
+def test_decoder_with_strategy_engine():
+    h_x = np.array([[1, 1, 0], [0, 1, 1]], dtype=np.int32)
+    h_z = np.array([[1, 0, 1], [1, 1, 0]], dtype=np.int32)
+
+    decoder = QLDPCDecoder.from_qldpc_code(h_x, h_z)
+
+    # Verify strategy engine is initialized
+    assert decoder.strategy_engine is not None
+    assert decoder.current_strategy_x is not None
+    assert decoder.current_strategy_z is not None
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run test to verify it fails</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_decoder.py::test_decoder_with_strategy_engine -v</code>
+Expected: FAIL with "QLDPCDecoder has no attribute 'strategy_engine'"</p>
+<ul>
+<li>[ ] <strong>Step 3: Add strategy engine fields to QLDPCDecoder</strong></li>
+</ul>
+<pre><code class="language-python">from dataclasses import dataclass
+import numpy as np
+from qldpc.models import QLDPCConfig
+from qldpc.message_passing import MessagePassingDecoder
+from qldpc.adaptive_strategy import (
+    AdaptiveStrategyEngine,
+    SparseStrategy,
+    DecodingProgress,
+    StrategyUpdate
+)
+
+@dataclass
+class QLDPCDecoder:
+    &quot;&quot;&quot;QLDPC decoder with adaptive sparse architecture.&quot;&quot;&quot;
+
+    h_x: np.ndarray
+    h_z: np.ndarray
+    config: QLDPCConfig
+    _mp_decoder_x: MessagePassingDecoder = None
+    _mp_decoder_z: MessagePassingDecoder = None
+
+    # New: adaptive strategy engine
+    strategy_engine: AdaptiveStrategyEngine = None
+    current_strategy_x: SparseStrategy = None
+    current_strategy_z: SparseStrategy = None
+    decoding_progress: DecodingProgress = None
+
+    def __post_init__(self):
+        if self.h_x.shape != self.h_z.shape:
+            raise ValueError(&quot;H_x and H_z must have the same shape&quot;)
+
+        mp_config = {
+            'max_iterations': self.config.max_iterations,
+            'convergence_threshold': self.config.convergence_threshold
+        }
+        self._mp_decoder_x = MessagePassingDecoder(**mp_config)
+        self._mp_decoder_z = MessagePassingDecoder(**mp_config)
+
+        # Initialize adaptive engine
+        if self.strategy_engine is None:
+            self.strategy_engine = AdaptiveStrategyEngine()
+
+        self.current_strategy_x, self.current_strategy_z = \
+            self.strategy_engine.initialize_strategy(self.h_x, self.h_z, self.config)
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Run test to verify it passes</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_decoder.py::test_decoder_with_strategy_engine -v</code>
+Expected: PASS</p>
+<ul>
+<li>[ ] <strong>Step 5: Commit</strong></li>
+</ul>
+<pre><code class="language-bash">cd qldpc_decoder
+git add src/qldpc/decoder.py tests/test_decoder.py
+git commit -m &quot;feat: integrate AdaptiveStrategyEngine into QLDPCDecoder&quot;
+</code></pre>
+<hr />
+<h3 id="task-7-update-decoder-decode_batch-to-support-strategy-tracking">Task 7: Update decoder decode_batch to support strategy tracking<a class="headerlink" href="#task-7-update-decoder-decode_batch-to-support-strategy-tracking" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong>
+- Modify: <code>qldpc_decoder/src/qldpc/decoder.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Add progress tracking to decode_batch</strong></li>
+</ul>
+<p>Modify the <code>decode_batch</code> method to track <code>DecodingProgress</code>:</p>
+<pre><code class="language-python">    def decode_batch(self, syndrome_samples: np.ndarray) -&gt; np.ndarray:
+        shots, n_detectors = syndrome_samples.shape
+
+        # For Phase 2, just track iteration count (adaptation not yet applied)
+        self.decoding_progress = DecodingProgress(
+            iteration=0,
+            convergence_rate=1.0,
+            stuck_iterations=0,
+            last_syndrome_weight=0
+        )
+
+        predictions = self._mp_decoder_x.decode_batch(self.h_x, syndrome_samples)
+
+        return predictions
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Commit</strong></li>
+</ul>
+<pre><code class="language-bash">cd qldpc_decoder
+git add src/qldpc/decoder.py
+git commit -m &quot;feat: add progress tracking placeholder in decode_batch&quot;
+</code></pre>
+<hr />
+<h3 id="task-8-run-full-test-suite-and-verify-integration">Task 8: Run full test suite and verify integration<a class="headerlink" href="#task-8-run-full-test-suite-and-verify-integration" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong>
+- Test: All test files</p>
+<ul>
+<li>[ ] <strong>Step 1: Run all adaptive strategy tests</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_adaptive_strategy.py -v</code>
+Expected: All 8+ tests PASS</p>
+<ul>
+<li>[ ] <strong>Step 2: Run all decoder tests</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/test_decoder.py -v</code>
+Expected: All tests PASS</p>
+<ul>
+<li>[ ] <strong>Step 3: Run entire test suite</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/ -v</code>
+Expected: All tests PASS (Phase 1 + Phase 2 tests)</p>
+<ul>
+<li>[ ] <strong>Step 4: Check test coverage</strong></li>
+</ul>
+<p>Run: <code>cd qldpc_decoder &amp;&amp; python -m pytest tests/ --cov=qldpc --cov-report=term-missing</code>
+Expected: Coverage report with improved percentage</p>
+<ul>
+<li>[ ] <strong>Step 5: Commit</strong></li>
+</ul>
+<pre><code class="language-bash">cd qldpc_decoder
+git add .
+git commit -m &quot;test: verify Phase 2 integration and test suite&quot;
+</code></pre>
+<hr />
+<h2 id="self-review">Self-Review<a class="headerlink" href="#self-review" title="Permanent link">&para;</a></h2>
+<h3 id="spec-coverage-check">Spec Coverage Check<a class="headerlink" href="#spec-coverage-check" title="Permanent link">&para;</a></h3>
+<p>From the design spec (<code>2026-04-22-qldpc-adaptive-strategy-engine-design.md</code>):</p>
+<ol>
+<li><strong>CodeAnalyzer</strong> - Covered in Task 2</li>
+<li><strong>StrategySelector</strong> - Covered in Task 3</li>
+<li><strong>StrategyAdapter</strong> - Covered in Task 4</li>
+<li><strong>AdaptiveStrategyEngine</strong> - Covered in Task 5</li>
+<li><strong>Data models</strong> - Covered in Task 1</li>
+<li><strong>QLDPCDecoder integration</strong> - Covered in Task 6</li>
+<li><strong>Progress tracking</strong> - Covered in Task 7 (placeholder)</li>
+<li><strong>Test suite</strong> - Covered in Task 8</li>
+</ol>
+<h3 id="placeholder-scan">Placeholder Scan<a class="headerlink" href="#placeholder-scan" title="Permanent link">&para;</a></h3>
+<p>No TBD, TODO, or incomplete sections found. All code blocks are complete.</p>
+<h3 id="type-consistency-check">Type Consistency Check<a class="headerlink" href="#type-consistency-check" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>CodeFeatures</code> extended with 4 new fields (max_node_degree, min_node_degree, avg_cycle_length, n_connected_components, max_component_size)</li>
+<li><code>SparseStrategy</code> data class defined and used consistently</li>
+<li><code>DecodingProgress</code> and <code>StrategyUpdate</code> types defined</li>
+<li>Method signatures match between tests and implementations</li>
+<li>All imports properly declared in <strong>init</strong>.py</li>
+</ul>
+<h3 id="gap-analysis">Gap Analysis<a class="headerlink" href="#gap-analysis" title="Permanent link">&para;</a></h3>
+<p>The design spec mentions Phase 3+ (FPGA Hardware, Integration, Optimization) which will be covered in subsequent plans. Progress tracking in Task 7 is a placeholder - full strategy application to decoding is reserved for Phase 3.</p>
+<p>This plan implements Phase 2: Adaptive Strategy Engine as specified.</p>
+<hr />
+<h2 id="plan-complete-and-saved-to-docsplansqldpc2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementationmd">Plan complete and saved to <code>docs/plans/qldpc/2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementation.md</code>.<a class="headerlink" href="#plan-complete-and-saved-to-docsplansqldpc2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementationmd" title="Permanent link">&para;</a></h2>
+<p>Two execution options:</p>
+<p><strong>1. Subagent-Driven (recommended)</strong> - I dispatch a fresh subagent per task, review between tasks, fast iteration</p>
+<p><strong>2. Inline Execution</strong> - Execute tasks in this session using executing-plans, batch execution with checkpoints</p>
+<p>Which approach?</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

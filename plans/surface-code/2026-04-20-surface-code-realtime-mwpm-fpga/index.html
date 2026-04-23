@@ -1,0 +1,3447 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Public documentation for the 0420 FPGA decoder workspace">
+      
+      
+      
+        <link rel="canonical" href="https://junjunaa22.github.io/0420-FPGA-Decoder-docs/plans/surface-code/2026-04-20-surface-code-realtime-mwpm-fpga/">
+      
+      
+        <link rel="prev" href="../../repository/2026-04-23-docs-information-architecture-implementation/">
+      
+      
+        <link rel="next" href="../../interface/2026-04-20-python-decoder-verilog-interface-implementation/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Surface Code Realtime MWPM FPGA - 0420-FPGA-Decoder Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#surface-code-real-time-mwpm-fpga-simulation-implementation-plan" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="0420-FPGA-Decoder Documentation" class="md-header__button md-logo" aria-label="0420-FPGA-Decoder Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            0420-FPGA-Decoder Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Surface Code Realtime MWPM FPGA
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/JUNJUNAA22/0420-FPGA-Decoder-docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    JUNJUNAA22/0420-FPGA-Decoder-docs
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../architecture/overview/" class="md-tabs__link">
+          
+  
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../verification/ci/" class="md-tabs__link">
+          
+  
+  
+  Verification
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../development/environment/" class="md-tabs__link">
+          
+  
+  
+  Development
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../specs/repository/2026-04-23-docs-information-architecture-design/" class="md-tabs__link">
+          
+  
+  
+  Specs
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../repository/2026-04-23-docs-information-architecture-implementation/" class="md-tabs__link">
+          
+  
+  
+  Plans
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="0420-FPGA-Decoder Documentation" class="md-nav__button md-logo" aria-label="0420-FPGA-Decoder Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    0420-FPGA-Decoder Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/JUNJUNAA22/0420-FPGA-Decoder-docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    JUNJUNAA22/0420-FPGA-Decoder-docs
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/surface-code-decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/python-verilog-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python-Verilog Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/qldpc-decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/gpu-decoder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPU Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Verification
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../verification/ci/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../verification/surface-code-verilog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code Verilog Self-Check
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../verification/human-verification-test-plan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human Verification Test Plan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/generated-artifacts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Generated Artifacts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Specs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/repository/2026-04-23-docs-information-architecture-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/surface-code/2026-04-20-surface-code-realtime-mwpm-fpga-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/interface/2026-04-20-python-decoder-verilog-interface-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python-Verilog Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/qldpc/2026-04-22-qldpc-adaptive-sparse-decoder-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Adaptive Sparse Decoder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/qldpc/2026-04-22-qldpc-adaptive-strategy-engine-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Adaptive Strategy Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../specs/qldpc/2026-04-22-qldpc-jupyter-demo-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Jupyter Demo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plans
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Plans
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../repository/2026-04-23-docs-information-architecture-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repository Documentation Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code Realtime MWPM FPGA
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Surface Code Realtime MWPM FPGA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-1-project-scaffold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 1: Project Scaffold
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tiny-development-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tiny development run
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone boundary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-2-shared-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 2: Shared Models
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-3-circuitfactory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 3: CircuitFactory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-4-syndromesampler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 4: SyndromeSampler
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-5-mwpmdecoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 5: MWPMDecoder
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-6-latencymodel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 6: LatencyModel
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-7-reportgenerator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 7: ReportGenerator
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-8-benchmarkrunner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 8: BenchmarkRunner
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-9-sinter-baseline-cross-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 9: Sinter Baseline Cross-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-10-cli-and-benchmark-bundle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 10: CLI And Benchmark Bundle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tiny-development-run_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tiny development run
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-sweep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone sweep
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#latency-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Latency parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-boundary_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone boundary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-11-acceptance-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 11: Acceptance Verification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Review
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../interface/2026-04-20-python-decoder-verilog-interface-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python-Verilog Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../interface/2026-04-20-verilog-counter-smoke-test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verilog Counter Smoke Test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../qldpc/2026-04-22-qldpc-decoder-phase1-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Decoder Phase 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../qldpc/2026-04-22-qldpc-phase2-adaptive-strategy-engine-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QLDPC Adaptive Strategy Phase 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-1-project-scaffold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 1: Project Scaffold
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tiny-development-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tiny development run
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone boundary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-2-shared-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 2: Shared Models
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-3-circuitfactory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 3: CircuitFactory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-4-syndromesampler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 4: SyndromeSampler
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-5-mwpmdecoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 5: MWPMDecoder
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-6-latencymodel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 6: LatencyModel
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-7-reportgenerator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 7: ReportGenerator
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-8-benchmarkrunner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 8: BenchmarkRunner
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-9-sinter-baseline-cross-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 9: Sinter Baseline Cross-Check
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-10-cli-and-benchmark-bundle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 10: CLI And Benchmark Bundle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tiny-development-run_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tiny development run
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-sweep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone sweep
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#latency-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Latency parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-boundary_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone boundary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-11-acceptance-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task 11: Acceptance Verification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Review
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="surface-code-real-time-mwpm-fpga-simulation-implementation-plan">Surface-Code Real-Time MWPM FPGA Simulation Implementation Plan<a class="headerlink" href="#surface-code-real-time-mwpm-fpga-simulation-implementation-plan" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Status: Historical implementation plan. The work described here may already
+be partially or fully implemented. Use the corresponding architecture page and
+current source tree as the source of truth.</p>
+<p><strong>For agentic workers:</strong> REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (<code>- [ ]</code>) syntax for tracking.</p>
+</blockquote>
+<p><strong>Goal:</strong> Build a simulation-first Python benchmark pipeline for rotated planar surface-code MWPM decoding that reports logical error rate, host decode wall time, and explicit simulated latency in syndrome-round units.</p>
+<p><strong>Architecture:</strong> Create a small <code>decoder_benchmark</code> package with one module per pipeline boundary: Stim circuit generation, syndrome-frame sampling, PyMatching decode, latency accounting, report generation, sinter baseline comparison, and CLI orchestration. Keep PyMatching as the reference decoder while exposing streaming-shaped interfaces that can later map to FPGA pipeline stages.</p>
+<p><strong>Tech Stack:</strong> Python 3.11+, Stim, PyMatching, sinter, NumPy, pytest, standard-library CSV/JSON/argparse/pathlib/dataclasses.</p>
+<hr />
+<h2 id="file-structure">File Structure<a class="headerlink" href="#file-structure" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Create: <code>pyproject.toml</code>
+  Package metadata, runtime dependencies, pytest configuration, and the <code>decoder-benchmark</code> CLI entry point.</li>
+<li>Create: <code>README.md</code>
+  User-facing quick start, dependency delegation notes, and example benchmark command.</li>
+<li>Create: <code>src/decoder_benchmark/__init__.py</code>
+  Public package exports.</li>
+<li>Create: <code>src/decoder_benchmark/models.py</code>
+  Shared dataclasses for benchmark configuration, latency costs, latency breakdowns, and result rows.</li>
+<li>Create: <code>src/decoder_benchmark/circuit_factory.py</code>
+  Stim rotated planar memory circuit creation and detector error model extraction.</li>
+<li>Create: <code>src/decoder_benchmark/syndrome.py</code>
+  Detector sample collection and conversion between batch detector arrays and ordered syndrome frames.</li>
+<li>Create: <code>src/decoder_benchmark/decoder.py</code>
+  PyMatching-backed MWPM wrapper with batch decode and logical-error counting helpers.</li>
+<li>Create: <code>src/decoder_benchmark/latency.py</code>
+  Replaceable latency model with deterministic stage-level accounting.</li>
+<li>Create: <code>src/decoder_benchmark/reporting.py</code>
+  CSV, JSON, and Markdown benchmark bundle generation.</li>
+<li>Create: <code>src/decoder_benchmark/runner.py</code>
+  End-to-end sweep runner that wires circuit generation, sampling, decoding, latency, and reporting.</li>
+<li>Create: <code>src/decoder_benchmark/sinter_baseline.py</code>
+  Tiny sinter baseline collection path and conversion to comparable metrics.</li>
+<li>Create: <code>src/decoder_benchmark/cli.py</code>
+  Command-line interface for benchmark sweeps and output directory selection.</li>
+<li>Create: <code>tests/test_circuit_factory.py</code>
+  Stim circuit and detector error model tests.</li>
+<li>Create: <code>tests/test_syndrome.py</code>
+  Streaming frame conversion tests.</li>
+<li>Create: <code>tests/test_decoder.py</code>
+  PyMatching correctness path tests.</li>
+<li>Create: <code>tests/test_latency.py</code>
+  Deterministic latency accounting tests.</li>
+<li>Create: <code>tests/test_reporting.py</code>
+  Artifact generation tests.</li>
+<li>Create: <code>tests/test_runner.py</code>
+  End-to-end tiny benchmark tests.</li>
+<li>Create: <code>tests/test_sinter_baseline.py</code>
+  Sinter baseline conversion tests.</li>
+<li>Create: <code>tests/test_cli.py</code>
+  CLI argument parsing and smoke execution tests.</li>
+</ul>
+<h2 id="task-1-project-scaffold">Task 1: Project Scaffold<a class="headerlink" href="#task-1-project-scaffold" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Create: <code>pyproject.toml</code>
+- Create: <code>README.md</code>
+- Create: <code>src/decoder_benchmark/__init__.py</code>
+- Create: <code>tests/test_package_import.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write the failing package import test</strong></li>
+</ul>
+<p>Create <code>tests/test_package_import.py</code> with:</p>
+<pre><code class="language-python">import decoder_benchmark
+
+
+def test_package_exposes_version():
+    assert isinstance(decoder_benchmark.__version__, str)
+    assert decoder_benchmark.__version__
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run the import test to verify it fails</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_package_import.py -v
+</code></pre>
+<p>Expected: FAIL with <code>ModuleNotFoundError: No module named 'decoder_benchmark'</code>.</p>
+<ul>
+<li>[ ] <strong>Step 3: Create package metadata</strong></li>
+</ul>
+<p>Create <code>pyproject.toml</code> with:</p>
+<pre><code class="language-toml">[build-system]
+requires = [&quot;hatchling&gt;=1.24&quot;]
+build-backend = &quot;hatchling.build&quot;
+
+[project]
+name = &quot;decoder-benchmark&quot;
+version = &quot;0.1.0&quot;
+description = &quot;Simulation-first rotated surface-code MWPM benchmark with explicit latency modeling.&quot;
+readme = &quot;README.md&quot;
+requires-python = &quot;&gt;=3.11&quot;
+dependencies = [
+  &quot;numpy&gt;=1.26&quot;,
+  &quot;stim&gt;=1.13&quot;,
+  &quot;pymatching&gt;=2.2&quot;,
+  &quot;sinter&gt;=1.13&quot;,
+]
+
+[project.optional-dependencies]
+dev = [
+  &quot;pytest&gt;=8.0&quot;,
+]
+
+[project.scripts]
+decoder-benchmark = &quot;decoder_benchmark.cli:main&quot;
+
+[tool.pytest.ini_options]
+testpaths = [&quot;tests&quot;]
+pythonpath = [&quot;src&quot;]
+addopts = &quot;-ra&quot;
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Create initial package export</strong></li>
+</ul>
+<p>Create <code>src/decoder_benchmark/__init__.py</code> with:</p>
+<pre><code class="language-python">&quot;&quot;&quot;Rotated surface-code MWPM benchmark pipeline.&quot;&quot;&quot;
+
+__version__ = &quot;0.1.0&quot;
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 5: Create quick-start documentation</strong></li>
+</ul>
+<p>Create <code>README.md</code> with:</p>
+<pre><code class="language-markdown"># decoder-benchmark
+
+Simulation-first benchmark tooling for rotated planar surface-code MWPM decoding.
+
+The milestone-one implementation delegates circuit generation and detector sampling
+to Stim, reference MWPM decoding to PyMatching, and a tiny baseline cross-check to
+sinter. Custom code in this repository owns the streaming-shaped syndrome frame
+representation, latency accounting, benchmark orchestration, and report packaging.
+
+## Development setup
+
+```bash
+python -m pip install -e &quot;.[dev]&quot;
+python -m pytest -v
+</code></pre>
+<h2 id="tiny-development-run">Tiny development run<a class="headerlink" href="#tiny-development-run" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">decoder-benchmark \
+  --distances 3 \
+  --error-rates 0.001 \
+  --shots 100 \
+  --output-dir benchmark-out/dev
+</code></pre>
+<p>The command writes <code>results.csv</code>, <code>results.json</code>, and <code>report.md</code> into the output
+directory.</p>
+<h2 id="milestone-boundary">Milestone boundary<a class="headerlink" href="#milestone-boundary" title="Permanent link">&para;</a></h2>
+<p>This project does not implement RTL, HLS, FPGA board integration, or a custom MWPM
+engine. The latency numbers are explicit simulation parameters around a reference
+software decoder; they are design aids, not hardware timing-closure evidence.</p>
+<pre><code>
+- [ ] **Step 6: Install package in editable mode**
+
+Run:
+
+```bash
+python -m pip install -e &quot;.[dev]&quot;
+</code></pre>
+<p>Expected: installation completes and includes <code>decoder-benchmark</code>.</p>
+<ul>
+<li>[ ] <strong>Step 7: Run the import test to verify it passes</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_package_import.py -v
+</code></pre>
+<p>Expected: PASS.</p>
+<ul>
+<li>[ ] <strong>Step 8: Commit scaffold</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">git add pyproject.toml README.md src/decoder_benchmark/__init__.py tests/test_package_import.py
+git commit -m &quot;chore: scaffold decoder benchmark package&quot;
+</code></pre>
+<h2 id="task-2-shared-models">Task 2: Shared Models<a class="headerlink" href="#task-2-shared-models" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Create: <code>src/decoder_benchmark/models.py</code>
+- Modify: <code>src/decoder_benchmark/__init__.py</code>
+- Create: <code>tests/test_models.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing model tests</strong></li>
+</ul>
+<p>Create <code>tests/test_models.py</code> with:</p>
+<pre><code class="language-python">from decoder_benchmark.models import (
+    BenchmarkConfig,
+    BenchmarkResult,
+    LatencyBreakdown,
+    LatencyStageCosts,
+)
+
+
+def test_benchmark_config_defaults_rounds_to_distance():
+    config = BenchmarkConfig(distance=5, physical_error_rate=0.003, shots=100)
+
+    assert config.rounds == 5
+    assert config.basis == &quot;z&quot;
+
+
+def test_latency_stage_costs_have_named_stage_dict():
+    costs = LatencyStageCosts(
+        ingestion=0.25,
+        graph_update=0.5,
+        matching=1.25,
+        correction_output=0.25,
+    )
+
+    assert costs.as_dict() == {
+        &quot;ingestion&quot;: 0.25,
+        &quot;graph_update&quot;: 0.5,
+        &quot;matching&quot;: 1.25,
+        &quot;correction_output&quot;: 0.25,
+    }
+
+
+def test_benchmark_result_serializes_flat_row_and_structured_dict():
+    result = BenchmarkResult(
+        distance=3,
+        physical_error_rate=0.001,
+        rounds=3,
+        shots=10,
+        logical_errors=1,
+        logical_error_rate=0.1,
+        decode_wall_time_seconds=0.012,
+        latency=LatencyBreakdown(
+            latency_rounds=2.5,
+            stage_breakdown={
+                &quot;ingestion&quot;: 0.75,
+                &quot;graph_update&quot;: 0.75,
+                &quot;matching&quot;: 0.75,
+                &quot;correction_output&quot;: 0.25,
+            },
+        ),
+    )
+
+    assert result.to_csv_row() == {
+        &quot;distance&quot;: 3,
+        &quot;physical_error_rate&quot;: 0.001,
+        &quot;rounds&quot;: 3,
+        &quot;shots&quot;: 10,
+        &quot;logical_errors&quot;: 1,
+        &quot;logical_error_rate&quot;: 0.1,
+        &quot;decode_wall_time_seconds&quot;: 0.012,
+        &quot;latency_rounds&quot;: 2.5,
+        &quot;latency_ingestion_rounds&quot;: 0.75,
+        &quot;latency_graph_update_rounds&quot;: 0.75,
+        &quot;latency_matching_rounds&quot;: 0.75,
+        &quot;latency_correction_output_rounds&quot;: 0.25,
+    }
+    assert result.to_json_dict()[&quot;latency&quot;][&quot;stage_breakdown&quot;][&quot;matching&quot;] == 0.75
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run model tests to verify they fail</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_models.py -v
+</code></pre>
+<p>Expected: FAIL with <code>ModuleNotFoundError: No module named 'decoder_benchmark.models'</code>.</p>
+<ul>
+<li>[ ] <strong>Step 3: Implement shared models</strong></li>
+</ul>
+<p>Create <code>src/decoder_benchmark/models.py</code> with:</p>
+<pre><code class="language-python">from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Any
+
+
+@dataclass(frozen=True)
+class BenchmarkConfig:
+    distance: int
+    physical_error_rate: float
+    shots: int
+    rounds: int | None = None
+    basis: str = &quot;z&quot;
+
+    def __post_init__(self) -&gt; None:
+        if self.distance &lt; 3 or self.distance % 2 == 0:
+            raise ValueError(&quot;distance must be an odd integer greater than or equal to 3&quot;)
+        if not 0.0 &lt; self.physical_error_rate &lt; 1.0:
+            raise ValueError(&quot;physical_error_rate must be between 0 and 1&quot;)
+        if self.shots &lt; 1:
+            raise ValueError(&quot;shots must be at least 1&quot;)
+        if self.rounds is None:
+            object.__setattr__(self, &quot;rounds&quot;, self.distance)
+        if self.rounds is None or self.rounds &lt; 1:
+            raise ValueError(&quot;rounds must be at least 1&quot;)
+        normalized_basis = self.basis.lower()
+        if normalized_basis not in {&quot;x&quot;, &quot;z&quot;}:
+            raise ValueError(&quot;basis must be 'x' or 'z'&quot;)
+        object.__setattr__(self, &quot;basis&quot;, normalized_basis)
+
+
+@dataclass(frozen=True)
+class LatencyStageCosts:
+    ingestion: float = 0.25
+    graph_update: float = 0.25
+    matching: float = 1.0
+    correction_output: float = 0.25
+
+    def __post_init__(self) -&gt; None:
+        for name, value in self.as_dict().items():
+            if value &lt; 0:
+                raise ValueError(f&quot;{name} latency cost must be non-negative&quot;)
+
+    def as_dict(self) -&gt; dict[str, float]:
+        return {
+            &quot;ingestion&quot;: self.ingestion,
+            &quot;graph_update&quot;: self.graph_update,
+            &quot;matching&quot;: self.matching,
+            &quot;correction_output&quot;: self.correction_output,
+        }
+
+
+@dataclass(frozen=True)
+class LatencyBreakdown:
+    latency_rounds: float
+    stage_breakdown: dict[str, float]
+
+    def to_json_dict(self) -&gt; dict[str, Any]:
+        return {
+            &quot;latency_rounds&quot;: self.latency_rounds,
+            &quot;stage_breakdown&quot;: dict(self.stage_breakdown),
+        }
+
+
+@dataclass(frozen=True)
+class BenchmarkResult:
+    distance: int
+    physical_error_rate: float
+    rounds: int
+    shots: int
+    logical_errors: int
+    logical_error_rate: float
+    decode_wall_time_seconds: float
+    latency: LatencyBreakdown
+
+    def to_csv_row(self) -&gt; dict[str, int | float]:
+        return {
+            &quot;distance&quot;: self.distance,
+            &quot;physical_error_rate&quot;: self.physical_error_rate,
+            &quot;rounds&quot;: self.rounds,
+            &quot;shots&quot;: self.shots,
+            &quot;logical_errors&quot;: self.logical_errors,
+            &quot;logical_error_rate&quot;: self.logical_error_rate,
+            &quot;decode_wall_time_seconds&quot;: self.decode_wall_time_seconds,
+            &quot;latency_rounds&quot;: self.latency.latency_rounds,
+            &quot;latency_ingestion_rounds&quot;: self.latency.stage_breakdown[&quot;ingestion&quot;],
+            &quot;latency_graph_update_rounds&quot;: self.latency.stage_breakdown[&quot;graph_update&quot;],
+            &quot;latency_matching_rounds&quot;: self.latency.stage_breakdown[&quot;matching&quot;],
+            &quot;latency_correction_output_rounds&quot;: self.latency.stage_breakdown[&quot;correction_output&quot;],
+        }
+
+    def to_json_dict(self) -&gt; dict[str, Any]:
+        return {
+            &quot;distance&quot;: self.distance,
+            &quot;physical_error_rate&quot;: self.physical_error_rate,
+            &quot;rounds&quot;: self.rounds,
+            &quot;shots&quot;: self.shots,
+            &quot;logical_errors&quot;: self.logical_errors,
+            &quot;logical_error_rate&quot;: self.logical_error_rate,
+            &quot;decode_wall_time_seconds&quot;: self.decode_wall_time_seconds,
+            &quot;latency&quot;: self.latency.to_json_dict(),
+        }
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Export model names</strong></li>
+</ul>
+<p>Replace <code>src/decoder_benchmark/__init__.py</code> with:</p>
+<pre><code class="language-python">&quot;&quot;&quot;Rotated surface-code MWPM benchmark pipeline.&quot;&quot;&quot;
+
+from decoder_benchmark.models import (
+    BenchmarkConfig,
+    BenchmarkResult,
+    LatencyBreakdown,
+    LatencyStageCosts,
+)
+
+__version__ = &quot;0.1.0&quot;
+
+__all__ = [
+    &quot;BenchmarkConfig&quot;,
+    &quot;BenchmarkResult&quot;,
+    &quot;LatencyBreakdown&quot;,
+    &quot;LatencyStageCosts&quot;,
+    &quot;__version__&quot;,
+]
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 5: Run model and import tests</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_models.py tests/test_package_import.py -v
+</code></pre>
+<p>Expected: PASS.</p>
+<ul>
+<li>[ ] <strong>Step 6: Commit shared models</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">git add src/decoder_benchmark/__init__.py src/decoder_benchmark/models.py tests/test_models.py
+git commit -m &quot;feat: add benchmark data models&quot;
+</code></pre>
+<h2 id="task-3-circuitfactory">Task 3: CircuitFactory<a class="headerlink" href="#task-3-circuitfactory" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Create: <code>src/decoder_benchmark/circuit_factory.py</code>
+- Create: <code>tests/test_circuit_factory.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing circuit factory tests</strong></li>
+</ul>
+<p>Create <code>tests/test_circuit_factory.py</code> with:</p>
+<pre><code class="language-python">import stim
+
+from decoder_benchmark.circuit_factory import CircuitFactory
+from decoder_benchmark.models import BenchmarkConfig
+
+
+def test_builds_rotated_memory_circuit_with_observable_and_detectors():
+    factory = CircuitFactory()
+    config = BenchmarkConfig(distance=3, physical_error_rate=0.001, shots=5)
+
+    circuit = factory.build_memory_circuit(config)
+
+    assert isinstance(circuit, stim.Circuit)
+    assert circuit.num_detectors &gt; 0
+    assert circuit.num_observables == 1
+
+
+def test_extracts_detector_error_model_for_matching():
+    factory = CircuitFactory()
+    config = BenchmarkConfig(distance=3, physical_error_rate=0.001, shots=5)
+    circuit = factory.build_memory_circuit(config)
+
+    detector_error_model = factory.detector_error_model(circuit)
+
+    assert isinstance(detector_error_model, stim.DetectorErrorModel)
+    assert len(str(detector_error_model)) &gt; 0
+
+
+def test_supports_x_and_z_memory_basis():
+    factory = CircuitFactory()
+    z_circuit = factory.build_memory_circuit(
+        BenchmarkConfig(distance=3, physical_error_rate=0.001, shots=5, basis=&quot;z&quot;)
+    )
+    x_circuit = factory.build_memory_circuit(
+        BenchmarkConfig(distance=3, physical_error_rate=0.001, shots=5, basis=&quot;x&quot;)
+    )
+
+    assert z_circuit.num_detectors == x_circuit.num_detectors
+    assert z_circuit.num_observables == x_circuit.num_observables == 1
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run circuit tests to verify they fail</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_circuit_factory.py -v
+</code></pre>
+<p>Expected: FAIL with <code>ModuleNotFoundError: No module named 'decoder_benchmark.circuit_factory'</code>.</p>
+<ul>
+<li>[ ] <strong>Step 3: Implement CircuitFactory</strong></li>
+</ul>
+<p>Create <code>src/decoder_benchmark/circuit_factory.py</code> with:</p>
+<pre><code class="language-python">from __future__ import annotations
+
+import stim
+
+from decoder_benchmark.models import BenchmarkConfig
+
+
+class CircuitFactory:
+    &quot;&quot;&quot;Creates Stim rotated planar surface-code memory circuits.&quot;&quot;&quot;
+
+    def build_memory_circuit(self, config: BenchmarkConfig) -&gt; stim.Circuit:
+        task_name = f&quot;surface_code:rotated_memory_{config.basis}&quot;
+        return stim.Circuit.generated(
+            task_name,
+            distance=config.distance,
+            rounds=config.rounds,
+            after_clifford_depolarization=config.physical_error_rate,
+            before_round_data_depolarization=config.physical_error_rate,
+            before_measure_flip_probability=config.physical_error_rate,
+            after_reset_flip_probability=config.physical_error_rate,
+        )
+
+    def detector_error_model(self, circuit: stim.Circuit) -&gt; stim.DetectorErrorModel:
+        return circuit.detector_error_model(decompose_errors=True)
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Run circuit tests</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_circuit_factory.py -v
+</code></pre>
+<p>Expected: PASS.</p>
+<ul>
+<li>[ ] <strong>Step 5: Commit CircuitFactory</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">git add src/decoder_benchmark/circuit_factory.py tests/test_circuit_factory.py
+git commit -m &quot;feat: add stim circuit factory&quot;
+</code></pre>
+<h2 id="task-4-syndromesampler">Task 4: SyndromeSampler<a class="headerlink" href="#task-4-syndromesampler" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Create: <code>src/decoder_benchmark/syndrome.py</code>
+- Create: <code>tests/test_syndrome.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing syndrome sampler tests</strong></li>
+</ul>
+<p>Create <code>tests/test_syndrome.py</code> with:</p>
+<pre><code class="language-python">import numpy as np
+
+from decoder_benchmark.circuit_factory import CircuitFactory
+from decoder_benchmark.models import BenchmarkConfig
+from decoder_benchmark.syndrome import SyndromeFrame, SyndromeSampler
+
+
+def test_samples_detector_and_observable_arrays():
+    circuit = CircuitFactory().build_memory_circuit(
+        BenchmarkConfig(distance=3, physical_error_rate=0.001, shots=4)
+    )
+    sampler = SyndromeSampler(seed=1234)
+
+    detector_samples, observable_samples = sampler.sample_batch(circuit, shots=4)
+
+    assert detector_samples.shape == (4, circuit.num_detectors)
+    assert observable_samples.shape == (4, circuit.num_observables)
+    assert detector_samples.dtype == np.bool_
+    assert observable_samples.dtype == np.bool_
+
+
+def test_converts_detector_batch_to_ordered_frames_without_losing_bits():
+    circuit = CircuitFactory().build_memory_circuit(
+        BenchmarkConfig(distance=3, physical_error_rate=0.001, shots=2)
+    )
+    sampler = SyndromeSampler(seed=1234)
+    detector_samples, _ = sampler.sample_batch(circuit, shots=2)
+
+    frames_by_shot = sampler.to_frames(circuit, detector_samples)
+    reconstructed = sampler.frames_to_batch(frames_by_shot, detector_count=circuit.num_detectors)
+
+    assert len(frames_by_shot) == 2
+    assert all(isinstance(frame, SyndromeFrame) for frame in frames_by_shot[0])
+    assert np.array_equal(reconstructed, detector_samples)
+
+
+def test_detector_round_groups_are_sorted_and_cover_all_detectors():
+    circuit = CircuitFactory().build_memory_circuit(
+        BenchmarkConfig(distance=3, physical_error_rate=0.001, shots=1)
+    )
+    sampler = SyndromeSampler(seed=1234)
+
+    groups = sampler.detector_round_groups(circuit)
+    flat_detector_ids = [detector_id for group in groups for detector_id in group.detector_indices]
+
+    assert groups == sorted(groups, key=lambda group: group.round_index)
+    assert flat_detector_ids == sorted(flat_detector_ids)
+    assert flat_detector_ids == list(range(circuit.num_detectors))
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run syndrome tests to verify they fail</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_syndrome.py -v
+</code></pre>
+<p>Expected: FAIL with <code>ModuleNotFoundError: No module named 'decoder_benchmark.syndrome'</code>.</p>
+<ul>
+<li>[ ] <strong>Step 3: Implement SyndromeSampler</strong></li>
+</ul>
+<p>Create <code>src/decoder_benchmark/syndrome.py</code> with:</p>
+<pre><code class="language-python">from __future__ import annotations
+
+from dataclasses import dataclass
+
+import numpy as np
+import stim
+
+
+@dataclass(frozen=True)
+class DetectorRoundGroup:
+    round_index: int
+    detector_indices: tuple[int, ...]
+
+
+@dataclass(frozen=True)
+class SyndromeFrame:
+    round_index: int
+    detector_indices: tuple[int, ...]
+    values: np.ndarray
+
+
+class SyndromeSampler:
+    &quot;&quot;&quot;Samples Stim detector data and exposes it as time-ordered frames.&quot;&quot;&quot;
+
+    def __init__(self, seed: int | None = None) -&gt; None:
+        self.seed = seed
+
+    def sample_batch(self, circuit: stim.Circuit, shots: int) -&gt; tuple[np.ndarray, np.ndarray]:
+        sampler = circuit.compile_detector_sampler(seed=self.seed)
+        detector_samples, observable_samples = sampler.sample(
+            shots=shots,
+            separate_observables=True,
+        )
+        return np.asarray(detector_samples, dtype=np.bool_), np.asarray(observable_samples, dtype=np.bool_)
+
+    def detector_round_groups(self, circuit: stim.Circuit) -&gt; list[DetectorRoundGroup]:
+        detector_coordinates = circuit.get_detector_coordinates()
+        grouped: dict[int, list[int]] = {}
+        for detector_id in range(circuit.num_detectors):
+            coordinates = detector_coordinates.get(detector_id, ())
+            round_index = int(round(coordinates[-1])) if coordinates else 0
+            grouped.setdefault(round_index, []).append(detector_id)
+
+        return [
+            DetectorRoundGroup(round_index=round_index, detector_indices=tuple(sorted(detector_ids)))
+            for round_index, detector_ids in sorted(grouped.items())
+        ]
+
+    def to_frames(self, circuit: stim.Circuit, detector_samples: np.ndarray) -&gt; list[list[SyndromeFrame]]:
+        samples = np.asarray(detector_samples, dtype=np.bool_)
+        if samples.ndim != 2:
+            raise ValueError(&quot;detector_samples must be a 2D array shaped as shots by detectors&quot;)
+        if samples.shape[1] != circuit.num_detectors:
+            raise ValueError(&quot;detector_samples detector dimension must match circuit.num_detectors&quot;)
+
+        groups = self.detector_round_groups(circuit)
+        frames_by_shot: list[list[SyndromeFrame]] = []
+        for shot in samples:
+            frames_by_shot.append(
+                [
+                    SyndromeFrame(
+                        round_index=group.round_index,
+                        detector_indices=group.detector_indices,
+                        values=np.asarray(shot[list(group.detector_indices)], dtype=np.bool_),
+                    )
+                    for group in groups
+                ]
+            )
+        return frames_by_shot
+
+    def frames_to_batch(self, frames_by_shot: list[list[SyndromeFrame]], detector_count: int) -&gt; np.ndarray:
+        reconstructed = np.zeros((len(frames_by_shot), detector_count), dtype=np.bool_)
+        for shot_index, frames in enumerate(frames_by_shot):
+            for frame in frames:
+                reconstructed[shot_index, list(frame.detector_indices)] = frame.values
+        return reconstructed
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Run syndrome tests</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_syndrome.py -v
+</code></pre>
+<p>Expected: PASS.</p>
+<ul>
+<li>[ ] <strong>Step 5: Commit SyndromeSampler</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">git add src/decoder_benchmark/syndrome.py tests/test_syndrome.py
+git commit -m &quot;feat: add syndrome frame sampler&quot;
+</code></pre>
+<h2 id="task-5-mwpmdecoder">Task 5: MWPMDecoder<a class="headerlink" href="#task-5-mwpmdecoder" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Create: <code>src/decoder_benchmark/decoder.py</code>
+- Create: <code>tests/test_decoder.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing decoder tests</strong></li>
+</ul>
+<p>Create <code>tests/test_decoder.py</code> with:</p>
+<pre><code class="language-python">import numpy as np
+
+from decoder_benchmark.circuit_factory import CircuitFactory
+from decoder_benchmark.decoder import MWPMDecoder, count_logical_errors
+from decoder_benchmark.models import BenchmarkConfig
+from decoder_benchmark.syndrome import SyndromeSampler
+
+
+def test_builds_decoder_from_detector_error_model_and_decodes_batch():
+    factory = CircuitFactory()
+    config = BenchmarkConfig(distance=3, physical_error_rate=0.001, shots=8)
+    circuit = factory.build_memory_circuit(config)
+    detector_error_model = factory.detector_error_model(circuit)
+    detector_samples, observable_samples = SyndromeSampler(seed=1234).sample_batch(circuit, shots=8)
+
+    decoder = MWPMDecoder.from_detector_error_model(detector_error_model)
+    predictions = decoder.decode_batch(detector_samples)
+
+    assert predictions.shape == observable_samples.shape
+    assert predictions.dtype == np.bool_
+
+
+def test_counts_logical_errors_from_prediction_mismatch():
+    predictions = np.array([[False], [True], [True], [False]], dtype=np.bool_)
+    observables = np.array([[False], [False], [True], [True]], dtype=np.bool_)
+
+    logical_errors, logical_error_rate = count_logical_errors(predictions, observables)
+
+    assert logical_errors == 2
+    assert logical_error_rate == 0.5
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run decoder tests to verify they fail</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_decoder.py -v
+</code></pre>
+<p>Expected: FAIL with <code>ModuleNotFoundError: No module named 'decoder_benchmark.decoder'</code>.</p>
+<ul>
+<li>[ ] <strong>Step 3: Implement MWPMDecoder</strong></li>
+</ul>
+<p>Create <code>src/decoder_benchmark/decoder.py</code> with:</p>
+<pre><code class="language-python">from __future__ import annotations
+
+import numpy as np
+import pymatching
+import stim
+
+
+class MWPMDecoder:
+    &quot;&quot;&quot;PyMatching-backed reference MWPM decoder with a streaming-facing boundary.&quot;&quot;&quot;
+
+    def __init__(self, matching: pymatching.Matching) -&gt; None:
+        self.matching = matching
+
+    @classmethod
+    def from_detector_error_model(cls, detector_error_model: stim.DetectorErrorModel) -&gt; &quot;MWPMDecoder&quot;:
+        return cls(pymatching.Matching.from_detector_error_model(detector_error_model))
+
+    def decode_batch(self, detector_samples: np.ndarray) -&gt; np.ndarray:
+        samples = np.asarray(detector_samples, dtype=np.bool_)
+        if samples.ndim != 2:
+            raise ValueError(&quot;detector_samples must be a 2D array shaped as shots by detectors&quot;)
+
+        predictions = np.asarray(self.matching.decode_batch(samples), dtype=np.bool_)
+        if predictions.ndim == 1:
+            predictions = predictions.reshape((-1, 1))
+        return predictions
+
+
+def count_logical_errors(predictions: np.ndarray, observables: np.ndarray) -&gt; tuple[int, float]:
+    prediction_array = np.asarray(predictions, dtype=np.bool_)
+    observable_array = np.asarray(observables, dtype=np.bool_)
+    if prediction_array.shape != observable_array.shape:
+        raise ValueError(&quot;predictions and observables must have the same shape&quot;)
+
+    mismatched_shots = np.any(prediction_array != observable_array, axis=1)
+    logical_errors = int(np.count_nonzero(mismatched_shots))
+    return logical_errors, logical_errors / prediction_array.shape[0]
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Run decoder tests</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_decoder.py -v
+</code></pre>
+<p>Expected: PASS.</p>
+<ul>
+<li>[ ] <strong>Step 5: Commit MWPMDecoder</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">git add src/decoder_benchmark/decoder.py tests/test_decoder.py
+git commit -m &quot;feat: add pymatching decoder wrapper&quot;
+</code></pre>
+<h2 id="task-6-latencymodel">Task 6: LatencyModel<a class="headerlink" href="#task-6-latencymodel" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Create: <code>src/decoder_benchmark/latency.py</code>
+- Create: <code>tests/test_latency.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing latency tests</strong></li>
+</ul>
+<p>Create <code>tests/test_latency.py</code> with:</p>
+<pre><code class="language-python">from decoder_benchmark.latency import LatencyModel
+from decoder_benchmark.models import LatencyStageCosts
+
+
+def test_latency_model_accounts_for_per_frame_and_final_stages():
+    model = LatencyModel(
+        LatencyStageCosts(
+            ingestion=0.25,
+            graph_update=0.5,
+            matching=1.25,
+            correction_output=0.25,
+        )
+    )
+
+    breakdown = model.evaluate(frame_count=3)
+
+    assert breakdown.latency_rounds == 3.5
+    assert breakdown.stage_breakdown == {
+        &quot;ingestion&quot;: 0.75,
+        &quot;graph_update&quot;: 1.5,
+        &quot;matching&quot;: 1.25,
+        &quot;correction_output&quot;: 0.25,
+    }
+
+
+def test_latency_model_rejects_empty_stream():
+    model = LatencyModel()
+
+    try:
+        model.evaluate(frame_count=0)
+    except ValueError as exc:
+        assert str(exc) == &quot;frame_count must be at least 1&quot;
+    else:
+        raise AssertionError(&quot;expected ValueError&quot;)
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run latency tests to verify they fail</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_latency.py -v
+</code></pre>
+<p>Expected: FAIL with <code>ModuleNotFoundError: No module named 'decoder_benchmark.latency'</code>.</p>
+<ul>
+<li>[ ] <strong>Step 3: Implement LatencyModel</strong></li>
+</ul>
+<p>Create <code>src/decoder_benchmark/latency.py</code> with:</p>
+<pre><code class="language-python">from __future__ import annotations
+
+from decoder_benchmark.models import LatencyBreakdown, LatencyStageCosts
+
+
+class LatencyModel:
+    &quot;&quot;&quot;Deterministic syndrome-round latency accounting for a simple decoder pipeline.&quot;&quot;&quot;
+
+    def __init__(self, costs: LatencyStageCosts | None = None) -&gt; None:
+        self.costs = costs or LatencyStageCosts()
+
+    def evaluate(self, frame_count: int) -&gt; LatencyBreakdown:
+        if frame_count &lt; 1:
+            raise ValueError(&quot;frame_count must be at least 1&quot;)
+
+        stage_breakdown = {
+            &quot;ingestion&quot;: self.costs.ingestion * frame_count,
+            &quot;graph_update&quot;: self.costs.graph_update * frame_count,
+            &quot;matching&quot;: self.costs.matching,
+            &quot;correction_output&quot;: self.costs.correction_output,
+        }
+        latency_rounds = sum(stage_breakdown.values())
+        return LatencyBreakdown(latency_rounds=latency_rounds, stage_breakdown=stage_breakdown)
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Run latency tests</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_latency.py -v
+</code></pre>
+<p>Expected: PASS.</p>
+<ul>
+<li>[ ] <strong>Step 5: Commit LatencyModel</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">git add src/decoder_benchmark/latency.py tests/test_latency.py
+git commit -m &quot;feat: add deterministic latency model&quot;
+</code></pre>
+<h2 id="task-7-reportgenerator">Task 7: ReportGenerator<a class="headerlink" href="#task-7-reportgenerator" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Create: <code>src/decoder_benchmark/reporting.py</code>
+- Create: <code>tests/test_reporting.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing report generation tests</strong></li>
+</ul>
+<p>Create <code>tests/test_reporting.py</code> with:</p>
+<pre><code class="language-python">import csv
+import json
+
+from decoder_benchmark.models import BenchmarkResult, LatencyBreakdown
+from decoder_benchmark.reporting import ReportGenerator
+
+
+def sample_result() -&gt; BenchmarkResult:
+    return BenchmarkResult(
+        distance=3,
+        physical_error_rate=0.001,
+        rounds=3,
+        shots=10,
+        logical_errors=1,
+        logical_error_rate=0.1,
+        decode_wall_time_seconds=0.012,
+        latency=LatencyBreakdown(
+            latency_rounds=2.5,
+            stage_breakdown={
+                &quot;ingestion&quot;: 0.75,
+                &quot;graph_update&quot;: 0.75,
+                &quot;matching&quot;: 0.75,
+                &quot;correction_output&quot;: 0.25,
+            },
+        ),
+    )
+
+
+def test_writes_csv_json_and_markdown_bundle(tmp_path):
+    generator = ReportGenerator(tmp_path)
+
+    paths = generator.write(
+        results=[sample_result()],
+        metadata={
+            &quot;distances&quot;: [3],
+            &quot;physical_error_rates&quot;: [0.001],
+            &quot;shots&quot;: 10,
+            &quot;rounds&quot;: &quot;distance&quot;,
+        },
+    )
+
+    assert paths.csv_path == tmp_path / &quot;results.csv&quot;
+    assert paths.json_path == tmp_path / &quot;results.json&quot;
+    assert paths.markdown_path == tmp_path / &quot;report.md&quot;
+    assert paths.csv_path.exists()
+    assert paths.json_path.exists()
+    assert paths.markdown_path.exists()
+
+    with paths.csv_path.open(newline=&quot;&quot;) as csv_file:
+        rows = list(csv.DictReader(csv_file))
+    assert rows[0][&quot;distance&quot;] == &quot;3&quot;
+    assert rows[0][&quot;latency_rounds&quot;] == &quot;2.5&quot;
+
+    payload = json.loads(paths.json_path.read_text())
+    assert payload[&quot;metadata&quot;][&quot;shots&quot;] == 10
+    assert payload[&quot;results&quot;][0][&quot;latency&quot;][&quot;stage_breakdown&quot;][&quot;matching&quot;] == 0.75
+
+    markdown = paths.markdown_path.read_text()
+    assert &quot;| distance | p_error | rounds | shots | logical_error_rate | latency_rounds |&quot; in markdown
+    assert &quot;| 3 | 0.001 | 3 | 10 | 0.1 | 2.5 |&quot; in markdown
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run reporting tests to verify they fail</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_reporting.py -v
+</code></pre>
+<p>Expected: FAIL with <code>ModuleNotFoundError: No module named 'decoder_benchmark.reporting'</code>.</p>
+<ul>
+<li>[ ] <strong>Step 3: Implement ReportGenerator</strong></li>
+</ul>
+<p>Create <code>src/decoder_benchmark/reporting.py</code> with:</p>
+<pre><code class="language-python">from __future__ import annotations
+
+import csv
+import json
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+from decoder_benchmark.models import BenchmarkResult
+
+
+@dataclass(frozen=True)
+class ReportPaths:
+    csv_path: Path
+    json_path: Path
+    markdown_path: Path
+
+
+class ReportGenerator:
+    def __init__(self, output_dir: str | Path) -&gt; None:
+        self.output_dir = Path(output_dir)
+
+    def write(self, results: list[BenchmarkResult], metadata: dict[str, Any]) -&gt; ReportPaths:
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+        csv_path = self.output_dir / &quot;results.csv&quot;
+        json_path = self.output_dir / &quot;results.json&quot;
+        markdown_path = self.output_dir / &quot;report.md&quot;
+
+        self._write_csv(csv_path, results)
+        self._write_json(json_path, results, metadata)
+        self._write_markdown(markdown_path, results, metadata)
+        return ReportPaths(csv_path=csv_path, json_path=json_path, markdown_path=markdown_path)
+
+    def _write_csv(self, path: Path, results: list[BenchmarkResult]) -&gt; None:
+        fieldnames = [
+            &quot;distance&quot;,
+            &quot;physical_error_rate&quot;,
+            &quot;rounds&quot;,
+            &quot;shots&quot;,
+            &quot;logical_errors&quot;,
+            &quot;logical_error_rate&quot;,
+            &quot;decode_wall_time_seconds&quot;,
+            &quot;latency_rounds&quot;,
+            &quot;latency_ingestion_rounds&quot;,
+            &quot;latency_graph_update_rounds&quot;,
+            &quot;latency_matching_rounds&quot;,
+            &quot;latency_correction_output_rounds&quot;,
+        ]
+        with path.open(&quot;w&quot;, newline=&quot;&quot;) as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            writer.writeheader()
+            for result in results:
+                writer.writerow(result.to_csv_row())
+
+    def _write_json(self, path: Path, results: list[BenchmarkResult], metadata: dict[str, Any]) -&gt; None:
+        payload = {
+            &quot;metadata&quot;: metadata,
+            &quot;results&quot;: [result.to_json_dict() for result in results],
+        }
+        path.write_text(json.dumps(payload, indent=2, sort_keys=True) + &quot;\n&quot;)
+
+    def _write_markdown(self, path: Path, results: list[BenchmarkResult], metadata: dict[str, Any]) -&gt; None:
+        lines = [
+            &quot;# Surface-Code MWPM Benchmark Report&quot;,
+            &quot;&quot;,
+            &quot;## Run Metadata&quot;,
+            &quot;&quot;,
+        ]
+        for key, value in metadata.items():
+            lines.append(f&quot;- `{key}`: `{value}`&quot;)
+        lines.extend(
+            [
+                &quot;&quot;,
+                &quot;## Results&quot;,
+                &quot;&quot;,
+                &quot;| distance | p_error | rounds | shots | logical_error_rate | latency_rounds |&quot;,
+                &quot;| --- | --- | --- | --- | --- | --- |&quot;,
+            ]
+        )
+        for result in results:
+            lines.append(
+                &quot;| &quot;
+                f&quot;{result.distance} | &quot;
+                f&quot;{result.physical_error_rate} | &quot;
+                f&quot;{result.rounds} | &quot;
+                f&quot;{result.shots} | &quot;
+                f&quot;{result.logical_error_rate} | &quot;
+                f&quot;{result.latency.latency_rounds} |&quot;
+            )
+        lines.extend(
+            [
+                &quot;&quot;,
+                &quot;## Interpretation&quot;,
+                &quot;&quot;,
+                &quot;Logical error rate is measured by comparing PyMatching-predicted observable flips &quot;
+                &quot;against Stim-sampled observables. Latency is a configurable syndrome-round model &quot;
+                &quot;with explicit ingestion, graph update, matching, and correction output stages.&quot;,
+            ]
+        )
+        path.write_text(&quot;\n&quot;.join(lines) + &quot;\n&quot;)
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Run reporting tests</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_reporting.py -v
+</code></pre>
+<p>Expected: PASS.</p>
+<ul>
+<li>[ ] <strong>Step 5: Commit ReportGenerator</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">git add src/decoder_benchmark/reporting.py tests/test_reporting.py
+git commit -m &quot;feat: add benchmark report generation&quot;
+</code></pre>
+<h2 id="task-8-benchmarkrunner">Task 8: BenchmarkRunner<a class="headerlink" href="#task-8-benchmarkrunner" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Create: <code>src/decoder_benchmark/runner.py</code>
+- Create: <code>tests/test_runner.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing runner tests</strong></li>
+</ul>
+<p>Create <code>tests/test_runner.py</code> with:</p>
+<pre><code class="language-python">from decoder_benchmark.models import BenchmarkConfig, LatencyStageCosts
+from decoder_benchmark.runner import BenchmarkRunner
+
+
+def test_runs_tiny_single_configuration():
+    runner = BenchmarkRunner(
+        latency_costs=LatencyStageCosts(
+            ingestion=0.25,
+            graph_update=0.25,
+            matching=0.5,
+            correction_output=0.25,
+        ),
+        seed=1234,
+    )
+
+    result = runner.run_config(
+        BenchmarkConfig(distance=3, physical_error_rate=0.001, shots=8, rounds=3)
+    )
+
+    assert result.distance == 3
+    assert result.physical_error_rate == 0.001
+    assert result.rounds == 3
+    assert result.shots == 8
+    assert 0 &lt;= result.logical_errors &lt;= 8
+    assert 0.0 &lt;= result.logical_error_rate &lt;= 1.0
+    assert result.decode_wall_time_seconds &gt;= 0.0
+    assert result.latency.latency_rounds &gt; 0.0
+
+
+def test_runs_sweep_with_rounds_defaulting_to_distance():
+    runner = BenchmarkRunner(seed=1234)
+
+    results = runner.run_sweep(distances=[3], physical_error_rates=[0.001, 0.003], shots=4)
+
+    assert [result.physical_error_rate for result in results] == [0.001, 0.003]
+    assert all(result.rounds == result.distance for result in results)
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run runner tests to verify they fail</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_runner.py -v
+</code></pre>
+<p>Expected: FAIL with <code>ModuleNotFoundError: No module named 'decoder_benchmark.runner'</code>.</p>
+<ul>
+<li>[ ] <strong>Step 3: Implement BenchmarkRunner</strong></li>
+</ul>
+<p>Create <code>src/decoder_benchmark/runner.py</code> with:</p>
+<pre><code class="language-python">from __future__ import annotations
+
+import time
+
+from decoder_benchmark.circuit_factory import CircuitFactory
+from decoder_benchmark.decoder import MWPMDecoder, count_logical_errors
+from decoder_benchmark.latency import LatencyModel
+from decoder_benchmark.models import BenchmarkConfig, BenchmarkResult, LatencyStageCosts
+from decoder_benchmark.syndrome import SyndromeSampler
+
+
+class BenchmarkRunner:
+    def __init__(
+        self,
+        circuit_factory: CircuitFactory | None = None,
+        latency_costs: LatencyStageCosts | None = None,
+        seed: int | None = None,
+    ) -&gt; None:
+        self.circuit_factory = circuit_factory or CircuitFactory()
+        self.latency_model = LatencyModel(latency_costs)
+        self.sampler = SyndromeSampler(seed=seed)
+
+    def run_config(self, config: BenchmarkConfig) -&gt; BenchmarkResult:
+        circuit = self.circuit_factory.build_memory_circuit(config)
+        detector_error_model = self.circuit_factory.detector_error_model(circuit)
+        detector_samples, observable_samples = self.sampler.sample_batch(circuit, config.shots)
+        frames_by_shot = self.sampler.to_frames(circuit, detector_samples)
+
+        decoder = MWPMDecoder.from_detector_error_model(detector_error_model)
+        started_at = time.perf_counter()
+        predictions = decoder.decode_batch(detector_samples)
+        decode_wall_time_seconds = time.perf_counter() - started_at
+
+        logical_errors, logical_error_rate = count_logical_errors(predictions, observable_samples)
+        frame_count = len(frames_by_shot[0]) if frames_by_shot else 0
+        latency = self.latency_model.evaluate(frame_count=frame_count)
+
+        return BenchmarkResult(
+            distance=config.distance,
+            physical_error_rate=config.physical_error_rate,
+            rounds=config.rounds or config.distance,
+            shots=config.shots,
+            logical_errors=logical_errors,
+            logical_error_rate=logical_error_rate,
+            decode_wall_time_seconds=decode_wall_time_seconds,
+            latency=latency,
+        )
+
+    def run_sweep(
+        self,
+        distances: list[int],
+        physical_error_rates: list[float],
+        shots: int,
+        rounds: int | None = None,
+        basis: str = &quot;z&quot;,
+    ) -&gt; list[BenchmarkResult]:
+        results: list[BenchmarkResult] = []
+        for distance in distances:
+            for physical_error_rate in physical_error_rates:
+                config = BenchmarkConfig(
+                    distance=distance,
+                    physical_error_rate=physical_error_rate,
+                    shots=shots,
+                    rounds=rounds,
+                    basis=basis,
+                )
+                results.append(self.run_config(config))
+        return results
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Run runner tests</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_runner.py -v
+</code></pre>
+<p>Expected: PASS.</p>
+<ul>
+<li>[ ] <strong>Step 5: Commit BenchmarkRunner</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">git add src/decoder_benchmark/runner.py tests/test_runner.py
+git commit -m &quot;feat: add benchmark sweep runner&quot;
+</code></pre>
+<h2 id="task-9-sinter-baseline-cross-check">Task 9: Sinter Baseline Cross-Check<a class="headerlink" href="#task-9-sinter-baseline-cross-check" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Create: <code>src/decoder_benchmark/sinter_baseline.py</code>
+- Create: <code>tests/test_sinter_baseline.py</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing sinter baseline tests</strong></li>
+</ul>
+<p>Create <code>tests/test_sinter_baseline.py</code> with:</p>
+<pre><code class="language-python">from decoder_benchmark.models import BenchmarkConfig
+from decoder_benchmark.sinter_baseline import SinterBaselineResult, run_sinter_baseline
+
+
+def test_sinter_baseline_returns_comparable_error_metrics():
+    result = run_sinter_baseline(
+        BenchmarkConfig(distance=3, physical_error_rate=0.001, shots=4, rounds=3),
+        max_shots=4,
+        num_workers=1,
+    )
+
+    assert isinstance(result, SinterBaselineResult)
+    assert result.shots == 4
+    assert 0 &lt;= result.errors &lt;= result.shots
+    assert 0.0 &lt;= result.logical_error_rate &lt;= 1.0
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run sinter baseline tests to verify they fail</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_sinter_baseline.py -v
+</code></pre>
+<p>Expected: FAIL with <code>ModuleNotFoundError: No module named 'decoder_benchmark.sinter_baseline'</code>.</p>
+<ul>
+<li>[ ] <strong>Step 3: Implement sinter baseline helper</strong></li>
+</ul>
+<p>Create <code>src/decoder_benchmark/sinter_baseline.py</code> with:</p>
+<pre><code class="language-python">from __future__ import annotations
+
+from dataclasses import dataclass
+
+import sinter
+
+from decoder_benchmark.circuit_factory import CircuitFactory
+from decoder_benchmark.models import BenchmarkConfig
+
+
+@dataclass(frozen=True)
+class SinterBaselineResult:
+    shots: int
+    errors: int
+    logical_error_rate: float
+    seconds: float
+
+
+def run_sinter_baseline(
+    config: BenchmarkConfig,
+    max_shots: int | None = None,
+    num_workers: int = 1,
+) -&gt; SinterBaselineResult:
+    circuit = CircuitFactory().build_memory_circuit(config)
+    task = sinter.Task(
+        circuit=circuit,
+        decoder=&quot;pymatching&quot;,
+        json_metadata={
+            &quot;distance&quot;: config.distance,
+            &quot;physical_error_rate&quot;: config.physical_error_rate,
+            &quot;rounds&quot;: config.rounds,
+            &quot;basis&quot;: config.basis,
+        },
+    )
+    stats = sinter.collect(
+        num_workers=num_workers,
+        tasks=[task],
+        max_shots=max_shots or config.shots,
+        max_errors=max_shots or config.shots,
+    )
+    if len(stats) != 1:
+        raise RuntimeError(f&quot;expected one sinter result, got {len(stats)}&quot;)
+    stat = stats[0]
+    logical_error_rate = stat.errors / stat.shots if stat.shots else 0.0
+    return SinterBaselineResult(
+        shots=stat.shots,
+        errors=stat.errors,
+        logical_error_rate=logical_error_rate,
+        seconds=stat.seconds,
+    )
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Run sinter baseline tests</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_sinter_baseline.py -v
+</code></pre>
+<p>Expected: PASS.</p>
+<ul>
+<li>[ ] <strong>Step 5: Commit sinter baseline helper</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">git add src/decoder_benchmark/sinter_baseline.py tests/test_sinter_baseline.py
+git commit -m &quot;feat: add sinter baseline cross-check&quot;
+</code></pre>
+<h2 id="task-10-cli-and-benchmark-bundle">Task 10: CLI And Benchmark Bundle<a class="headerlink" href="#task-10-cli-and-benchmark-bundle" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Create: <code>src/decoder_benchmark/cli.py</code>
+- Create: <code>tests/test_cli.py</code>
+- Modify: <code>README.md</code></p>
+<ul>
+<li>[ ] <strong>Step 1: Write failing CLI tests</strong></li>
+</ul>
+<p>Create <code>tests/test_cli.py</code> with:</p>
+<pre><code class="language-python">import json
+
+from decoder_benchmark.cli import main, parse_args
+
+
+def test_parse_args_supports_default_milestone_sweep():
+    args = parse_args(
+        [
+            &quot;--shots&quot;,
+            &quot;10&quot;,
+            &quot;--output-dir&quot;,
+            &quot;benchmark-out/test&quot;,
+        ]
+    )
+
+    assert args.distances == [3, 5, 7]
+    assert args.error_rates == [0.001, 0.003, 0.01]
+    assert args.shots == 10
+    assert args.rounds is None
+    assert args.output_dir == &quot;benchmark-out/test&quot;
+
+
+def test_main_writes_benchmark_bundle(tmp_path):
+    exit_code = main(
+        [
+            &quot;--distances&quot;,
+            &quot;3&quot;,
+            &quot;--error-rates&quot;,
+            &quot;0.001&quot;,
+            &quot;--shots&quot;,
+            &quot;4&quot;,
+            &quot;--rounds&quot;,
+            &quot;3&quot;,
+            &quot;--output-dir&quot;,
+            str(tmp_path),
+            &quot;--seed&quot;,
+            &quot;1234&quot;,
+            &quot;--ingestion-rounds&quot;,
+            &quot;0.25&quot;,
+            &quot;--graph-update-rounds&quot;,
+            &quot;0.25&quot;,
+            &quot;--matching-rounds&quot;,
+            &quot;0.5&quot;,
+            &quot;--correction-output-rounds&quot;,
+            &quot;0.25&quot;,
+        ]
+    )
+
+    assert exit_code == 0
+    assert (tmp_path / &quot;results.csv&quot;).exists()
+    assert (tmp_path / &quot;results.json&quot;).exists()
+    assert (tmp_path / &quot;report.md&quot;).exists()
+    payload = json.loads((tmp_path / &quot;results.json&quot;).read_text())
+    assert payload[&quot;metadata&quot;][&quot;distances&quot;] == [3]
+    assert payload[&quot;metadata&quot;][&quot;physical_error_rates&quot;] == [0.001]
+    assert len(payload[&quot;results&quot;]) == 1
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run CLI tests to verify they fail</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest tests/test_cli.py -v
+</code></pre>
+<p>Expected: FAIL with <code>ModuleNotFoundError: No module named 'decoder_benchmark.cli'</code>.</p>
+<ul>
+<li>[ ] <strong>Step 3: Implement CLI</strong></li>
+</ul>
+<p>Create <code>src/decoder_benchmark/cli.py</code> with:</p>
+<pre><code class="language-python">from __future__ import annotations
+
+import argparse
+from pathlib import Path
+from typing import Sequence
+
+from decoder_benchmark.models import LatencyStageCosts
+from decoder_benchmark.reporting import ReportGenerator
+from decoder_benchmark.runner import BenchmarkRunner
+
+
+def parse_args(argv: Sequence[str] | None = None) -&gt; argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog=&quot;decoder-benchmark&quot;,
+        description=&quot;Run rotated surface-code MWPM benchmark sweeps with explicit latency modeling.&quot;,
+    )
+    parser.add_argument(&quot;--distances&quot;, nargs=&quot;+&quot;, type=int, default=[3, 5, 7])
+    parser.add_argument(&quot;--error-rates&quot;, nargs=&quot;+&quot;, type=float, default=[0.001, 0.003, 0.01])
+    parser.add_argument(&quot;--shots&quot;, type=int, required=True)
+    parser.add_argument(&quot;--rounds&quot;, type=int, default=None)
+    parser.add_argument(&quot;--basis&quot;, choices=[&quot;x&quot;, &quot;z&quot;], default=&quot;z&quot;)
+    parser.add_argument(&quot;--output-dir&quot;, required=True)
+    parser.add_argument(&quot;--seed&quot;, type=int, default=None)
+    parser.add_argument(&quot;--ingestion-rounds&quot;, type=float, default=0.25)
+    parser.add_argument(&quot;--graph-update-rounds&quot;, type=float, default=0.25)
+    parser.add_argument(&quot;--matching-rounds&quot;, type=float, default=1.0)
+    parser.add_argument(&quot;--correction-output-rounds&quot;, type=float, default=0.25)
+    return parser.parse_args(argv)
+
+
+def main(argv: Sequence[str] | None = None) -&gt; int:
+    args = parse_args(argv)
+    latency_costs = LatencyStageCosts(
+        ingestion=args.ingestion_rounds,
+        graph_update=args.graph_update_rounds,
+        matching=args.matching_rounds,
+        correction_output=args.correction_output_rounds,
+    )
+    runner = BenchmarkRunner(latency_costs=latency_costs, seed=args.seed)
+    results = runner.run_sweep(
+        distances=args.distances,
+        physical_error_rates=args.error_rates,
+        shots=args.shots,
+        rounds=args.rounds,
+        basis=args.basis,
+    )
+    metadata = {
+        &quot;distances&quot;: args.distances,
+        &quot;physical_error_rates&quot;: args.error_rates,
+        &quot;shots&quot;: args.shots,
+        &quot;rounds&quot;: args.rounds if args.rounds is not None else &quot;distance&quot;,
+        &quot;basis&quot;: args.basis,
+        &quot;seed&quot;: args.seed,
+        &quot;latency_stage_costs&quot;: latency_costs.as_dict(),
+        &quot;delegated_to_stim&quot;: &quot;circuit generation, detector sampling, detector error models&quot;,
+        &quot;delegated_to_pymatching&quot;: &quot;reference MWPM decoding&quot;,
+        &quot;delegated_to_sinter&quot;: &quot;optional tiny baseline cross-check&quot;,
+        &quot;custom_code&quot;: &quot;streaming syndrome frames, latency accounting, orchestration, reporting&quot;,
+    }
+    ReportGenerator(Path(args.output_dir)).write(results=results, metadata=metadata)
+    return 0
+
+
+if __name__ == &quot;__main__&quot;:
+    raise SystemExit(main())
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 4: Update README with full milestone command</strong></li>
+</ul>
+<p>Replace <code>README.md</code> with:</p>
+<pre><code class="language-markdown"># decoder-benchmark
+
+Simulation-first benchmark tooling for rotated planar surface-code MWPM decoding.
+
+The milestone-one implementation delegates circuit generation and detector sampling
+to Stim, reference MWPM decoding to PyMatching, and a tiny baseline cross-check to
+sinter. Custom code in this repository owns the streaming-shaped syndrome frame
+representation, latency accounting, benchmark orchestration, and report packaging.
+
+## Development setup
+
+```bash
+python -m pip install -e &quot;.[dev]&quot;
+python -m pytest -v
+</code></pre>
+<h2 id="tiny-development-run_1">Tiny development run<a class="headerlink" href="#tiny-development-run_1" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">decoder-benchmark \
+  --distances 3 \
+  --error-rates 0.001 \
+  --shots 100 \
+  --rounds 3 \
+  --output-dir benchmark-out/dev \
+  --seed 1234
+</code></pre>
+<h2 id="milestone-sweep">Milestone sweep<a class="headerlink" href="#milestone-sweep" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">decoder-benchmark \
+  --distances 3 5 7 \
+  --error-rates 0.001 0.003 0.01 \
+  --shots 1000 \
+  --output-dir benchmark-out/milestone-1
+</code></pre>
+<p>The command writes:</p>
+<ul>
+<li><code>results.csv</code>: one row per distance and physical error-rate configuration</li>
+<li><code>results.json</code>: structured metrics, latency breakdowns, and run metadata</li>
+<li><code>report.md</code>: a readable summary table and interpretation notes</li>
+</ul>
+<h2 id="latency-parameters">Latency parameters<a class="headerlink" href="#latency-parameters" title="Permanent link">&para;</a></h2>
+<p>Latency is modeled in syndrome-round units and is separate from host decode wall
+time. The configurable stages are:</p>
+<ul>
+<li><code>--ingestion-rounds</code></li>
+<li><code>--graph-update-rounds</code></li>
+<li><code>--matching-rounds</code></li>
+<li><code>--correction-output-rounds</code></li>
+</ul>
+<h2 id="milestone-boundary_1">Milestone boundary<a class="headerlink" href="#milestone-boundary_1" title="Permanent link">&para;</a></h2>
+<p>This project does not implement RTL, HLS, FPGA board integration, or a custom MWPM
+engine. The latency numbers are explicit simulation parameters around a reference
+software decoder; they are design aids, not hardware timing-closure evidence.</p>
+<pre><code>
+- [ ] **Step 5: Run CLI tests**
+
+Run:
+
+```bash
+python -m pytest tests/test_cli.py -v
+</code></pre>
+<p>Expected: PASS.</p>
+<ul>
+<li>[ ] <strong>Step 6: Run all tests</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest -v
+</code></pre>
+<p>Expected: PASS.</p>
+<ul>
+<li>[ ] <strong>Step 7: Run tiny smoke benchmark</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">decoder-benchmark --distances 3 --error-rates 0.001 --shots 4 --rounds 3 --output-dir benchmark-out/smoke --seed 1234
+</code></pre>
+<p>Expected:</p>
+<pre><code class="language-text">benchmark-out/smoke/results.csv exists
+benchmark-out/smoke/results.json exists
+benchmark-out/smoke/report.md exists
+</code></pre>
+<p>Verify with:</p>
+<pre><code class="language-bash">test -f benchmark-out/smoke/results.csv
+test -f benchmark-out/smoke/results.json
+test -f benchmark-out/smoke/report.md
+</code></pre>
+<p>Expected: all three commands exit with status 0.</p>
+<ul>
+<li>[ ] <strong>Step 8: Commit CLI and documentation</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">git add src/decoder_benchmark/cli.py tests/test_cli.py README.md
+git commit -m &quot;feat: add benchmark cli&quot;
+</code></pre>
+<h2 id="task-11-acceptance-verification">Task 11: Acceptance Verification<a class="headerlink" href="#task-11-acceptance-verification" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong>
+- Modify: no source files expected
+- Verify: complete package, tests, and benchmark artifacts</p>
+<ul>
+<li>[ ] <strong>Step 1: Run complete test suite</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -m pytest -v
+</code></pre>
+<p>Expected: PASS for every test file:</p>
+<pre><code class="language-text">tests/test_circuit_factory.py
+tests/test_cli.py
+tests/test_decoder.py
+tests/test_latency.py
+tests/test_models.py
+tests/test_package_import.py
+tests/test_reporting.py
+tests/test_runner.py
+tests/test_sinter_baseline.py
+tests/test_syndrome.py
+</code></pre>
+<ul>
+<li>[ ] <strong>Step 2: Run acceptance benchmark bundle command</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">decoder-benchmark \
+  --distances 3 5 7 \
+  --error-rates 0.001 0.003 0.01 \
+  --shots 100 \
+  --output-dir benchmark-out/acceptance \
+  --seed 1234
+</code></pre>
+<p>Expected: command exits 0 and writes <code>results.csv</code>, <code>results.json</code>, and <code>report.md</code>.</p>
+<ul>
+<li>[ ] <strong>Step 3: Verify result row count</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -c &quot;import csv; rows=list(csv.DictReader(open('benchmark-out/acceptance/results.csv'))); assert len(rows) == 9, len(rows)&quot;
+</code></pre>
+<p>Expected: command exits 0 because the sweep has 3 distances times 3 physical error rates.</p>
+<ul>
+<li>[ ] <strong>Step 4: Verify JSON metadata documents dependency boundaries</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -c &quot;import json; data=json.load(open('benchmark-out/acceptance/results.json')); meta=data['metadata']; assert 'Stim' not in meta.get('custom_code', ''); assert 'delegated_to_stim' in meta; assert 'delegated_to_pymatching' in meta; assert 'delegated_to_sinter' in meta&quot;
+</code></pre>
+<p>Expected: command exits 0.</p>
+<ul>
+<li>[ ] <strong>Step 5: Verify Markdown report has readable summary table</strong></li>
+</ul>
+<p>Run:</p>
+<pre><code class="language-bash">python -c &quot;text=open('benchmark-out/acceptance/report.md').read(); assert '| distance | p_error | rounds | shots | logical_error_rate | latency_rounds |' in text; assert 'Logical error rate is measured' in text&quot;
+</code></pre>
+<p>Expected: command exits 0.</p>
+<ul>
+<li>[ ] <strong>Step 6: Commit acceptance artifacts policy only</strong></li>
+</ul>
+<p>Do not commit generated <code>benchmark-out</code> files. If the repository later adds <code>.gitignore</code>, include <code>benchmark-out/</code> there. For this milestone, leave generated artifacts untracked unless the user explicitly asks to preserve a sample bundle.</p>
+<h2 id="self-review">Self-Review<a class="headerlink" href="#self-review" title="Permanent link">&para;</a></h2>
+<p><strong>Spec coverage:</strong> The plan covers Stim circuit generation, detector error model extraction, PyMatching decode, streaming-shaped syndrome frames, deterministic latency in syndrome-round units, CSV/JSON/Markdown reports, configurable distance/error-rate/shot/round sweeps, and a tiny sinter baseline path. The plan explicitly excludes RTL, HLS, FPGA board work, and custom MWPM implementation.</p>
+<p><strong>Placeholder scan:</strong> The plan contains concrete paths, test code, implementation code, commands, and expected outcomes. It does not rely on unresolved implementation placeholders.</p>
+<p><strong>Type consistency:</strong> <code>BenchmarkConfig</code>, <code>LatencyStageCosts</code>, <code>LatencyBreakdown</code>, <code>BenchmarkResult</code>, <code>SyndromeFrame</code>, <code>MWPMDecoder</code>, <code>LatencyModel</code>, <code>ReportGenerator</code>, <code>BenchmarkRunner</code>, and <code>run_sinter_baseline</code> are named consistently across tests, implementation snippets, and CLI wiring.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
